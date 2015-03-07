@@ -17,7 +17,7 @@ import edu.harvard.cscie99.adam.service.AuthenticationService;
 import edu.harvard.cscie99.adam.service.PlateEditorService;
 
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/plate/editor/")
 public class PlateEditorController {
 	
 	//TODO implement
@@ -35,7 +35,7 @@ public class PlateEditorController {
 	 * @param user
 	 * @return
 	 */
-	@RequestMapping(value = "/plate/editor/save", method = RequestMethod.POST)
+	@RequestMapping(value = "save", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean savePlate(
 			@RequestParam(value="plate", required=true) Plate plate,
@@ -52,7 +52,7 @@ public class PlateEditorController {
 	 * @param user
 	 * @return
 	 */
-	@RequestMapping(value = "/plate/editor/load/{plateId}", method = RequestMethod.POST)
+	@RequestMapping(value = "load/{plateId}", method = RequestMethod.POST)
 	@ResponseBody
 	public Plate loadPlate(
 			@RequestParam(value="user", required=true) String user){
@@ -68,7 +68,7 @@ public class PlateEditorController {
 	 * @param user
 	 * @return
 	 */
-	@RequestMapping(value = "/plate/editor/search", method = RequestMethod.POST)
+	@RequestMapping(value = "search", method = RequestMethod.POST)
 	@ResponseBody
 	public List<Plate> searchPlate(
 			@RequestParam(value="fromDate", required=true) Date fromDate,

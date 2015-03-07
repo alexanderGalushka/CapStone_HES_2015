@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>edu.harvard.cscie99</groupId>
-	<artifactId>biorie</artifactId>
+	<artifactId>adam</artifactId>
 	<version>1</version>
 	<packaging>war</packaging>
 
-	<name>biorie</name>
+	<name>adam</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
