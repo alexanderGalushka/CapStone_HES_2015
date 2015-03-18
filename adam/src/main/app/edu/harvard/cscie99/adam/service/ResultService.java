@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import edu.harvard.cscie99.adam.model.PlateResult;
+import edu.harvard.cscie99.adam.model.Sample;
 import edu.harvard.cscie99.adam.model.WellResult;
 
 @Component
@@ -24,25 +25,26 @@ public class ResultService {
 			WellResult wellResult = new WellResult();
 			
 			List<String> labels = new ArrayList<String>();
-			List<Double> readings = new ArrayList<Double>();
+			List<Sample> samples = new ArrayList<Sample>();
 
 			Calendar cal = Calendar.getInstance(); 
 		    cal.setTime(new Date());
 		    
 		    labels.add("compound1");
 		    labels.add("compound2");
-		    labels.add("dosage1");
-		    labels.add("dosage2");
+		    labels.add("compound3");
+		    labels.add("compound4");
 
 			for (int j = 0; j < 4; j++){
-				readings.add(Math.random());
+				Sample sample = new Sample();
+				sample.setValue(Math.random());
+				sample.setTime(cal.getTime());
+				
+				cal.add(Calendar.HOUR_OF_DAY, 1);
+				samples.add(sample);
 			}
 			
-			wellResult.setLabels(labels);
-			wellResult.setReadings(readings);
-			wellResult.setTime(cal.getTime());
-			
-			cal.add(Calendar.HOUR_OF_DAY, 1);
+			wellResult.setSamples(samples);
 			
 			wellResults.add(wellResult);
 		}
