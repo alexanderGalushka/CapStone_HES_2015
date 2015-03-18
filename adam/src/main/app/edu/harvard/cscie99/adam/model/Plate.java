@@ -1,6 +1,5 @@
 package edu.harvard.cscie99.adam.model;
 
-import java.io.Serializable;
 import java.util.List;
 
 import edu.harvard.cscie99.adam.profile.User;
