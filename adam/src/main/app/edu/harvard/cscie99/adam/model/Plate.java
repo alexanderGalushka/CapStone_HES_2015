@@ -3,7 +3,9 @@ package edu.harvard.cscie99.adam.model;
 import java.io.Serializable;
 import java.util.List;
 
-public class Plate implements Serializable{
+import edu.harvard.cscie99.adam.profile.User;
+
+public class Plate extends Template{
 	
 	/**
 	 * Initial version
@@ -14,15 +16,12 @@ public class Plate implements Serializable{
 
 	private int id;
 	private String barcode;
-	private String name;
 	private String description;
-	private int numWellsX;
-	private int numWellsY;
-	private PlateType type;
-	private Experiment experiment;
 	private String protocol;
 	private List<String> tags;
 	private List<Well> wells;
+	private User owner;
+	private List<User> collaborators;
 	
 	public int getId() {
 		return id;
@@ -36,41 +35,11 @@ public class Plate implements Serializable{
 	public void setBarcode(String barcode) {
 		this.barcode = barcode;
 	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
 	public String getDescription() {
 		return description;
 	}
 	public void setDescription(String description) {
 		this.description = description;
-	}
-	public int getNumWellsX() {
-		return numWellsX;
-	}
-	public void setNumWellsX(int numWellsX) {
-		this.numWellsX = numWellsX;
-	}
-	public int getNumWellsY() {
-		return numWellsY;
-	}
-	public void setNumWellsY(int numWellsY) {
-		this.numWellsY = numWellsY;
-	}
-	public PlateType getType() {
-		return type;
-	}
-	public void setType(PlateType type) {
-		this.type = type;
-	}
-	public Experiment getExperiment() {
-		return experiment;
-	}
-	public void setExperiment(Experiment experiment) {
-		this.experiment = experiment;
 	}
 	public String getProtocol() {
 		return protocol;
@@ -89,6 +58,18 @@ public class Plate implements Serializable{
 	}
 	public void setWells(List<Well> wells) {
 		this.wells = wells;
+	}
+	public User getOwner() {
+		return owner;
+	}
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
+	public List<User> getCollaborators() {
+		return collaborators;
+	}
+	public void setCollaborators(List<User> collaborators) {
+		this.collaborators = collaborators;
 	}
 	
 }

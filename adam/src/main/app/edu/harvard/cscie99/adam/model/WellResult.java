@@ -11,22 +11,17 @@ public class WellResult implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private int id;
 	private Well well;
-	private List<Double> readings;
-	private List<String> labels;
-	private Date time;
 	
-	public List<Double> getReadings() {
-		return readings;
+	private Date creationTime;
+	private List<Sample> samples;
+	
+	public int getId() {
+		return id;
 	}
-	public void setReadings(List<Double> readings) {
-		this.readings = readings;
-	}
-	public List<String> getLabels() {
-		return labels;
-	}
-	public void setLabels(List<String> label) {
-		this.labels = label;
+	public void setId(int id) {
+		this.id = id;
 	}
 	public Well getWell() {
 		return well;
@@ -34,11 +29,18 @@ public class WellResult implements Serializable{
 	public void setWell(Well well) {
 		this.well = well;
 	}
-	public Date getTime() {
-		return time;
+	public Date getCreationTime() {
+		return creationTime;
 	}
-	public void setTime(Date time) {
-		this.time = time;
+	public void setCreationTime(Date creationTime) {
+		this.creationTime = creationTime;
 	}
+	public List<Sample> getSamples() {
+		return samples;
+	}
+	public void setSamples(List<Sample> samples) {
+		this.samples = samples;
+	}
+	
 
 }

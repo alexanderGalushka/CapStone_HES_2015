@@ -18,38 +18,13 @@ public class Well implements Serializable{
 	
 	private Integer id;
 	private List<Compound> compounds;
-	private List<Cell> cells;
 	private List<String> labels;
 	private Integer color;
 	private ControlType controlType;
 	
 	private Double dosagePerc;
-	private WellResult wellResult;
+	private List<WellResult> wellResults;
 	
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public List<Compound> getCompounds() {
-		return compounds;
-	}
-	public void setCompounds(List<Compound> compounds) {
-		this.compounds = compounds;
-	}
-	public Double getDosagePerc() {
-		return dosagePerc;
-	}
-	public void setDosagePerc(Double dosagePerc) {
-		this.dosagePerc = dosagePerc;
-	}
-	public WellResult getWellResult() {
-		return wellResult;
-	}
-	public void setWellResult(WellResult wellResult) {
-		this.wellResult = wellResult;
-	}
 	public Plate getPlate() {
 		return plate;
 	}
@@ -68,11 +43,17 @@ public class Well implements Serializable{
 	public void setPlatePositionY(int platePositionY) {
 		this.platePositionY = platePositionY;
 	}
-	public List<Cell> getCells() {
-		return cells;
+	public Integer getId() {
+		return id;
 	}
-	public void setCells(List<Cell> cells) {
-		this.cells = cells;
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public List<Compound> getCompounds() {
+		return compounds;
+	}
+	public void setCompounds(List<Compound> compounds) {
+		this.compounds = compounds;
 	}
 	public List<String> getLabels() {
 		return labels;
@@ -92,5 +73,18 @@ public class Well implements Serializable{
 	public void setControlType(ControlType controlType) {
 		this.controlType = controlType;
 	}
+	public Double getDosagePerc() {
+		return dosagePerc;
+	}
+	public void setDosagePerc(Double dosagePerc) {
+		this.dosagePerc = dosagePerc;
+	}
+	public List<WellResult> getWellResults() {
+		return wellResults;
+	}
+	public void setWellResults(List<WellResult> wellResults) {
+		this.wellResults = wellResults;
+	}
+	
 
 }
