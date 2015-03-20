@@ -1,5 +1,6 @@
 package edu.harvard.cscie99.adam.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,8 +21,16 @@ public class CollaborationController {
 	@ResponseBody
 	public List<User> listAllUsers(){
 		
-		//TODO
-		return null;
+		List<User> userList = new ArrayList<User>();
+		
+		for (int i = 0; i < 10; i++){
+			User user = new User();
+			user.setEmail("user@"+i+".com");
+			user.setUsername("user"+i);
+			userList.add(user);
+		}
+		
+		return userList;
 	}
 	
 	@RequestMapping(value = "/share/{projectId}/user/{username}", method = RequestMethod.GET)
