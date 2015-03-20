@@ -21,16 +21,8 @@ public class CollaborationController {
 	@ResponseBody
 	public List<User> listAllUsers(){
 		
-		List<User> userList = new ArrayList<User>();
-		
-		for (int i = 0; i < 10; i++){
-			User user = new User();
-			user.setEmail("user@"+i+".com");
-			user.setUsername("user"+i);
-			userList.add(user);
-		}
-		
-		return userList;
+		//TODO
+		return null;
 	}
 	
 	@RequestMapping(value = "/share/{projectId}/user/{username}", method = RequestMethod.GET)
