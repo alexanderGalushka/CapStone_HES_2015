@@ -47,13 +47,6 @@ public class PlateController {
 		return true;
 	}
 	
-	/**
-	 * Saves the Plate object into the DB. (FR 3.1)
-	 * 
-	 * @param plate
-	 * @param user
-	 * @return
-	 */
 	@RequestMapping(value = "/template/search", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Template> searchTemplate(
