@@ -51,14 +51,14 @@ public class ResultService {
 
 			for (int j = 0; j < 4; j++){
 				Sample sample = new Sample();
-				sample.setValue(Math.random());
-				sample.setTime(cal.getTime());
+				//sample.setValue(Math.random());
+				//sample.setTime(cal.getTime());
 				
 				cal.add(Calendar.HOUR_OF_DAY, 1);
 				samples.add(sample);
 			}
 			
-			wellResult.setSamples(samples);
+			//wellResult.setSamples(samples);
 			
 			wellResults.add(wellResult);
 		}
@@ -81,7 +81,7 @@ public class ResultService {
 			List<WellResult> wells = new ArrayList<>();
 			for (int j = 0; j < 10; j++){
 				WellResult wellResult = new WellResult();
-				wellResult.setCreationTime(new Date());
+				//wellResult.setCreationTime(new Date());
 				wellResult.setId(j);
 				wells.add(wellResult);
 			}
@@ -111,7 +111,7 @@ public class ResultService {
 		List<WellResult> wells = new ArrayList<>();
 		for (int j = 0; j < 10; j++){
 			WellResult wellResult = new WellResult();
-			wellResult.setCreationTime(new Date());
+			//wellResult.setCreationTime(new Date());
 			wellResult.setId(j);
 			wells.add(wellResult);
 		}

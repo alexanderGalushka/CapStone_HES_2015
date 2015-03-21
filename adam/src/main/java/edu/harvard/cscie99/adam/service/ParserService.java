@@ -89,8 +89,8 @@ public class ParserService {
 	    
 		//TODO: remove
 		plateResult.setId(1);
-		plateResult.setComments(new ArrayList<String>());
-		plateResult.setLastUpdate(new Date());
+//		plateResult.setComments(new ArrayList<String>());
+//		plateResult.setLastUpdate(new Date());
 		
 	    return plateResult;
 	}
