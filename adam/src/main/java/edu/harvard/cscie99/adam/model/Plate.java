@@ -24,6 +24,7 @@ public class Plate extends Template{
 	private String description;
 	private String protocol;
 	private List<String> tags;
+	private List<String> comments;
 	private List<Well> wells;
 	private User owner;
 	private List<User> collaborators;
@@ -81,6 +82,14 @@ public class Plate extends Template{
 	}
 	public void setCollaborators(List<User> collaborators) {
 		this.collaborators = collaborators;
+	}
+
+	public List<String> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<String> comments) {
+		this.comments = comments;
 	}
 	
 }
