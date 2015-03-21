@@ -16,6 +16,7 @@ import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
 import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.profile.User;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
+import edu.harvard.cscie99.adam.service.ProfileService;
 import edu.harvard.cscie99.adam.service.ProjectService;
 
 @RestController
@@ -28,20 +29,14 @@ public class CollaborationController {
 	@Autowired
 	private AuthenticationService authService;
 	
+	@Autowired
+	private ProfileService profileService;
+	
 	@RequestMapping(value = "/users/list", method = RequestMethod.GET)
 	@ResponseBody
 	public List<User> listAllUsers(){
 		
-		//TODO: get data from DB
-		List<User> userList = new ArrayList<User>();
-		
-		for (int i = 0; i < 10; i++){
-			User user = new User();
-			user.setEmail("user"+i+"@adam.com");
-			user.setUsername("user"+i);
-			userList.add(user);
-		}
-		return userList;
+		return profileService.listAllUsers();
 	}
 	
 	@RequestMapping(value = "/share/{projectId}/user/{username}", method = RequestMethod.GET)
@@ -55,7 +50,7 @@ public class CollaborationController {
 		
 		if (hasAccess){
 			Project project = projectService.retrieveProject(projectId);
-			User collaborator = authService.getUserDetails(username);
+			User collaborator = profileService.getUserDetails(username);
 			
 			project.getCollaborators().add(collaborator);
 			projectService.updateProject(project);
@@ -79,7 +74,7 @@ public class CollaborationController {
 		
 		if (hasAccess){
 			Project project = projectService.retrieveProject(projectId);
-			User collaborator = authService.getUserDetails(username);
+			User collaborator = profileService.getUserDetails(username);
 			
 			project.getCollaborators().remove(collaborator);
 			projectService.updateProject(project);
