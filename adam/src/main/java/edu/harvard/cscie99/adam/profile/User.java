@@ -2,19 +2,51 @@ package edu.harvard.cscie99.adam.profile;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
 /**
  * 
  * @author Gerson
  *
  */
+@Entity
 public class User {
 	
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id")
+	private int id;
+	
+    @Column(name = "username")
 	private String username;
+	
+	@Column(name = "password")
 	private String password;
+	
+	@Column(name = "first_name")
+	private String firstName;
+	
+	@Column(name = "last_name")
+	private String lastName;
+	
+	@Column(name = "email")
 	private String email;
+	
+	@Column(name = "security_question")
 	private String securityQuestion;
+	
+	@Column(name = "security_answer")
 	private String securityAnswer;
-	private List<String> roles;
+	
+	@OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Role> roles;
 	
 	public String getUsername() {
 		return username;
@@ -28,10 +60,10 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public List<String> getRoles() {
+	public List<Role> getRoles() {
 		return roles;
 	}
-	public void setRoles(List<String> roles) {
+	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
 	public String getEmail() {
@@ -51,6 +83,18 @@ public class User {
 	}
 	public void setSecurityAnswer(String securityAnswer) {
 		this.securityAnswer = securityAnswer;
+	}
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 }

@@ -5,6 +5,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
 import edu.harvard.cscie99.adam.profile.User;
 
 /**
@@ -12,6 +23,7 @@ import edu.harvard.cscie99.adam.profile.User;
  * @author Gerson
  *
  */
+@Entity
 public class Project implements Serializable {
 	
 	public enum ProjectType {BIOLOGICAL, PHARMACEUTICAL}
@@ -21,16 +33,43 @@ public class Project implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "project_id")
 	private Integer id;
+	
+	@Column(name = "name")
 	private String name;
+	
+	@Column(name = "description")
 	private String description;
+	
+	@OneToMany(mappedBy = "compound", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Compound> compounds;
+
+	@OneToMany(mappedBy = "substrate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Substrate> substrates;
+	
+	@Column(name = "project_type")
 	private String type;
+	
+	@Column(name = "creation_date")
 	private Date creationDate;
-	private User owner;
+	
+	@ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ID")
+    private User owner;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<User> collaborators;
+	
+	@Column(name="tags")
 	private List<String> tags;
+	
+	@Column(name="comments")
 	private List<String> comments;
+	
+	@Column(name = "public")
 	private boolean isPublic;
 	
 	public Project(){

@@ -2,11 +2,18 @@ package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * 
  * @author Gerson
  *
  */
+@Entity
 public class Compound implements Serializable{
 	
 	/**
@@ -14,7 +21,12 @@ public class Compound implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "compound_id")
 	private String id;
+	
+	@Column(name = "name")
 	private String name;
 	
 	public String getId() {
