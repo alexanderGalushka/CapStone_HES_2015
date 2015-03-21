@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.harvard.cscie99.adam.error.LogoutFailedException;
+import edu.harvard.cscie99.adam.error.SessionTimeouException;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
 import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.PlateResult;
@@ -62,7 +64,16 @@ public class ResultController {
 			@PathVariable("result_id") int resultId,
 			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
 		
-		boolean hasAccess = authService.checkUserAccess(user, projectId, "getResult");
+		boolean hasAccess = false;
+		try {
+			hasAccess = authService.checkUserAccess(user, projectId, "getResult");
+		} catch (SessionTimeouException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LogoutFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if (hasAccess){
 			PlateResult plateResult = resultService.retrieveResult(projectId, resultId);

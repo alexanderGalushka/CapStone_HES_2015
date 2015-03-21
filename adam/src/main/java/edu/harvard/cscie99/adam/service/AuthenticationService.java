@@ -2,6 +2,8 @@ package edu.harvard.cscie99.adam.service;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.harvard.cscie99.adam.error.LoginFailedException;
 import edu.harvard.cscie99.adam.error.LogoutFailedException;
+import edu.harvard.cscie99.adam.error.SessionTimeouException;
 import edu.harvard.cscie99.adam.profile.User;
 
 /**
@@ -25,20 +28,52 @@ import edu.harvard.cscie99.adam.profile.User;
 @Component
 public class AuthenticationService 
 {
-
-	public boolean checkUserAccess(String user, Integer plateId, String service) 
+	private HttpSession session;
+	
+	public HttpSession getSession() {
+		return session;
+	}
+	
+	public AuthenticationService()
 	{
-		// TODO implement
-		return true;
+		session = null;
+	}
+	
+	
+	public boolean checkUserAccess(String userName, Integer projectId, String service) throws SessionTimeouException, LogoutFailedException
+	{
+		boolean result = false;
+		// it could be performance burden, but assures that the session in up
+		if (checkIfSessionIsUp())
+		{
+			User user  = (User) session.getAttribute("user");
+			// validate if the userName is not injected!
+			if (user.getUsername().equals(userName))
+			{
+				// is Role is intended to be a permission like for simplification purpose?
+				if(user.getRoles().contains(service))
+				{
+					result = true;
+				}
+			}
+		}
+		else
+		{
+			//do we want to invalidate the session and logout the user here?
+			logout( session, userName );
+			throw new SessionTimeouException("timeout exception");
+		}
+		
+		return result;
 	}
 	
 
 	
 	/**
-	 * this method logs out the user by invalidating accToken,
+	 * this method logs out the user by invalidating session,
 	 * this method considered to be the end point of user's session
-	 * @param accToken - access token
-	 * @param login - login string
+	 * @param session - user's session, HttpSession
+	 * @param login - login name,  string
 	 * @throws LogoutFailedException if failed to login
 	 */
 	public void logout( HttpSession session, String login ) throws LogoutFailedException
@@ -63,7 +98,7 @@ public class AuthenticationService
 		String hashedPswd = hashPassword(password);
 		
 		// make a call to DB to check credentials
-		// suff the user will all the entitlements he/she has and return the one back
+		// stuff the user with all the entitlements and other user data from DB he/she has and return the one back
 		user = new User();
 		
 		return user;
@@ -76,7 +111,7 @@ public class AuthenticationService
 									 HttpServletRequest request, 
 									 HttpServletResponse response) throws LoginFailedException
 	{
-		HttpSession session = request.getSession();
+		session = request.getSession();
 
 	    //if User is already logged and session not expired
 		
@@ -104,7 +139,7 @@ public class AuthenticationService
 
 	}
 	
-	
+	// it's a helper function which can potentially be a part of our Utils class
 	private String hashPassword( String passwordToHash )
 	{
 		//****************************************//
@@ -139,5 +174,18 @@ public class AuthenticationService
 	   //****************************************//
    }
 	
+   private boolean checkIfSessionIsUp()
+   {
+	   boolean result = true;
+	   
+	   Date timeNow = Calendar.getInstance().getTime();
+	   // not sure what getCreationTime returns... might need more logic/conversion
+	   long timeElapsed = timeNow.getTime() - session.getCreationTime();
+	   
+	   // how to get the constant out of the web.xml?
+	   //if (timeElapsed > config-timeout) {result = false;}
+	   
+	   return result;
+   }
 	
 }
