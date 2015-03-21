@@ -11,9 +11,4 @@ public class AuthenticationService {
 		// TODO implement
 		return true;
 	}
-	
-	public User getUserDetails(String username){
-		//TODO implement
-		return null;
-	}
 }
