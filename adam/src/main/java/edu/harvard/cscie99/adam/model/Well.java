@@ -23,16 +23,17 @@ public class Well implements Serializable{
 	private int platePositionY;
 	
 	private Integer id;
-	private List<Compound> compounds;
+//	private List<Compound> compounds;
 	private List<String> labels;
 	private Integer color;
 	private ControlType controlType;
 	
-	private Double dosagePerc;
+//	private Double dosagePerc;
+	private List<Sample> samples;
 	private List<WellResult> wellResults;
 	
 	public Well(){
-		compounds = new ArrayList<Compound>();
+		samples = new ArrayList<Sample>();
 		labels = new ArrayList<String>();
 		wellResults = new ArrayList<WellResult>();
 	}
@@ -61,12 +62,6 @@ public class Well implements Serializable{
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public List<Compound> getCompounds() {
-		return compounds;
-	}
-	public void setCompounds(List<Compound> compounds) {
-		this.compounds = compounds;
-	}
 	public List<String> getLabels() {
 		return labels;
 	}
@@ -85,18 +80,16 @@ public class Well implements Serializable{
 	public void setControlType(ControlType controlType) {
 		this.controlType = controlType;
 	}
-	public Double getDosagePerc() {
-		return dosagePerc;
-	}
-	public void setDosagePerc(Double dosagePerc) {
-		this.dosagePerc = dosagePerc;
-	}
 	public List<WellResult> getWellResults() {
 		return wellResults;
 	}
 	public void setWellResults(List<WellResult> wellResults) {
 		this.wellResults = wellResults;
 	}
-	
-
+	public List<Sample> getSamples() {
+		return samples;
+	}
+	public void setSamples(List<Sample> samples) {
+		this.samples = samples;
+	}
 }
