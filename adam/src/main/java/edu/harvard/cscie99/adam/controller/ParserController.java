@@ -20,6 +20,11 @@ import edu.harvard.cscie99.adam.model.Template;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
 import edu.harvard.cscie99.adam.service.ParserService;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 @RestController
 @RequestMapping(value = "/")
 public class ParserController {

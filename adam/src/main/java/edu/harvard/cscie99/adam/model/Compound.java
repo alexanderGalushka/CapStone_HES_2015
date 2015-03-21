@@ -2,6 +2,11 @@ package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 public class Compound implements Serializable{
 	
 	/**

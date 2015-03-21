@@ -7,6 +7,11 @@ import java.util.List;
 
 import edu.harvard.cscie99.adam.profile.User;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 public class Project implements Serializable {
 	
 	public enum ProjectType {BIOLOGICAL, PHARMACEUTICAL}

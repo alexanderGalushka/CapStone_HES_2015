@@ -21,6 +21,11 @@ import edu.harvard.cscie99.adam.service.ProjectService;
 import edu.harvard.cscie99.adam.service.ResultService;
 import edu.harvard.cscie99.adam.service.TagService;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 @RestController
 @RequestMapping(value = "/")
 public class ProjectController {

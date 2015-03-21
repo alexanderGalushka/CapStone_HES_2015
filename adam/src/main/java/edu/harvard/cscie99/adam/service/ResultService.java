@@ -20,6 +20,11 @@ import edu.harvard.cscie99.adam.model.Well;
 import edu.harvard.cscie99.adam.model.WellResult;
 import edu.harvard.cscie99.adam.profile.User;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 @Component
 public class ResultService {
 	

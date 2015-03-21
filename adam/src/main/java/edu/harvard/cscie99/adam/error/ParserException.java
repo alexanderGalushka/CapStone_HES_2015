@@ -1,5 +1,10 @@
 package edu.harvard.cscie99.adam.error;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 public class ParserException extends Exception{
 	
 	/**

@@ -9,6 +9,11 @@ import edu.harvard.cscie99.adam.model.Compound;
 import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.profile.User;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 @Component
 public class ProjectService {
 

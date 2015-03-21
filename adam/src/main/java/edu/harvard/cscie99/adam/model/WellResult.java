@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 public class WellResult implements Serializable{
 	
 	/**

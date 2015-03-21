@@ -2,6 +2,11 @@ package edu.harvard.cscie99.adam.profile;
 
 import java.util.List;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 public class User {
 	
 	private String username;

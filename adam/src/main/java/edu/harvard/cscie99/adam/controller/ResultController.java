@@ -21,6 +21,11 @@ import edu.harvard.cscie99.adam.service.AuthenticationService;
 import edu.harvard.cscie99.adam.service.ProfileService;
 import edu.harvard.cscie99.adam.service.ResultService;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 @RestController
 @RequestMapping(value = "/")
 public class ResultController {

@@ -4,6 +4,11 @@ import org.springframework.stereotype.Component;
 
 import edu.harvard.cscie99.adam.profile.User;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 @Component
 public class AuthenticationService {
 

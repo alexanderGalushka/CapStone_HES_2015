@@ -13,6 +13,11 @@ import edu.harvard.cscie99.adam.error.ParserException;
 import edu.harvard.cscie99.adam.model.PlateResult;
 import edu.harvard.cscie99.adam.model.Template;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 @Component
 public class ParserService {
 	

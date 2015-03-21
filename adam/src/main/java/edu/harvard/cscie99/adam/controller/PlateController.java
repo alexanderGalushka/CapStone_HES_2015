@@ -17,6 +17,11 @@ import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
 import edu.harvard.cscie99.adam.service.PlateService;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 @RestController
 @RequestMapping(value = "/")
 public class PlateController {
