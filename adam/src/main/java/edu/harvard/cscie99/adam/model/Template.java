@@ -16,6 +16,7 @@ public class Template implements Serializable{
 	private String description;
 	private int numWellsX;
 	private int numWellsY;
+	private Project project;
 	private Plate.PlateType type;
 	private List<String> tags;
 	
@@ -64,6 +65,14 @@ public class Template implements Serializable{
 	}
 	public void setTags(List<String> tags) {
 		this.tags = tags;
+	}
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 }
