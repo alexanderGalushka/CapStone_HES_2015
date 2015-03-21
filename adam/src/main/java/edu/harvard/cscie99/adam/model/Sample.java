@@ -1,13 +1,23 @@
 package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
-import java.util.Date;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  * 
  * @author Gerson
  *
  */
+@Entity
 public class Sample implements Serializable{
 	
 	/**
@@ -15,31 +25,30 @@ public class Sample implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private double value;
-	private String label;
-	private Date time;
-	private Compound compound;
-	private Substrate substrate;
-	private double dilution;
-	private DataPointMetadata comment;
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "plate_result_id")
+	private int id;
 	
-	public double getValue() {
-		return value;
-	}
-	public void setValue(double value) {
-		this.value = value;
-	}
+	@Column(name = "label")
+	private String label;
+	
+	@ManyToOne(targetEntity = Compound.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "compound_id")
+    private Compound compound;
+	
+	@ManyToOne(targetEntity = Substrate.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "substrate_id")
+	private Substrate substrate;
+	
+	@Column(name = "dilution")
+	private double dilution;
+	
 	public String getLabel() {
 		return label;
 	}
 	public void setLabel(String label) {
 		this.label = label;
-	}
-	public Date getTime() {
-		return time;
-	}
-	public void setTime(Date time) {
-		this.time = time;
 	}
 	public Compound getCompound() {
 		return compound;
@@ -59,11 +68,10 @@ public class Sample implements Serializable{
 	public void setDilution(double dilution) {
 		this.dilution = dilution;
 	}
-	public DataPointMetadata getComment() {
-		return comment;
+	public int getId() {
+		return id;
 	}
-	public void setComment(DataPointMetadata comment) {
-		this.comment = comment;
+	public void setId(int id) {
+		this.id = id;
 	}
-
 }

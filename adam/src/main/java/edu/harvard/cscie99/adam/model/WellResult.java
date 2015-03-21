@@ -1,15 +1,21 @@
 package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  * 
  * @author Gerson
  *
  */
+@Entity
 public class WellResult implements Serializable{
 	
 	/**
@@ -17,15 +23,28 @@ public class WellResult implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "well_result_id")
 	private int id;
-	private Well well;
 	
-	private Date creationTime;
-	private List<Sample> samples;
+	@Column(name = "position_x")
+	private int positionX;
 	
-	public WellResult(){
-		samples = new ArrayList<Sample>();
-	}
+	@Column(name = "position_y")
+	private int positionY;
+	
+	@Column(name = "value")
+	private double value;
+	
+	@Column(name = "time")
+	private Date time;
+	
+	@Column(name = "label")
+	private String label;
+	
+	@OneToOne(mappedBy = "comment_id")
+    private Comment comment;
 	
 	public int getId() {
 		return id;
@@ -33,24 +52,49 @@ public class WellResult implements Serializable{
 	public void setId(int id) {
 		this.id = id;
 	}
-	public Well getWell() {
-		return well;
+
+	public double getValue() {
+		return value;
 	}
-	public void setWell(Well well) {
-		this.well = well;
+
+	public void setValue(double value) {
+		this.value = value;
 	}
-	public Date getCreationTime() {
-		return creationTime;
+
+	public Date getTime() {
+		return time;
 	}
-	public void setCreationTime(Date creationTime) {
-		this.creationTime = creationTime;
+
+	public void setTime(Date time) {
+		this.time = time;
 	}
-	public List<Sample> getSamples() {
-		return samples;
+
+	public String getLabel() {
+		return label;
 	}
-	public void setSamples(List<Sample> samples) {
-		this.samples = samples;
+
+	public void setLabel(String label) {
+		this.label = label;
 	}
-	
+
+	public Comment getComment() {
+		return comment;
+	}
+
+	public void setComment(Comment comment) {
+		this.comment = comment;
+	}
+	public int getPositionX() {
+		return positionX;
+	}
+	public void setPositionX(int positionX) {
+		this.positionX = positionX;
+	}
+	public int getPositionY() {
+		return positionY;
+	}
+	public void setPositionY(int positionY) {
+		this.positionY = positionY;
+	}
 
 }

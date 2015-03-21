@@ -3,6 +3,19 @@ package edu.harvard.cscie99.adam.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
 import edu.harvard.cscie99.adam.profile.User;
 
 /**
@@ -10,6 +23,7 @@ import edu.harvard.cscie99.adam.profile.User;
  * @author Gerson
  *
  */
+@Entity
 public class Plate extends Template{
 	
 	/**
@@ -19,20 +33,45 @@ public class Plate extends Template{
 	
 	public enum PlateType {STANDARD, DEEP, PERFORATED}
 
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "plate_id")
 	private int id;
+	
+	@Column(name = "column_id")
 	private String barcode;
+	
+	@Column(name = "description")
 	private String description;
+	
+	@Column(name = "protocol")
 	private String protocol;
-	private List<String> tags;
-	private List<String> comments;
+	
+	@Column(name = "tags")
+	private String tags;
+	
+	@OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Comment> comments;
+	
+	@OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Well> wells;
-	private User owner;
+	
+	@ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ID")
+    private User owner;
+	
+	//TODO: revisit
+	@ManyToMany 
+	@JoinTable(
+			name="TABLE_NAME",
+			joinColumns={@JoinColumn(name="User_id", referencedColumnName="user_id")},
+			inverseJoinColumns={@JoinColumn(name="project_id", referencedColumnName="project_id")})
 	private List<User> collaborators;
 	
 	public Plate(){
-		tags = new ArrayList<String>();
 		wells = new ArrayList<Well>();
 		collaborators = new ArrayList<User>();
+		comments = new ArrayList<Comment>();
 	}
 	
 	public int getId() {
@@ -59,10 +98,10 @@ public class Plate extends Template{
 	public void setProtocol(String protocol) {
 		this.protocol = protocol;
 	}
-	public List<String> getTags() {
+	public String getTags() {
 		return tags;
 	}
-	public void setTags(List<String> tags) {
+	public void setTags(String tags) {
 		this.tags = tags;
 	}
 	public List<Well> getWells() {
@@ -84,11 +123,11 @@ public class Plate extends Template{
 		this.collaborators = collaborators;
 	}
 
-	public List<String> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<String> comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
 	

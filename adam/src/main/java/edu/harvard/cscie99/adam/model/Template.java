@@ -1,14 +1,25 @@
 package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import edu.harvard.cscie99.adam.profile.User;
 
 /**
  * 
  * @author Gerson
  *
  */
+@Entity
 public class Template implements Serializable{
 	
 	/**
@@ -16,18 +27,32 @@ public class Template implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "template_id")
 	private int id;
-	private String name;
-	private String description;
-	private int numWellsX;
-	private int numWellsY;
-	private Project project;
-	private Plate.PlateType type;
-	private List<String> tags;
 	
-	public Template(){
-		tags = new ArrayList<String>();
-	}
+	@Column(name = "name")
+	private String name;
+	
+	@Column(name = "description")
+	private String description;
+	
+	@Column(name = "numWellsX")
+	private int numWellsX;
+	
+	@Column(name = "numWellsY")
+	private int numWellsY;
+	
+	@ManyToOne(targetEntity = Project.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "project_id")
+    private Project project;
+	
+	@Column(name = "plate_type")
+	private Plate.PlateType type;
+	
+	@Column(name = "tags")
+	private String tags;
 	
 	public int getId() {
 		return id;
@@ -65,10 +90,10 @@ public class Template implements Serializable{
 	public void setType(Plate.PlateType type) {
 		this.type = type;
 	}
-	public List<String> getTags() {
+	public String getTags() {
 		return tags;
 	}
-	public void setTags(List<String> tags) {
+	public void setTags(String tags) {
 		this.tags = tags;
 	}
 
