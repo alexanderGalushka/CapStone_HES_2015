@@ -11,5 +11,11 @@ public class ColumnReaderTest extends TestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
+	
+	public void testReadColumnBasedFile(){
+		
+		//TODO
+		assertTrue(true);
+	}
 
 }

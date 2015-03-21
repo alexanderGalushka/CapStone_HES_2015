@@ -11,5 +11,11 @@ public class CollaborationControllerTest extends TestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
+	
+	public void testSharePlateWithUser(){
+		
+		//TODO
+		assertTrue(true);
+	}
 
 }
