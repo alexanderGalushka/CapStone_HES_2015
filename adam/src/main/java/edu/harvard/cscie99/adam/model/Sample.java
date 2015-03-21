@@ -19,6 +19,9 @@ public class Sample implements Serializable{
 	private String label;
 	private Date time;
 	private Compound compound;
+	private Substrate substrate;
+	private double dilution;
+	private DataPointMetadata comment;
 	
 	public double getValue() {
 		return value;
@@ -43,6 +46,24 @@ public class Sample implements Serializable{
 	}
 	public void setCompound(Compound compound) {
 		this.compound = compound;
+	}
+	public Substrate getSubstrate() {
+		return substrate;
+	}
+	public void setSubstrate(Substrate substrate) {
+		this.substrate = substrate;
+	}
+	public double getDilution() {
+		return dilution;
+	}
+	public void setDilution(double dilution) {
+		this.dilution = dilution;
+	}
+	public DataPointMetadata getComment() {
+		return comment;
+	}
+	public void setComment(DataPointMetadata comment) {
+		this.comment = comment;
 	}
 
 }
