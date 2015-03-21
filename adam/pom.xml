@@ -19,7 +19,6 @@
 
 
 	<dependencies>
-	
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -49,7 +48,10 @@
 			<artifactId>jackson-core</artifactId>
 			<version>2.4.1</version>
 		</dependency>
+		
+		<!-- Database dependencies - START -->
 
+<!-- 
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -67,7 +69,9 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 			<version>1.2.2.RELEASE</version>
 		</dependency>
-
+ -->
+ 		<!-- Database dependencies - END -->
+ 		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
