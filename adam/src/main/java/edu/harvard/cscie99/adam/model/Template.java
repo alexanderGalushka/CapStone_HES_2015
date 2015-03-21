@@ -1,6 +1,7 @@
 package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Template implements Serializable{
@@ -17,6 +18,10 @@ public class Template implements Serializable{
 	private int numWellsY;
 	private Plate.PlateType type;
 	private List<String> tags;
+	
+	public Template(){
+		tags = new ArrayList<String>();
+	}
 	
 	public int getId() {
 		return id;

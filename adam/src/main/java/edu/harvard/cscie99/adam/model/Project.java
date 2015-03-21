@@ -1,6 +1,7 @@
 package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,12 @@ public class Project implements Serializable {
 	private List<User> collaborators;
 	private List<String> tags;
 	private List<String> comments;
+	
+	public Project(){
+		collaborators = new ArrayList<User>();
+		tags = new ArrayList<String>();
+		comments = new ArrayList<String>();
+	}
 	
 	public Integer getId() {
 		return id;

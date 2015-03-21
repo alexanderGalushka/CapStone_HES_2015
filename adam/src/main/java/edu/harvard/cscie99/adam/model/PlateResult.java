@@ -1,6 +1,7 @@
 package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,11 @@ public class PlateResult implements Serializable{
 	private Date lastUpdate;
 	private List<String> comments;
 	private List<WellResult> wells;
+	
+	public PlateResult(){
+		comments = new ArrayList<String>();
+		wells = new ArrayList<WellResult>();
+	}
 	
 	public int getId() {
 		return id;
