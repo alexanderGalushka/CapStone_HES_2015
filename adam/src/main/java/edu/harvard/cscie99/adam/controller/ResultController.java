@@ -40,9 +40,23 @@ public class ResultController {
 		return null;
 	}
 	
-	@RequestMapping(value = "/project/{projectId}/result/search", method = RequestMethod.POST)
+	@RequestMapping(value = "/project/{projectId}/result/search", method = RequestMethod.GET)
 	@ResponseBody
 	public List<PlateResult> searchResult(
+			@PathVariable("projectId") int projectId,
+			@RequestParam(value="id", required=false) int id,
+			@RequestParam(value="plate_id", required=false) int plate_id,
+			@RequestParam(value="creationDate", required=false) Date creationDate,
+			@RequestParam(value="comment", required=false) String comment,
+			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
+		
+		//TODO
+		return null;
+	}
+	
+	@RequestMapping(value = "/project/{projectId}/result/list", method = RequestMethod.GET)
+	@ResponseBody
+	public List<PlateResult> listResults(
 			@PathVariable("projectId") int projectId,
 			@RequestParam(value="id", required=false) int id,
 			@RequestParam(value="plate_id", required=false) int plate_id,
