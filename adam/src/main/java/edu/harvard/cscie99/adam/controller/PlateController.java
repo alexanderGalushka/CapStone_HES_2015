@@ -35,7 +35,7 @@ public class PlateController {
 	 * 
 	 * @param plate
 	 * @param user
-	 * @return
+	 * @return true/false
 	 */
 	@RequestMapping(value = "/plate/save", method = RequestMethod.POST)
 	@ResponseBody

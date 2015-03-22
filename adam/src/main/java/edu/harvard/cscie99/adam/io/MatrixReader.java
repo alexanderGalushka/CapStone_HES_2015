@@ -279,7 +279,7 @@ public class MatrixReader {
     
     /**
      * Returns a matrix of raw values
-     * @return 
+     * @return double[][]
      */
     public double[][] getRawMatrix() {
         double[][] mtx = new double[numRows][numCols];
@@ -295,7 +295,7 @@ public class MatrixReader {
     
     /**
      * Returns a matrix of N(0,1) normalized valus
-     * @return 
+     * @return double[][]
      */
     public double[][] getNormalizedMatrix() {
         double[] means = new double[numCols];
