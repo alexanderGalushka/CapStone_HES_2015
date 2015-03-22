@@ -34,7 +34,7 @@ public class PlateService {
 			plate.setBarcode("1234");
 			plate.setDescription("desc");
 			plate.setId(1);
-			plate.setName("name");
+//			plate.setName("name");
 			
 			plates.add(plate);
 		}

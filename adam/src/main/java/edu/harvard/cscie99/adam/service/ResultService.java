@@ -76,7 +76,7 @@ public class ResultService {
 			Plate plate = new Plate();
 			plate.setId(i);
 			plate.setDescription("description"+i);
-			plate.setName("plate"+i);
+//			plate.setName("plate"+i);
 			
 			List<WellResult> wells = new ArrayList<>();
 			for (int j = 0; j < 10; j++){
@@ -106,7 +106,7 @@ public class ResultService {
 		Plate plate = new Plate();
 		plate.setId(1);
 		plate.setDescription("description");
-		plate.setName("plate");
+//		plate.setName("plate");
 		
 		List<WellResult> wells = new ArrayList<>();
 		for (int j = 0; j < 10; j++){

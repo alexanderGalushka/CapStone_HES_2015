@@ -37,9 +37,9 @@ public class ProjectService {
 		project.setCreationDate(new Date());
 		project.setCollaborators(collaborators);
 		project.setOwner(owner);
-		project.setTags(tags);
+//		project.setTags(tags);
 		project.setDescription(description);
-		project.setCompounds(compounds);
+//		project.setCompounds(compounds);
 		project.setType(type);
 		
 		return project;
