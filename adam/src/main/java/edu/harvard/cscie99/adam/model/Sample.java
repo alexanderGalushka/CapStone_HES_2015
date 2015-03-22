@@ -3,6 +3,11 @@ package edu.harvard.cscie99.adam.model;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 public class Sample implements Serializable{
 	
 	/**

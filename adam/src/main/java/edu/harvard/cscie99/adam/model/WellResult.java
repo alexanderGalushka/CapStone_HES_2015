@@ -1,9 +1,15 @@
 package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 public class WellResult implements Serializable{
 	
 	/**
@@ -16,6 +22,10 @@ public class WellResult implements Serializable{
 	
 	private Date creationTime;
 	private List<Sample> samples;
+	
+	public WellResult(){
+		samples = new ArrayList<Sample>();
+	}
 	
 	public int getId() {
 		return id;

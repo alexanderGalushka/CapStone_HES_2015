@@ -6,6 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.harvard.cscie99.adam.service.DataAnalysisService;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 @RestController
 @RequestMapping(value = "/")
 public class DataAnalysisController {

@@ -1,9 +1,15 @@
 package edu.harvard.cscie99.adam.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.harvard.cscie99.adam.profile.User;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 public class Plate extends Template{
 	
 	/**
@@ -21,6 +27,12 @@ public class Plate extends Template{
 	private List<Well> wells;
 	private User owner;
 	private List<User> collaborators;
+	
+	public Plate(){
+		tags = new ArrayList<String>();
+		wells = new ArrayList<Well>();
+		collaborators = new ArrayList<User>();
+	}
 	
 	public int getId() {
 		return id;

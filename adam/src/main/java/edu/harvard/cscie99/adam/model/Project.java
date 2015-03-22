@@ -1,11 +1,17 @@
 package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import edu.harvard.cscie99.adam.profile.User;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 public class Project implements Serializable {
 	
 	public enum ProjectType {BIOLOGICAL, PHARMACEUTICAL}
@@ -17,11 +23,21 @@ public class Project implements Serializable {
 	
 	private Integer id;
 	private String name;
+	private String description;
+	private List<Compound> compounds;
+	private String type;
 	private Date creationDate;
 	private User owner;
 	private List<User> collaborators;
 	private List<String> tags;
 	private List<String> comments;
+	private boolean isPublic;
+	
+	public Project(){
+		collaborators = new ArrayList<User>();
+		tags = new ArrayList<String>();
+		comments = new ArrayList<String>();
+	}
 	
 	public Integer getId() {
 		return id;
@@ -64,6 +80,38 @@ public class Project implements Serializable {
 	}
 	public void setComments(List<String> comments) {
 		this.comments = comments;
+	}
+
+	public boolean isPublic() {
+		return isPublic;
+	}
+
+	public void setPublic(boolean isPublic) {
+		this.isPublic = isPublic;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public List<Compound> getCompounds() {
+		return compounds;
+	}
+
+	public void setCompounds(List<Compound> compounds) {
+		this.compounds = compounds;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	

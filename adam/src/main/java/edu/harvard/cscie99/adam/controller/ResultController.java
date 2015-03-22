@@ -16,9 +16,16 @@ import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.PlateResult;
 import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.model.WellResult;
+import edu.harvard.cscie99.adam.profile.User;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
+import edu.harvard.cscie99.adam.service.ProfileService;
 import edu.harvard.cscie99.adam.service.ResultService;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 @RestController
 @RequestMapping(value = "/")
 public class ResultController {
@@ -29,43 +36,23 @@ public class ResultController {
 	@Autowired
 	private AuthenticationService authService;
 	
-	@RequestMapping(value = "/project/{projectId}/result/upload_from_file", method = RequestMethod.POST)
-	@ResponseBody
-	public PlateResult uploadResultFromFile(
-			@PathVariable("projectId") int projectId,
-			@RequestParam(value="filename", required=true) String filename,
-			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
-		
-		//TODO
-		return null;
-	}
-	
+	@Autowired
+	private ProfileService profileService;
+
 	@RequestMapping(value = "/project/{projectId}/result/search", method = RequestMethod.GET)
 	@ResponseBody
 	public List<PlateResult> searchResult(
 			@PathVariable("projectId") int projectId,
 			@RequestParam(value="id", required=false) int id,
-			@RequestParam(value="plate_id", required=false) int plate_id,
+			@RequestParam(value="plate_id", required=false) int plateId,
 			@RequestParam(value="creationDate", required=false) Date creationDate,
 			@RequestParam(value="comment", required=false) String comment,
-			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
+			@RequestParam(value="user", required=true) String userName) throws UnauthorizedOperationException{
 		
-		//TODO
-		return null;
-	}
-	
-	@RequestMapping(value = "/project/{projectId}/result/list", method = RequestMethod.GET)
-	@ResponseBody
-	public List<PlateResult> listResults(
-			@PathVariable("projectId") int projectId,
-			@RequestParam(value="id", required=false) int id,
-			@RequestParam(value="plate_id", required=false) int plate_id,
-			@RequestParam(value="creationDate", required=false) Date creationDate,
-			@RequestParam(value="comment", required=false) String comment,
-			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
+		User user = profileService.getUserDetails(userName);
 		
-		//TODO
-		return null;
+		List<PlateResult> results = resultService.search(projectId, id, plateId, creationDate, comment, user);
+		return results;
 	}
 	
 	@RequestMapping(value = "/project/{projectId}/result/{result_id}/detail", method = RequestMethod.POST)
@@ -75,47 +62,46 @@ public class ResultController {
 			@PathVariable("result_id") int resultId,
 			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
 		
-		//TODO
-		return null;
-	}
-	
-	@RequestMapping(value = "/project/{projectId}/result/{result_id}/normalize/{function}", method = RequestMethod.POST)
-	@ResponseBody
-	public PlateResult normalizeResult(
-			@PathVariable("project_id") int projectId,
-			@PathVariable("result_id") int resultId,
-			@PathVariable("function") String function,
-			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
+		boolean hasAccess = authService.checkUserAccess(user, projectId, "getResult");
 		
-		//TODO
-		return null;
+		if (hasAccess){
+			PlateResult plateResult = resultService.retrieveResult(projectId, resultId);
+			return plateResult;
+		}
+		else{
+			throw new UnauthorizedOperationException ("User don't have permission", user, "getResult");
+		}
 	}
 	
-	@RequestMapping(value = "/project/{projectId}/result/{result_id}/removenan", method = RequestMethod.POST)
-	@ResponseBody
-	public PlateResult removeNan(
-			@PathVariable("project_id") int projectId,
-			@PathVariable("result_id") int resultId,
-			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
-		
-		//TODO
-		return null;
-	}
-	
-//	@RequestMapping(value = "/plate/result/{plateId}", method = RequestMethod.GET)
+	//VALIDATE 
+//	@RequestMapping(value = "/project/{projectId}/result/{result_id}/normalize/{function}", method = RequestMethod.POST)
 //	@ResponseBody
-//	public PlateResult getPlateResult(
-//			@PathVariable("plateId") Integer plateId,
+//	public PlateResult normalizeResult(
+//			@PathVariable("project_id") int projectId,
+//			@PathVariable("result_id") int resultId,
+//			@PathVariable("function") String function,
 //			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
 //		
-//		boolean hasAccess = authService.checkUserAccess(user, plateId, "getPlateResult");
+//		boolean hasAccess = authService.checkUserAccess(user, projectId, "getResult");
 //		
 //		if (hasAccess){
-//			return resultService.getPlateResult(plateId);
+//			PlateResult plateResult = resultService.retrieveResult(projectId, resultId);
+//			return plateResult;
 //		}
 //		else{
-//			throw new UnauthorizedOperationException ("User don't have permission", user, "getPlateResult");
+//			throw new UnauthorizedOperationException ("User don't have permission", user, "getResult");
 //		}
+//	}
+//	
+//	@RequestMapping(value = "/project/{projectId}/result/{result_id}/removenan", method = RequestMethod.POST)
+//	@ResponseBody
+//	public PlateResult removeNan(
+//			@PathVariable("project_id") int projectId,
+//			@PathVariable("result_id") int resultId,
+//			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
+//		
+//		//TODO
+//		return null;
 //	}
 
 }

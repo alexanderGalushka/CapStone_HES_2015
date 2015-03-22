@@ -4,6 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 @Component
 public class TagService {
 	

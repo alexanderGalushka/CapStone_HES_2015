@@ -1,8 +1,14 @@
 package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 public class Well implements Serializable{
 	
 	/**
@@ -24,6 +30,12 @@ public class Well implements Serializable{
 	
 	private Double dosagePerc;
 	private List<WellResult> wellResults;
+	
+	public Well(){
+		compounds = new ArrayList<Compound>();
+		labels = new ArrayList<String>();
+		wellResults = new ArrayList<WellResult>();
+	}
 	
 	public Plate getPlate() {
 		return plate;

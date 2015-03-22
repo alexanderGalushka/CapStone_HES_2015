@@ -1,5 +1,6 @@
 package edu.harvard.cscie99.adam.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
 import edu.harvard.cscie99.adam.model.PlateResult;
 import edu.harvard.cscie99.adam.model.Project;
+import edu.harvard.cscie99.adam.profile.User;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
+import edu.harvard.cscie99.adam.service.ProfileService;
 import edu.harvard.cscie99.adam.service.ProjectService;
 import edu.harvard.cscie99.adam.service.ResultService;
 import edu.harvard.cscie99.adam.service.TagService;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 @RestController
 @RequestMapping(value = "/")
 public class ProjectController {
@@ -27,20 +35,36 @@ public class ProjectController {
 
 	@Autowired
 	private TagService tagService;
-	
+
 	@Autowired
 	private AuthenticationService authService;
+	
+	@Autowired
+	private ProfileService profileService;
 	
 	@RequestMapping(value = "/project/create", method = RequestMethod.POST)
 	@ResponseBody
 	public Project createProject(
-			@PathVariable("project") Project project,
+			@RequestParam(value="visibility", required=true) boolean isVisible,
+			@RequestParam(value="name", required=true) String name,
+			@RequestParam(value="type", required=true) String type,
+			@RequestParam(value="compounds", required=false) List<String> compounds,
+			@RequestParam(value="description", required=false) String description,
+			@RequestParam(value="tags", required=false) List<String> tags,
+			@RequestParam(value="collaborators", required=false) List<String> collaborators,
 			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
 		
 		boolean hasAccess = authService.checkUserAccess(user, null, "createProject");
 		
 		if (hasAccess){
-			return projectService.createProject(project);
+			
+			List<User> listCollaborators = new ArrayList<User>();
+			for (String username : collaborators){
+				listCollaborators.add(profileService.getUserDetails(username));
+			}
+			
+			
+			return projectService.createProject(name, type, null, description, tags, null, null);
 		}
 		else{
 			throw new UnauthorizedOperationException ("User don't have permission", user, "createProject");

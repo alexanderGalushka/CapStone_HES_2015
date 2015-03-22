@@ -1,8 +1,14 @@
 package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * @author Gerson
+ *
+ */
 public class Template implements Serializable{
 	
 	/**
@@ -15,8 +21,13 @@ public class Template implements Serializable{
 	private String description;
 	private int numWellsX;
 	private int numWellsY;
+	private Project project;
 	private Plate.PlateType type;
 	private List<String> tags;
+	
+	public Template(){
+		tags = new ArrayList<String>();
+	}
 	
 	public int getId() {
 		return id;
@@ -59,6 +70,14 @@ public class Template implements Serializable{
 	}
 	public void setTags(List<String> tags) {
 		this.tags = tags;
+	}
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 }
