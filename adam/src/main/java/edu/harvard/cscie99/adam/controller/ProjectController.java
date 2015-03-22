@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.harvard.cscie99.adam.error.SessionTimeouException;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
+import edu.harvard.cscie99.adam.model.Comment;
 import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.profile.User;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
@@ -138,7 +139,7 @@ public class ProjectController {
 		if (hasAccess){
 			
 			Project project = projectService.retrieveProject(projectId);
-			project.getTags().add(tag);
+//			project.getTags().add(tag);
 			projectService.updateProject(project);
 			
 			return true;
@@ -166,7 +167,7 @@ public class ProjectController {
 		if (hasAccess){
 			
 			Project project = projectService.retrieveProject(projectId);
-			project.getComments().add(comment);
+//			project.getComments().add(comment);
 			projectService.updateProject(project);
 			
 			return true;
@@ -178,7 +179,7 @@ public class ProjectController {
 	
 	@RequestMapping(value = "/project/{projectId}/updates", method = RequestMethod.POST)
 	@ResponseBody
-	public List<String> getProjectUpdates(
+	public List<Comment> getProjectUpdates(
 			@PathVariable("projectId") int projectId,			
 			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
 		
