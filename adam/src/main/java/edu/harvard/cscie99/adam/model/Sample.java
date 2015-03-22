@@ -27,7 +27,7 @@ public class Sample implements Serializable{
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "plate_result_id")
+    @Column(name = "sample_id")
 	private int id;
 	
 	@Column(name = "label")
@@ -43,6 +43,9 @@ public class Sample implements Serializable{
 	
 	@Column(name = "dilution")
 	private double dilution;
+	
+	@ManyToOne(targetEntity = Well.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Well well;
 	
 	public String getLabel() {
 		return label;

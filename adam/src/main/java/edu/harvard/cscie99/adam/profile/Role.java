@@ -27,7 +27,7 @@ public class Role {
 	@Column(name = "description")
 	private String description;
 	
-	@OneToMany(mappedBy = "permission", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Permission> permissions;
 	
 	public int getId() {

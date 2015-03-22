@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -44,11 +46,11 @@ public class Project implements Serializable {
 	@Column(name = "description")
 	private String description;
 	
-	@OneToMany(mappedBy = "compound", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Compound> compounds;
+//	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private List<Compound> compounds;
 
-	@OneToMany(mappedBy = "substrate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Substrate> substrates;
+//	@OneToMany(mappedBy = "substrate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private List<Substrate> substrates;
 	
 	@Column(name = "project_type")
 	private String type;
@@ -56,26 +58,32 @@ public class Project implements Serializable {
 	@Column(name = "creation_date")
 	private Date creationDate;
 	
+//	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	@ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_id")
+	
 	@ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "USER_ID")
     private User owner;
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany
+	  @JoinTable(
+	      name="project_collab",
+	      joinColumns={@JoinColumn(name="project_id", referencedColumnName="project_id")},
+	      inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="user_id")})
 	private List<User> collaborators;
 	
 	@Column(name="tags")
-	private List<String> tags;
+	private String tags;
 	
-	@Column(name="comments")
-	private List<String> comments;
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Comment> comments;
 	
 	@Column(name = "public")
 	private boolean isPublic;
 	
 	public Project(){
 		collaborators = new ArrayList<User>();
-		tags = new ArrayList<String>();
-		comments = new ArrayList<String>();
+		comments = new ArrayList<Comment>();
 	}
 	
 	public Integer getId() {
@@ -108,16 +116,16 @@ public class Project implements Serializable {
 	public void setCollaborators(List<User> collaborators) {
 		this.collaborators = collaborators;
 	}
-	public List<String> getTags() {
+	public String getTags() {
 		return tags;
 	}
-	public void setTags(List<String> tags) {
+	public void setTags(String tags) {
 		this.tags = tags;
 	}
-	public List<String> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
-	public void setComments(List<String> comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
 
@@ -137,13 +145,13 @@ public class Project implements Serializable {
 		this.description = description;
 	}
 
-	public List<Compound> getCompounds() {
-		return compounds;
-	}
-
-	public void setCompounds(List<Compound> compounds) {
-		this.compounds = compounds;
-	}
+//	public List<Compound> getCompounds() {
+//		return compounds;
+//	}
+//
+//	public void setCompounds(List<Compound> compounds) {
+//		this.compounds = compounds;
+//	}
 
 	public String getType() {
 		return type;

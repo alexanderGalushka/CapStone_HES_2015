@@ -2,7 +2,9 @@ package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  * 
@@ -40,6 +43,7 @@ public class Well implements Serializable{
 	
 	@Column(name = "plate_position_x")
 	private int platePositionX;
+	
 	@Column(name = "plate_position_y")
 	private int platePositionY;
 	
@@ -52,12 +56,15 @@ public class Well implements Serializable{
 	@Column(name = "control_type")
 	private ControlType controlType;
 	
-	private List<Sample> samples;
-	private List<WellResult> wellResults;
+	@OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Sample> samples;
+	
+	@OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<WellResult> wellResults;
 	
 	public Well(){
-		samples = new ArrayList<Sample>();
-		wellResults = new ArrayList<WellResult>();
+		samples = new HashSet<Sample>();
+		wellResults = new HashSet<WellResult>();
 	}
 	
 	public Plate getPlate() {
@@ -102,16 +109,16 @@ public class Well implements Serializable{
 	public void setControlType(ControlType controlType) {
 		this.controlType = controlType;
 	}
-	public List<WellResult> getWellResults() {
+	public Set<WellResult> getWellResults() {
 		return wellResults;
 	}
-	public void setWellResults(List<WellResult> wellResults) {
+	public void setWellResults(Set<WellResult> wellResults) {
 		this.wellResults = wellResults;
 	}
-	public List<Sample> getSamples() {
+	public Set<Sample> getSamples() {
 		return samples;
 	}
-	public void setSamples(List<Sample> samples) {
+	public void setSamples(Set<Sample> samples) {
 		this.samples = samples;
 	}
 }

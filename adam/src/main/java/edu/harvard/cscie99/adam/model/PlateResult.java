@@ -12,8 +12,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import edu.harvard.cscie99.adam.profile.User;
 
 /**
  * 
@@ -33,16 +36,16 @@ public class PlateResult implements Serializable{
     @Column(name = "plate_result_id")
 	private int id;
 	
-	@OneToOne(mappedBy = "plate_id")
+	@ManyToOne(targetEntity = Plate.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Plate plate;
 	
 	@Column(name = "creation_date")
 	private Date creationDate;
 	
-	@OneToMany(mappedBy = "comments", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "plateResult", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Comment> comments;
 	
-	@OneToMany(mappedBy = "well_result", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "plateResult", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<WellResult> wells;
 	
 	public PlateResult(){

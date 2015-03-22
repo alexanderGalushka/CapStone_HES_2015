@@ -2,6 +2,7 @@ package edu.harvard.cscie99.adam.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -38,7 +39,7 @@ public class Plate extends Template{
     @Column(name = "plate_id")
 	private int id;
 	
-	@Column(name = "column_id")
+	@Column(name = "barcode")
 	private String barcode;
 	
 	@Column(name = "description")
@@ -50,22 +51,23 @@ public class Plate extends Template{
 	@Column(name = "tags")
 	private String tags;
 	
-	@OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Comment> comments;
 	
-	@OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Well> wells;
 	
 	@ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "USER_ID")
     private User owner;
 	
-	//TODO: revisit
+	@OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<PlateResult> plateResults;
+	
 	@ManyToMany 
 	@JoinTable(
-			name="TABLE_NAME",
-			joinColumns={@JoinColumn(name="User_id", referencedColumnName="user_id")},
-			inverseJoinColumns={@JoinColumn(name="project_id", referencedColumnName="project_id")})
+			name="plate_collab",
+			joinColumns={@JoinColumn(name="plate_id", referencedColumnName="plate_id")},
+			inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="user_id")})
 	private List<User> collaborators;
 	
 	public Plate(){
@@ -74,12 +76,12 @@ public class Plate extends Template{
 		comments = new ArrayList<Comment>();
 	}
 	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
+//	public int getId() {
+//		return id;
+//	}
+//	public void setId(int id) {
+//		this.id = id;
+//	}
 	public String getBarcode() {
 		return barcode;
 	}
@@ -129,6 +131,22 @@ public class Plate extends Template{
 
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
+	}
+
+	public Set<PlateResult> getPlateResults() {
+		return plateResults;
+	}
+
+	public void setPlateResults(Set<PlateResult> plateResults) {
+		this.plateResults = plateResults;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 }

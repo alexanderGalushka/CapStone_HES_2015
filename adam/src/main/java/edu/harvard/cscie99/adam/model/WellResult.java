@@ -2,13 +2,20 @@ package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import edu.harvard.cscie99.adam.profile.User;
 
 /**
  * 
@@ -43,8 +50,14 @@ public class WellResult implements Serializable{
 	@Column(name = "label")
 	private String label;
 	
-	@OneToOne(mappedBy = "comment_id")
-    private Comment comment;
+	@ManyToOne(targetEntity = Well.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Well well;
+	
+	@OneToMany(mappedBy = "wellResult", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Comment> comments;
+	
+	@ManyToOne(targetEntity = PlateResult.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private PlateResult plateResult;
 	
 	public int getId() {
 		return id;
@@ -77,12 +90,12 @@ public class WellResult implements Serializable{
 		this.label = label;
 	}
 
-	public Comment getComment() {
-		return comment;
+	public Set<Comment> getComments() {
+		return comments;
 	}
 
-	public void setComment(Comment comment) {
-		this.comment = comment;
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
 	}
 	public int getPositionX() {
 		return positionX;
@@ -95,6 +108,18 @@ public class WellResult implements Serializable{
 	}
 	public void setPositionY(int positionY) {
 		this.positionY = positionY;
+	}
+	public PlateResult getPlateResult() {
+		return plateResult;
+	}
+	public void setPlateResult(PlateResult plateResult) {
+		this.plateResult = plateResult;
+	}
+	public Well getWell() {
+		return well;
+	}
+	public void setWell(Well well) {
+		this.well = well;
 	}
 
 }

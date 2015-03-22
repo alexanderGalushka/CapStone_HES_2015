@@ -12,8 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import edu.harvard.cscie99.adam.profile.User;
-
 /**
  * 
  * @author Gerson
@@ -44,7 +42,7 @@ public class Template implements Serializable{
 	@Column(name = "numWellsY")
 	private int numWellsY;
 	
-	@ManyToOne(targetEntity = Project.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = Project.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private Project project;
 	
