@@ -52,10 +52,10 @@ public class AuthenticationService
 			if (user.getUsername().equals(userName))
 			{
 				// is Role is intended to be a permission like for simplification purpose?
-				if(checkPermission(user.getPermissions(), service))
-				{
-					result = true;
-				}
+//				if(checkPermission(user.getPermissions(), service))
+//				{
+//					result = true;
+//				}
 			}
 			else
 			{
