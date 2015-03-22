@@ -1,5 +1,6 @@
 package edu.harvard.cscie99.adam.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -25,7 +26,7 @@ import edu.harvard.cscie99.adam.profile.User;
  *
  */
 @Entity
-public class Plate extends Template{
+public class Plate implements Serializable{
 	
 	/**
 	 * Initial version
@@ -38,6 +39,9 @@ public class Plate extends Template{
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "plate_id")
 	private int id;
+	
+	@ManyToOne(targetEntity = Template.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Template template;
 	
 	@Column(name = "barcode")
 	private String barcode;

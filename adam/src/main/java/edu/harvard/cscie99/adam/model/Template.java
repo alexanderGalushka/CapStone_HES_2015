@@ -1,6 +1,7 @@
 package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  * 
@@ -51,6 +53,9 @@ public class Template implements Serializable{
 	
 	@Column(name = "tags")
 	private String tags;
+	
+	@OneToMany(mappedBy = "template", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Plate> plates;
 	
 	public int getId() {
 		return id;
@@ -101,6 +106,12 @@ public class Template implements Serializable{
 
 	public void setProject(Project project) {
 		this.project = project;
+	}
+	public Set<Plate> getPlates() {
+		return plates;
+	}
+	public void setPlates(Set<Plate> plates) {
+		this.plates = plates;
 	}
 
 }
