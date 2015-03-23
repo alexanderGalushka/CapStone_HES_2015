@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import edu.harvard.cscie99.adam.error.LogoutFailedException;
 import edu.harvard.cscie99.adam.error.ParserException;
+import edu.harvard.cscie99.adam.error.SessionTimeouException;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
 import edu.harvard.cscie99.adam.model.PlateResult;
 import edu.harvard.cscie99.adam.model.Template;
@@ -67,7 +69,16 @@ public class ParserController {
 			@PathVariable("filename") String filename,
 			@RequestParam(value="user", required=true) String user) throws ParserException, UnauthorizedOperationException{
 		
-		boolean hasAccess = authService.checkUserAccess(user, null, "removeCollaboratorFromProject");
+		boolean hasAccess = false;
+		try {
+			hasAccess = authService.checkUserAccess(user, null, "removeCollaboratorFromProject");
+		} catch (SessionTimeouException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LogoutFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if (hasAccess){
 			return parserService.parseTemplateFromFile(filename);
@@ -84,7 +95,16 @@ public class ParserController {
 			@PathVariable("filename") String filename,
 			@RequestParam(value="user", required=true) String user) throws ParserException, UnauthorizedOperationException{
 		
-		boolean hasAccess = authService.checkUserAccess(user, projectId, "parseResults");
+		boolean hasAccess = false;
+		try {
+			hasAccess = authService.checkUserAccess(user, projectId, "parseResults");
+		} catch (SessionTimeouException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LogoutFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if (hasAccess){
 			return parserService.parseResultsFromFile(filename);

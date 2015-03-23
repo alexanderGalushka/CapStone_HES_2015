@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.harvard.cscie99.adam.error.LogoutFailedException;
+import edu.harvard.cscie99.adam.error.SessionTimeouException;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
 import edu.harvard.cscie99.adam.model.PlateResult;
 import edu.harvard.cscie99.adam.model.Project;
@@ -54,7 +56,16 @@ public class ProjectController {
 			@RequestParam(value="collaborators", required=false) List<String> collaborators,
 			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
 		
-		boolean hasAccess = authService.checkUserAccess(user, null, "createProject");
+		boolean hasAccess = false;
+		try {
+			hasAccess = authService.checkUserAccess(user, null, "createProject");
+		} catch (SessionTimeouException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LogoutFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if (hasAccess){
 			
@@ -77,7 +88,16 @@ public class ProjectController {
 			@PathVariable("projectId") int projectId,
 			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
 		
-		boolean hasAccess = authService.checkUserAccess(user, projectId, "getProject");
+		boolean hasAccess = false;
+		try {
+			hasAccess = authService.checkUserAccess(user, projectId, "getProject");
+		} catch (SessionTimeouException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LogoutFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if (hasAccess){
 			return projectService.retrieveProject(projectId);
@@ -93,7 +113,16 @@ public class ProjectController {
 			@PathVariable("project") Project project,
 			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
 		
-		boolean hasAccess = authService.checkUserAccess(user, project.getId(), "updateProject");
+		boolean hasAccess = false;
+		try {
+			hasAccess = authService.checkUserAccess(user, project.getId(), "updateProject");
+		} catch (SessionTimeouException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LogoutFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if (hasAccess){
 			return projectService.updateProject(project);
@@ -110,7 +139,16 @@ public class ProjectController {
 			@PathVariable("tag") String tag,
 			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
 		
-		boolean hasAccess = authService.checkUserAccess(user, projectId, "addTagToProject");
+		boolean hasAccess = false;
+		try {
+			hasAccess = authService.checkUserAccess(user, projectId, "addTagToProject");
+		} catch (SessionTimeouException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LogoutFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if (hasAccess){
 			
@@ -132,7 +170,16 @@ public class ProjectController {
 			@PathVariable("comment") String comment,
 			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
 		
-		boolean hasAccess = authService.checkUserAccess(user, projectId, "addCommentToProject");
+		boolean hasAccess = false;
+		try {
+			hasAccess = authService.checkUserAccess(user, projectId, "addCommentToProject");
+		} catch (SessionTimeouException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LogoutFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if (hasAccess){
 			
@@ -153,7 +200,16 @@ public class ProjectController {
 			@PathVariable("projectId") int projectId,			
 			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
 		
-		boolean hasAccess = authService.checkUserAccess(user, projectId, "addCommentToProject");
+		boolean hasAccess = false;
+		try {
+			hasAccess = authService.checkUserAccess(user, projectId, "addCommentToProject");
+		} catch (SessionTimeouException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LogoutFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if (hasAccess){
 			

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.harvard.cscie99.adam.error.LogoutFailedException;
+import edu.harvard.cscie99.adam.error.SessionTimeouException;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
 import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.profile.User;
@@ -51,7 +53,16 @@ public class CollaborationController {
 			@PathVariable("username") String username,
 			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
 		
-		boolean hasAccess = authService.checkUserAccess(user, null, "addCollaboratorToProject");
+		boolean hasAccess = false;
+		try {
+			hasAccess = authService.checkUserAccess(user, null, "addCollaboratorToProject");
+		} catch (SessionTimeouException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LogoutFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if (hasAccess){
 			Project project = projectService.retrieveProject(projectId);
@@ -75,7 +86,16 @@ public class CollaborationController {
 			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
 		
 		//TODO: get data from DB
-		boolean hasAccess = authService.checkUserAccess(user, null, "removeCollaboratorFromProject");
+		boolean hasAccess = false;
+		try {
+			hasAccess = authService.checkUserAccess(user, null, "removeCollaboratorFromProject");
+		} catch (SessionTimeouException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LogoutFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if (hasAccess){
 			Project project = projectService.retrieveProject(projectId);
@@ -98,7 +118,16 @@ public class CollaborationController {
 			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
 		
 		//TODO: get data from DB
-		boolean hasAccess = authService.checkUserAccess(user, null, "removeAllCollaborators");
+		boolean hasAccess = false;
+		try {
+			hasAccess = authService.checkUserAccess(user, null, "removeAllCollaborators");
+		} catch (SessionTimeouException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LogoutFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if (hasAccess){
 			Project project = projectService.retrieveProject(projectId);
