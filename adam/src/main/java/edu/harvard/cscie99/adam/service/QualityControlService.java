@@ -52,7 +52,7 @@ public class QualityControlService
 	// QC is perform on each map, which would have positive and negative controls and samples
 	// how to provide all these 3 data matrices?
 	// how to split the plate editor data? how to shift the data in the matrix to get just samples matrix?
-	public QualityControlsService(double[][] posControls, double[][] negControls, double[][] samples)
+	public void QualityControlsService(double[][] posControls, double[][] negControls, double[][] samples)
 	{
 		//this.posControls = posControls;
 		//this.negControls = negControls;
