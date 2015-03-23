@@ -19,11 +19,6 @@ import edu.harvard.cscie99.adam.model.Template;
  *
  */
 @Component
-/**
- * To transform .csv to matricies 
- * @author APGalush
- *
- */
 public class ParserService {
 	
 	public Template parseTemplateFromFile(String filename) throws ParserException{
@@ -100,12 +95,4 @@ public class ParserService {
 	    return plateResult;
 	}
 
-	// Matrixnum = numTimePoints*numMeasurements*numPlates
-	
-	public ParserService
-	{
-		
-	}
-	
-	
 }
