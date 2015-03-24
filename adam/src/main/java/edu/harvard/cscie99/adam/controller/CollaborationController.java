@@ -1,7 +1,5 @@
 package edu.harvard.cscie99.adam.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.harvard.cscie99.adam.error.LogoutFailedException;
 import edu.harvard.cscie99.adam.error.SessionTimeouException;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
 import edu.harvard.cscie99.adam.model.Project;
@@ -59,9 +56,6 @@ public class CollaborationController {
 		} catch (SessionTimeouException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (LogoutFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		if (hasAccess){
@@ -92,9 +86,6 @@ public class CollaborationController {
 		} catch (SessionTimeouException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (LogoutFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		if (hasAccess){
@@ -122,9 +113,6 @@ public class CollaborationController {
 		try {
 			hasAccess = authService.checkUserAccess(user, null, "removeAllCollaborators");
 		} catch (SessionTimeouException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (LogoutFailedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

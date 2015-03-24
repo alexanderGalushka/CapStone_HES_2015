@@ -2,8 +2,7 @@ package edu.harvard.cscie99.adam.service;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.harvard.cscie99.adam.error.LoginFailedException;
-import edu.harvard.cscie99.adam.error.LogoutFailedException;
 import edu.harvard.cscie99.adam.error.SessionTimeouException;
+import edu.harvard.cscie99.adam.profile.Permission;
 import edu.harvard.cscie99.adam.profile.User;
 
 /**
@@ -40,53 +39,60 @@ public class AuthenticationService
 	}
 	
 	
-	public boolean checkUserAccess(String userName, Integer projectId, String service) throws SessionTimeouException, LogoutFailedException
+	public boolean checkUserAccess(String userName, Integer projectId, String service) throws SessionTimeouException
 	{
 		boolean result = false;
-		// it could be performance burden, but assures that the session in up
-		if (checkIfSessionIsUp())
+		// it could be performance burden, but assures that the session is up
+		Object userObject = session.getAttribute("user");
+		
+		if (userObject != null)
 		{
-			User user  = (User) session.getAttribute("user");
+			User user  = (User) userObject;
 			// validate if the userName is not injected!
 			if (user.getUsername().equals(userName))
 			{
 				// is Role is intended to be a permission like for simplification purpose?
-				if(user.getRoles().contains(service))
+				if(checkPermission(user.getPermissions(), service))
 				{
 					result = true;
 				}
 			}
+			else
+			{
+				// TODO
+			}	
 		}
 		else
 		{
 			//do we want to invalidate the session and logout the user here?
-			logout( session, userName );
+			logout();
 			throw new SessionTimeouException("timeout exception");
 		}
 		
 		return result;
 	}
 	
-
+    private boolean checkPermission(List<Permission> permissions, String service)
+    {
+    	boolean result = false;
+    	for (Permission perm : permissions)
+    	{
+    		if(perm.getService().equals(service))
+    		{
+    			result = true;
+    			break;
+    		}          
+    	}
+    	return result;
+    }
 	
 	/**
 	 * this method logs out the user by invalidating session,
 	 * this method considered to be the end point of user's session
-	 * @param session - user's session, HttpSession
-	 * @param login - login name,  string
-	 * @throws LogoutFailedException if failed to login
 	 */
-	public void logout( HttpSession session, String login ) throws LogoutFailedException
+	public void logout()
 	{
-		// call to DB
-		/*
-		if ( if login not in DB )
-		{
-			String message = "login is incorrect";
-			throw new LogoutFailedException( message );
-		}
-		*/
-		
+        // keep it simple
 		session.invalidate(); //invalidate session
 	}
 	
@@ -111,28 +117,31 @@ public class AuthenticationService
 									 HttpServletRequest request, 
 									 HttpServletResponse response) throws LoginFailedException
 	{
-		session = request.getSession();
+		session = request.getSession();// it will go and look after the web.xml properties and check for the time out setting.
 
 	    //if User is already logged and session not expired
 		
 		// not sure what getAttribute would return if the attribute is not set - need to check!
-		User user = (User) session.getAttribute("user");
 		
-		if(user.equals(null))
+		Object userObject = session.getAttribute("user");
+		User user = null;
+		if(userObject == null)
 		{
 			//authenticationService will lookup database and match user and password
 			user = validateCredentials(username, password);
 	       
-			if (!user.equals(null))
+			if (user != null)
 			{
 				session.setAttribute("user", user);
 			}
 			else
 			{
 				throw new LoginFailedException("bad credentials");
-			}
-
-			
+			}			
+		}
+		else
+		{
+			user = (User) userObject;
 		}
 	
 		return user;
@@ -172,20 +181,6 @@ public class AuthenticationService
 		
 		return generatedPassword;
 	   //****************************************//
-   }
-	
-   private boolean checkIfSessionIsUp()
-   {
-	   boolean result = true;
-	   
-	   Date timeNow = Calendar.getInstance().getTime();
-	   // not sure what getCreationTime returns... might need more logic/conversion
-	   long timeElapsed = timeNow.getTime() - session.getCreationTime();
-	   
-	   // how to get the constant out of the web.xml?
-	   //if (timeElapsed > config-timeout) {result = false;}
-	   
-	   return result;
    }
 	
 }

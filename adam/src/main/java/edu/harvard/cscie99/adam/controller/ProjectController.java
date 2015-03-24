@@ -11,16 +11,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.harvard.cscie99.adam.error.LogoutFailedException;
 import edu.harvard.cscie99.adam.error.SessionTimeouException;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
-import edu.harvard.cscie99.adam.model.PlateResult;
 import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.profile.User;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
 import edu.harvard.cscie99.adam.service.ProfileService;
 import edu.harvard.cscie99.adam.service.ProjectService;
-import edu.harvard.cscie99.adam.service.ResultService;
 import edu.harvard.cscie99.adam.service.TagService;
 
 /**
@@ -62,9 +59,6 @@ public class ProjectController {
 		} catch (SessionTimeouException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (LogoutFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		if (hasAccess){
@@ -94,9 +88,6 @@ public class ProjectController {
 		} catch (SessionTimeouException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (LogoutFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		if (hasAccess){
@@ -117,9 +108,6 @@ public class ProjectController {
 		try {
 			hasAccess = authService.checkUserAccess(user, project.getId(), "updateProject");
 		} catch (SessionTimeouException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (LogoutFailedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -143,9 +131,6 @@ public class ProjectController {
 		try {
 			hasAccess = authService.checkUserAccess(user, projectId, "addTagToProject");
 		} catch (SessionTimeouException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (LogoutFailedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -176,9 +161,6 @@ public class ProjectController {
 		} catch (SessionTimeouException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (LogoutFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		if (hasAccess){
@@ -204,9 +186,6 @@ public class ProjectController {
 		try {
 			hasAccess = authService.checkUserAccess(user, projectId, "addCommentToProject");
 		} catch (SessionTimeouException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (LogoutFailedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

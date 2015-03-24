@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import edu.harvard.cscie99.adam.error.LogoutFailedException;
 import edu.harvard.cscie99.adam.error.ParserException;
 import edu.harvard.cscie99.adam.error.SessionTimeouException;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
@@ -75,9 +74,6 @@ public class ParserController {
 		} catch (SessionTimeouException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (LogoutFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		if (hasAccess){
@@ -99,9 +95,6 @@ public class ParserController {
 		try {
 			hasAccess = authService.checkUserAccess(user, projectId, "parseResults");
 		} catch (SessionTimeouException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (LogoutFailedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

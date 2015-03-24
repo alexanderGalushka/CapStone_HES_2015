@@ -70,9 +70,6 @@ public class ResultController {
 		} catch (SessionTimeouException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (LogoutFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		if (hasAccess){
