@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan({ "edu.harvard.cscie99.adam"})
-@ImportResource({ "classpath:persistence.xml" })
+@ImportResource({ "classpath:hibernate.cfg.xml" })
 public class PersistenceXmlConfig {
 
     public PersistenceXmlConfig() {
