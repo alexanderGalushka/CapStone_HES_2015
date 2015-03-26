@@ -15,7 +15,6 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="compound")
 public class Compound implements Serializable{
 	
 	/**
@@ -26,15 +25,15 @@ public class Compound implements Serializable{
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "compound_id")
-	private String id;
+	private int id;
 	
 	@Column(name = "name")
 	private String name;
 	
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getName() {
