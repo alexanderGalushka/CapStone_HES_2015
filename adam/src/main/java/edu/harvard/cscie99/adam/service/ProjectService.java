@@ -1,5 +1,6 @@
 package edu.harvard.cscie99.adam.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,22 @@ public class ProjectService {
 	public boolean updateProject(Project project){
 		//TODO
 		return true;
+	}
+	
+	public List<Project> list(){
+		
+		List<Project> projects = new ArrayList<Project>();
+		
+		for (int i = 0; i < 5; i++){
+			Project proj = new Project();
+			proj.setName("proj"+i);
+			proj.setCreationDate(new Date());
+			proj.setPublic(true);
+			proj.setType("Biological");
+			projects.add(proj);
+		}
+		return projects;
+		
 	}
 	
 	public Project createProject(String name, String type, List<Compound> compounds, String description, List<String> tags, List<User> collaborators, User owner){
