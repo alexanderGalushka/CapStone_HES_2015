@@ -45,89 +45,33 @@ public class CollaborationController {
 	
 	@RequestMapping(value = "/share/{projectId}/user/{username}", method = RequestMethod.GET)
 	@ResponseBody
-	public Project addCollaboratorToProject(
+	public boolean addCollaboratorToProject(
 			@PathVariable("projectId") int projectId,
-			@PathVariable("username") String username,
-			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
+			@PathVariable("username") String username){
 		
-		boolean hasAccess = false;
-		try {
-			hasAccess = authService.checkUserAccess(user, null, "addCollaboratorToProject");
-		} catch (SessionTimeouException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
-		if (hasAccess){
-			Project project = projectService.retrieveProject(projectId);
-			User collaborator = profileService.getUserDetails(username);
+		Project project = projectService.retrieveProject(projectId);
+		User collaborator = profileService.getUserDetails(username);
 			
-			project.getCollaborators().add(collaborator);
-			projectService.updateProject(project);
-			
-			return project;
-		}
-		else{
-			throw new UnauthorizedOperationException ("User don't have permission", user, "addCollaboratorToProject");
-		}
+		project.getCollaborators().add(collaborator);
+		return projectService.updateProject(project);
 	}
 	
 	@RequestMapping(value = "/unshare/{projectId}/user/{username}", method = RequestMethod.POST)
 	@ResponseBody
 	public Project removeCollaboratorFromProject(
 			@PathVariable("projectId") int projectId,
-			@PathVariable("username") String username,
-			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
+			@PathVariable("username") String username) throws UnauthorizedOperationException{
 		
-		//TODO: get data from DB
-		boolean hasAccess = false;
-		try {
-			hasAccess = authService.checkUserAccess(user, null, "removeCollaboratorFromProject");
-		} catch (SessionTimeouException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
-		if (hasAccess){
-			Project project = projectService.retrieveProject(projectId);
-			User collaborator = profileService.getUserDetails(username);
-			
-			project.getCollaborators().remove(collaborator);
-			projectService.updateProject(project);
-			
-			return project;
-		}
-		else{
-			throw new UnauthorizedOperationException ("User don't have permission", user, "removeCollaboratorFromProject");
-		}
-	}
-	
-	@RequestMapping(value = "/project/{projectId}/make_private", method = RequestMethod.POST)
-	@ResponseBody
-	public Project removeAllCollaborators(
-			@PathVariable("projectId") int projectId,
-			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
+		Project project = projectService.retrieveProject(projectId);
+		User collaborator = profileService.getUserDetails(username);
 		
-		//TODO: get data from DB
-		boolean hasAccess = false;
-		try {
-			hasAccess = authService.checkUserAccess(user, null, "removeAllCollaborators");
-		} catch (SessionTimeouException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		project.getCollaborators().remove(collaborator);
+		projectService.updateProject(project);
 		
-		if (hasAccess){
-			Project project = projectService.retrieveProject(projectId);
-			
-			project.getCollaborators().clear();
-			projectService.updateProject(project);
-			
-			return project;
-		}
-		else{
-			throw new UnauthorizedOperationException ("User don't have permission", user, "removeAllCollaborators");
-		}
+		return project;
+		
 	}
 	
 }

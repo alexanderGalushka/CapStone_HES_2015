@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.harvard.cscie99.adam.error.SessionTimeouException;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
 import edu.harvard.cscie99.adam.model.Comment;
+import edu.harvard.cscie99.adam.model.Compound;
 import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.profile.User;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
@@ -51,30 +52,16 @@ public class ProjectController {
 			@RequestParam(value="compounds", required=false) List<String> compounds,
 			@RequestParam(value="description", required=false) String description,
 			@RequestParam(value="tags", required=false) List<String> tags,
-			@RequestParam(value="collaborators", required=false) List<String> collaborators,
-			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
+			@RequestParam(value="collaborators", required=false) List<String> collaborators) throws UnauthorizedOperationException{
 		
-		boolean hasAccess = false;
-		try {
-			hasAccess = authService.checkUserAccess(user, null, "createProject");
-		} catch (SessionTimeouException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
+		List<User> listCollaborators = new ArrayList<User>();
+		for (String username : collaborators){
+			listCollaborators.add(profileService.getUserDetails(username));
 		}
 		
-		if (hasAccess){
-			
-			List<User> listCollaborators = new ArrayList<User>();
-			for (String username : collaborators){
-				listCollaborators.add(profileService.getUserDetails(username));
-			}
-			
-			
-			return projectService.createProject(name, type, null, description, tags, null, null);
-		}
-		else{
-			throw new UnauthorizedOperationException ("User don't have permission", user, "createProject");
-		}
+		
+		return projectService.createProject(name, type, null, description, tags, null, null);
 	}
 	
 	@RequestMapping(value = "/project/{projectId}/details", method = RequestMethod.GET)
@@ -83,122 +70,76 @@ public class ProjectController {
 			@PathVariable("projectId") int projectId,
 			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
 		
-		boolean hasAccess = false;
-		try {
-			hasAccess = authService.checkUserAccess(user, projectId, "getProject");
-		} catch (SessionTimeouException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		if (hasAccess){
-			return projectService.retrieveProject(projectId);
-		}
-		else{
-			throw new UnauthorizedOperationException ("User don't have permission", user, "getProject");
-		}
+//		boolean hasAccess = false;
+//		try {
+//			hasAccess = authService.checkUserAccess(user, projectId, "getProject");
+//		} catch (SessionTimeouException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		if (hasAccess){
+//			return projectService.retrieveProject(projectId);
+//		}
+//		else{
+//			throw new UnauthorizedOperationException ("User don't have permission", user, "getProject");
+//		}
+		Project project = new Project();
+		project.setDescription("description");
+		project.setId(1);
+		project.setName("name");
+		project.setPublic(true);
+		project.setType("type");
+		project.setTags("tags");
+		return project;
 	}
 	
 	@RequestMapping(value = "/project/{projectId}/update", method = RequestMethod.GET)
 	@ResponseBody
 	public boolean updateProject(
-			@PathVariable("project") Project project,
-			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
+			@PathVariable("project") Project project) throws UnauthorizedOperationException{
 		
-		boolean hasAccess = false;
-		try {
-			hasAccess = authService.checkUserAccess(user, project.getId(), "updateProject");
-		} catch (SessionTimeouException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		if (hasAccess){
-			return projectService.updateProject(project);
-		}
-		else{
-			throw new UnauthorizedOperationException ("User don't have permission", user, "updateProject");
-		}
+		return projectService.updateProject(project);
 	}
 	
 	@RequestMapping(value = "/project/{projectId}/add_tag/{tag}", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean addTagToProject(
+	public boolean tagProject(
 			@PathVariable("projectId") int projectId,
-			@PathVariable("tag") String tag,
-			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
+			@PathVariable("tag") String tag) throws UnauthorizedOperationException{
 		
-		boolean hasAccess = false;
-		try {
-			hasAccess = authService.checkUserAccess(user, projectId, "addTagToProject");
-		} catch (SessionTimeouException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
-		if (hasAccess){
 			
-			Project project = projectService.retrieveProject(projectId);
+		Project project = projectService.retrieveProject(projectId);
 //			project.getTags().add(tag);
-			projectService.updateProject(project);
-			
-			return true;
-		}
-		else{
-			throw new UnauthorizedOperationException ("User don't have permission", user, "addTagToProject");
-		}
+		projectService.updateProject(project);
+		
+		return true;
+		
 	}
 	
 	@RequestMapping(value = "/project/{projectId}/add_comment/{comment}", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean addCommentToProject(
 			@PathVariable("projectId") int projectId,
-			@PathVariable("comment") String comment,
-			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
+			@PathVariable("comment") String comment) throws UnauthorizedOperationException{
 		
-		boolean hasAccess = false;
-		try {
-			hasAccess = authService.checkUserAccess(user, projectId, "addCommentToProject");
-		} catch (SessionTimeouException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		if (hasAccess){
-			
-			Project project = projectService.retrieveProject(projectId);
+		Project project = projectService.retrieveProject(projectId);
 //			project.getComments().add(comment);
-			projectService.updateProject(project);
-			
-			return true;
-		}
-		else{
-			throw new UnauthorizedOperationException ("User don't have permission", user, "addCommentToProject");
-		}
+		projectService.updateProject(project);
+		
+		return true;
+		
 	}
 	
 	@RequestMapping(value = "/project/{projectId}/updates", method = RequestMethod.POST)
 	@ResponseBody
 	public List<Comment> getProjectUpdates(
-			@PathVariable("projectId") int projectId,			
-			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
+			@PathVariable("projectId") int projectId) throws UnauthorizedOperationException{
 		
-		boolean hasAccess = false;
-		try {
-			hasAccess = authService.checkUserAccess(user, projectId, "addCommentToProject");
-		} catch (SessionTimeouException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
-		if (hasAccess){
-			
-			Project project = projectService.retrieveProject(projectId);
-			return project.getComments();
-		}
-		else{
-			throw new UnauthorizedOperationException ("User don't have permission", user, "addCommentToProject");
-		}
+		Project project = projectService.retrieveProject(projectId);
+		return project.getComments();
 	}
 	
 	@RequestMapping(value = "/tags/list", method = RequestMethod.GET)
@@ -208,6 +149,35 @@ public class ProjectController {
 		List<String> tags = tagService.listRecentTags(numberOfTags);
 			
 		return tags;
+	}
+	
+	@RequestMapping(value = "/project/list", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Project> listProjects() throws UnauthorizedOperationException{
+			
+		return projectService.list();
+	}
+	
+	@RequestMapping(value = "/project/{project_id}/compounds/list", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Compound> listCompoundsFromProject(
+			@PathVariable("projectId") int projectId) throws UnauthorizedOperationException{
+			
+//		User user = UserContext.getUser(request);
+//		List<Project> projects = projectService.list();
+//			
+//		return projects;
+		
+		List<Compound> compounds = new ArrayList<Compound>();
+		
+		for (int i = 0; i < 10; i++){
+			Compound compound = new Compound();
+			compound.setId(i);
+			compound.setName("compound" + i);
+			compounds.add(compound);
+		}
+		
+		return compounds;
 	}
 	
 }

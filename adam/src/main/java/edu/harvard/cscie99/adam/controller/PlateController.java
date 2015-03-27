@@ -30,22 +30,28 @@ public class PlateController {
 	@Autowired
 	private AuthenticationService authService;
 	
-	/**
-	 * Saves the Plate object into the DB. (FR 3.1)
-	 * 
-	 * @param plate
-	 * @param user
-	 * @return
-	 */
-	@RequestMapping(value = "/plate/save", method = RequestMethod.POST)
+	
+	@RequestMapping(value = "/project/{project_id}/plate/list", method = RequestMethod.GET)
 	@ResponseBody
-	public boolean savePlate(
-			@RequestParam(value="plate", required=true) Plate plate,
-			@RequestParam(value="user", required=true) String user){
+	public List<Plate> listPlates(
+			@PathVariable("project_id") int projectId,
+			@RequestParam(value="search", required=false) String search){
 		
-		//TODO
-		return true;
+		List<Plate> plates = new ArrayList<Plate>();
+		
+		for (int i = 0; i < 10; i++){
+			Plate plate = new Plate();
+			plate.setBarcode("1234");
+			plate.setDescription("desc"+i);
+			plate.setProtocol("protocol");
+			plate.setTags("cells");
+			plates.add(plate);
+		}
+		
+		return plates;
 	}
+	
+	
 	
 	@RequestMapping(value = "/template/search", method = RequestMethod.GET)
 	@ResponseBody
@@ -54,8 +60,7 @@ public class PlateController {
 			@RequestParam(value="name", required=false) String name,
 			@RequestParam(value="description", required=false) String description,
 			@RequestParam(value="tag", required=false) String tag,
-			@RequestParam(value="type", required=false) Plate.PlateType type,
-			@RequestParam(value="user", required=true) String user){
+			@RequestParam(value="type", required=false) Plate.PlateType type){
 		
 		//TODO
 		return null;
@@ -65,8 +70,7 @@ public class PlateController {
 	@ResponseBody
 	public Template getTemplateDetails(
 			@PathVariable("project_id") int project_id,
-			@PathVariable("template_id") int template_id,
-			@RequestParam(value="user", required=true) String user){
+			@PathVariable("template_id") int template_id){
 		
 		//TODO
 		return null;
@@ -86,22 +90,41 @@ public class PlateController {
 	@ResponseBody
 	public boolean saveTemplate(
 			@PathVariable("project_id") int project_id,
-			@RequestParam(value="template", required=true) Template template,
-			@RequestParam(value="user", required=true) String user){
+			@RequestParam(value="template", required=true) Template templater){
 		
 		//TODO
 		return true;
 	}
 	
-	@RequestMapping(value = "/project/{project_id}/plate/save", method = RequestMethod.POST)
+	@RequestMapping(value = "/project/{project_id}/plate/create", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean savePlate(
 			@PathVariable("project_id") int project_id,
-			@RequestParam(value="plate", required=true) Plate plate,
-			@RequestParam(value="user", required=true) String user){
+			@RequestParam(value="plate", required=true) Plate plate){
 		
 		//TODO
 		return true;
 	}
+	
+	@RequestMapping(value = "/project/{project_id}/plate/{plate_id}/update", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean updatePlate(
+			@PathVariable("project_id") int project_id,
+			@RequestParam(value="plate", required=true) Plate plate){
+		
+		//TODO
+		return true;
+	}
+	
+	@RequestMapping(value = "/project/{project_id}/plate/{plate_id}/remove", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean removePlate(
+			@PathVariable("project_id") int project_id,
+			@RequestParam(value="plate", required=true) Plate plate){
+		
+		//TODO
+		return true;
+	}
+	
 
 }

@@ -41,20 +41,22 @@ public class ResultController {
 	@Autowired
 	private ProfileService profileService;
 
-	@RequestMapping(value = "/project/{projectId}/result/search", method = RequestMethod.GET)
+	@RequestMapping(value = "/result/list", method = RequestMethod.GET)
 	@ResponseBody
 	public List<PlateResult> searchResult(
-			@PathVariable("projectId") int projectId,
-			@RequestParam(value="id", required=false) int id,
-			@RequestParam(value="plate_id", required=false) int plateId,
-			@RequestParam(value="creationDate", required=false) Date creationDate,
-			@RequestParam(value="comment", required=false) String comment,
-			@RequestParam(value="user", required=true) String userName) throws UnauthorizedOperationException{
+			@RequestParam(value="search", required=false) String search)
+//			@RequestParam(value="id", required=false) int id,
+//			@RequestParam(value="plate_id", required=false) int plateId,
+//			@RequestParam(value="creationDate", required=false) Date creationDate,
+//			@RequestParam(value="comment", required=false) String comment,
+//			@RequestParam(value="user", required=true) String userName) 
+			throws UnauthorizedOperationException{
 		
-		User user = profileService.getUserDetails(userName);
-		
-		List<PlateResult> results = resultService.search(projectId, id, plateId, creationDate, comment, user);
-		return results;
+//		User user = profileService.getUserDetails(userName);
+//		
+//		List<PlateResult> results = resultService.search(projectId, id, plateId, creationDate, comment, user);
+//		return results;
+		return null;
 	}
 	
 	@RequestMapping(value = "/project/{projectId}/result/{result_id}/detail", method = RequestMethod.POST)

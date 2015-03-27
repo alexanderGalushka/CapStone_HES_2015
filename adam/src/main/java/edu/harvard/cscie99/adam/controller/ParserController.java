@@ -40,8 +40,7 @@ public class ParserController {
 	@ResponseBody
 	public boolean uploadFile(
 			@PathVariable("filename") String filename,
-			@RequestParam("file") MultipartFile file,
-			@RequestParam(value="user", required=true) String user){
+			@RequestParam("file") MultipartFile file){
 		
 		//TODO: save filename and path in DB
 		
@@ -65,45 +64,17 @@ public class ParserController {
 	@ResponseBody
 	public Template parseTemplate(
 			@PathVariable("project_id") int projectId,
-			@PathVariable("filename") String filename,
-			@RequestParam(value="user", required=true) String user) throws ParserException, UnauthorizedOperationException{
+			@PathVariable("filename") String filename) throws ParserException, UnauthorizedOperationException{
 		
-		boolean hasAccess = false;
-		try {
-			hasAccess = authService.checkUserAccess(user, null, "removeCollaboratorFromProject");
-		} catch (SessionTimeouException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		if (hasAccess){
-			return parserService.parseTemplateFromFile(filename);
-		}
-		else{
-			throw new UnauthorizedOperationException ("User don't have permission", user, "removeCollaboratorFromProject");
-		}
+		return parserService.parseTemplateFromFile(filename);
 	}
 	
 	@RequestMapping(value = "/project/{project_id}/result/parse/{filename}", method = RequestMethod.POST)
 	@ResponseBody
 	public PlateResult parseResults(
 			@PathVariable("project_id") int projectId,
-			@PathVariable("filename") String filename,
-			@RequestParam(value="user", required=true) String user) throws ParserException, UnauthorizedOperationException{
+			@PathVariable("filename") String filename) throws ParserException, UnauthorizedOperationException{
 		
-		boolean hasAccess = false;
-		try {
-			hasAccess = authService.checkUserAccess(user, projectId, "parseResults");
-		} catch (SessionTimeouException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		if (hasAccess){
-			return parserService.parseResultsFromFile(filename);
-		}
-		else{
-			throw new UnauthorizedOperationException ("User don't have permission", user, "parseResults");
-		}
+		return parserService.parseResultsFromFile(filename);
 	}
 }
