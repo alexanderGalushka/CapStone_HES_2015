@@ -4,6 +4,7 @@
 <script src="static/js/d3.min.js"></script>
 <script src="static/js/c3.min.js"></script>
 <script src="static/js/adam.js"></script>
+<script src="static/js/angular.min.js"></script>
 <link rel="stylesheet" href="static/style/c3.min.css" type="text/css" />
 </head>
 <body>
