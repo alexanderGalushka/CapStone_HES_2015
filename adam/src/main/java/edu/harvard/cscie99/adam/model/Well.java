@@ -38,8 +38,10 @@ public class Well implements Serializable{
 	private Integer id;
 	
 	@ManyToOne(targetEntity = Plate.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "plate_id")
     private Plate plate;
+	
+	@ManyToOne(targetEntity = Template.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Template template;
 	
 	@Column(name = "plate_position_x")
 	private int platePositionX;
