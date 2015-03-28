@@ -3,6 +3,7 @@ package edu.harvard.cscie99.adam.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
@@ -71,6 +72,35 @@ public class ProjectService {
 		project.setCreationDate(new Date());
 		
 		return project;
+	}
+	
+	public Set<Project> listMyProjects()
+	{
+		
+		Set<Project> myProjects = null;
+		//TODO
+		
+		// query DB or call the User method?
+		
+		
+		// access to the User through the session...
+		
+		Object userObject = AuthenticationService.getInstance().getSession().getAttribute("user");
+		
+		if (userObject != null)
+		{
+			User user  = (User) userObject;
+			
+			myProjects = user.getProjects();
+		}
+		
+		return myProjects;
+	}
+	
+	public Set<Project> listOthersProjects()
+	{
+		//TODO
+		return null;
 	}
 	
 }

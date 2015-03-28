@@ -29,14 +29,34 @@ public class AuthenticationService
 {
 	private HttpSession session;
 	
+	private static AuthenticationService _obj;
+	
+	
 	public HttpSession getSession() {
 		return session;
 	}
 	
-	public AuthenticationService()
+	private AuthenticationService()
 	{
 		session = null;
 	}
+	
+	
+    /**
+     * A special static method to access the single AuthServiceImpl instance
+     * @return _obj - type: AuthServiceImpl
+     * Singleton pattern
+     */
+    public static AuthenticationService getInstance()
+    {
+    	//Checking if the instance is null, then it will create new one and return it
+        if (_obj == null)  
+        //otherwise it will return previous one.
+        {
+            _obj = new AuthenticationService();
+        }
+        return _obj;
+    }
 	
 	
 	public boolean checkUserAccess(String userName, Integer projectId, String service) throws SessionTimeouException
