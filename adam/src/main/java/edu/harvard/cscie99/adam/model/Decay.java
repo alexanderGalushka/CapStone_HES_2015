@@ -8,9 +8,16 @@ package edu.harvard.cscie99.adam.model;
  *
  */
 
-public class Decay 
+public class Decay extends Curve
 {
-
+	private double decayRate;
+	
+	private double plateau;
+	
+	private double halfTime;
+	
+	private String graphType = "decay";
+	
 	public double getDecayRate() {
 		return decayRate;
 	}
@@ -37,11 +44,18 @@ public class Decay
 	}
 
 
-	private double decayRate;
-	
-	private double plateau;
-	
-	private double halfTime;
+	@Override
+	public double[] getDataPoints() 
+	{
+		double[] coeff = new double[] {plateau, decayRate, halfTime};
+		return coeff;
+	}
+
+	@Override
+	public String getCurveType()
+	{
+		return graphType;
+	}
 	
 	
 }

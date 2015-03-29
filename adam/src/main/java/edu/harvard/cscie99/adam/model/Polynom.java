@@ -1,6 +1,5 @@
 package edu.harvard.cscie99.adam.model;
 
-import javax.persistence.Entity;
 
 /**
  * 
@@ -8,38 +7,53 @@ import javax.persistence.Entity;
  *
  */
 
-public class Polynom 
+public class Polynom extends Curve
 {
 
-	public double getSlope() {
-		return slope;
-	}
-
-	public void setSlope(double slope) {
-		this.slope = slope;
-	}
-
-	public double getIntercept() {
-		return intercept;
-	}
-
-	public void setIntercept(double intercept) {
-		this.intercept = intercept;
-	}
-
-	public double getrSquared() {
+	private double[] polinimialCoeff;
+	
+	private double rSquared;
+	
+	private String curveType;
+	
+	public double getrSquared()
+	{
 		return rSquared;
 	}
 
-	public void setrSquared(double rSquared) {
+	public void setrSquared(double rSquared)
+	{
 		this.rSquared = rSquared;
 	}
 
-	private double slope;
+	public double[] getPolinomialCoeff()
+	{
+		return polinimialCoeff;
+	}
+
+	public void setPolinomialCoeff(double[] polinimialCoeff)
+	{
+		this.polinimialCoeff = polinimialCoeff;
+	}
+
+
+	public void setCurveType(String curveType)
+	{
+		this.curveType = curveType;
+	}
 	
-	private double intercept;
-	
-	private double rSquared;
+	@Override
+	public double[] getDataPoints()
+    {
+		return polinimialCoeff;
+	}
+
+	@Override
+	public String getCurveType() 
+	{
+		return curveType;
+	}
+
 	
 }
 
