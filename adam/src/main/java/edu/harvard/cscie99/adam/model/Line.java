@@ -7,7 +7,7 @@ import javax.persistence.Entity;
  * @author Alexander G.
  *
  */
-@Entity
+
 public class Line
 {
 

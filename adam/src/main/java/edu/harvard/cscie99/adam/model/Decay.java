@@ -1,13 +1,13 @@
 package edu.harvard.cscie99.adam.model;
 
-import javax.persistence.Entity;
+
 
 /**
  * 
  * @author Alexander G.
  *
  */
-@Entity
+
 public class Decay 
 {
 
