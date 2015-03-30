@@ -194,6 +194,14 @@ public class DataAnalysisService
 		return growth;
 	}
 	
+	//TODO
+	// michaelis-menten	y = vmax*x/[km + x]
+	
+	public void getMichaelisMenten (double x[], double y[])
+	{
+	    //LevenbergMarquardtEstimator estimator = 
+          //      new LevenbergMarquardtEstimator()
+	}
 	
 	private boolean ifDecay(double y[])
 	{
@@ -210,7 +218,6 @@ public class DataAnalysisService
 		return result;
 	}
 	
-	//TODO
-	// michaelis-menten	y = vmax*x/[km + x]
+
 	
 }
