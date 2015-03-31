@@ -37,18 +37,13 @@ public class Well implements Serializable{
     @Column(name = "well_id")
 	private Integer id;
 	
-	@ManyToOne(targetEntity = Plate.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Plate plate;
-	
-	@ManyToOne(targetEntity = Template.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Template template;
-	
 	@Column(name = "plate_position_x")
 	private int platePositionX;
 	
 	@Column(name = "plate_position_y")
 	private int platePositionY;
 	
+	// add each label to this string separated by space character
 	@Column(name = "labels")
 	private String labels;
 	
@@ -58,23 +53,19 @@ public class Well implements Serializable{
 	@Column(name = "control_type")
 	private ControlType controlType;
 	
-	@OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<Sample> samples;
+	@Column(name = "if_valid")
+	private ControlType ifValid;
+	
+	@Column(name = "substrate")
+	private Substrate substare; 
 	
 	@OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<WellResult> wellResults;
+	private Set<Compound> compouds;
+
+	@Column(name = "well_result")
+	private WellResult wellResult;
 	
-	public Well(){
-		samples = new HashSet<Sample>();
-		wellResults = new HashSet<WellResult>();
-	}
-	
-	public Plate getPlate() {
-		return plate;
-	}
-	public void setPlate(Plate plate) {
-		this.plate = plate;
-	}
+
 	public int getPlatePositionX() {
 		return platePositionX;
 	}
@@ -111,16 +102,17 @@ public class Well implements Serializable{
 	public void setControlType(ControlType controlType) {
 		this.controlType = controlType;
 	}
-	public Set<WellResult> getWellResults() {
-		return wellResults;
+	public WellResult getWellResult() {
+		return wellResult;
 	}
-	public void setWellResults(Set<WellResult> wellResults) {
-		this.wellResults = wellResults;
+	public void setWellResults(WellResult wellResult) {
+		this.wellResult = wellResult;
 	}
-	public Set<Sample> getSamples() {
-		return samples;
+
+	public ControlType getIfValid() {
+		return ifValid;
 	}
-	public void setSamples(Set<Sample> samples) {
-		this.samples = samples;
+	public void setIfValid(ControlType ifValid) {
+		this.ifValid = ifValid;
 	}
 }

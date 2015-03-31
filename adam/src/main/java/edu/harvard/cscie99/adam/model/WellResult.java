@@ -35,43 +35,34 @@ public class WellResult implements Serializable{
     @Column(name = "well_result_id")
 	private int id;
 	
-	@Column(name = "position_x")
-	private int positionX;
-	
-	@Column(name = "position_y")
-	private int positionY;
-	
-	@Column(name = "value")
-	private double value;
-	
+	// accounted for pharmacokinetics
 	@Column(name = "time")
 	private Date time;
 	
+	// measurement type 
 	@Column(name = "label")
 	private String label;
-	
-	@ManyToOne(targetEntity = Well.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Well well;
-	
+		
 	@OneToMany(mappedBy = "wellResult", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Comment> comments;
+	
+	@OneToMany(mappedBy = "wellResult", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Measurement> measurements;
 	
 	@ManyToOne(targetEntity = PlateResult.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private PlateResult plateResult;
 	
+	public Set<Measurement> getMeasurements() {
+		return measurements;
+	}
+	public void setMeasurements(Set<Measurement> measurements) {
+		this.measurements = measurements;
+	}
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
 	}
 
 	public Date getTime() {
@@ -97,29 +88,12 @@ public class WellResult implements Serializable{
 	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
 	}
-	public int getPositionX() {
-		return positionX;
-	}
-	public void setPositionX(int positionX) {
-		this.positionX = positionX;
-	}
-	public int getPositionY() {
-		return positionY;
-	}
-	public void setPositionY(int positionY) {
-		this.positionY = positionY;
-	}
+
 	public PlateResult getPlateResult() {
 		return plateResult;
 	}
 	public void setPlateResult(PlateResult plateResult) {
 		this.plateResult = plateResult;
-	}
-	public Well getWell() {
-		return well;
-	}
-	public void setWell(Well well) {
-		this.well = well;
 	}
 
 }

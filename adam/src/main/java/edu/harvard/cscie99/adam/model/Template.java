@@ -55,11 +55,26 @@ public class Template implements Serializable{
 	private String tags;
 	
 	@OneToMany(mappedBy = "template", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<Well> wells;
-	
-	@OneToMany(mappedBy = "template", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Plate> plates;
 	
+	@Column(name = "ifPosControls")
+	private boolean ifPositiveControls;
+	
+	@Column(name = "ifNegControls")
+	private boolean ifNegControls;
+	
+	public boolean isIfPositiveControls() {
+		return ifPositiveControls;
+	}
+	public void setIfPositiveControls(boolean ifPositiveControls) {
+		this.ifPositiveControls = ifPositiveControls;
+	}
+	public boolean isIfNegControls() {
+		return ifNegControls;
+	}
+	public void setIfNegControls(boolean ifNegControls) {
+		this.ifNegControls = ifNegControls;
+	}
 	public int getId() {
 		return id;
 	}
@@ -115,12 +130,6 @@ public class Template implements Serializable{
 	}
 	public void setPlates(Set<Plate> plates) {
 		this.plates = plates;
-	}
-	public Set<Well> getWells() {
-		return wells;
-	}
-	public void setWells(Set<Well> wells) {
-		this.wells = wells;
 	}
 
 }

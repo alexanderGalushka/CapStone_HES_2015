@@ -30,6 +30,9 @@ public class Compound implements Serializable{
 	@Column(name = "name")
 	private String name;
 	
+	@Column(name = "dilution")
+	private double dilution;
+	
 	public int getId() {
 		return id;
 	}
@@ -41,6 +44,13 @@ public class Compound implements Serializable{
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public double getDilution() {
+		return dilution;
+	}
+	public void setDilution(double dilution) {
+		this.dilution = dilution;
 	}
 
 }
