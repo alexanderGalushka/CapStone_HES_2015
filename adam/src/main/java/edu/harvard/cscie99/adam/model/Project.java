@@ -18,6 +18,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import edu.harvard.cscie99.adam.profile.User;
 
 /**
@@ -66,6 +69,7 @@ public class Project implements Serializable {
     private User owner;
 	
 	@ManyToMany
+	@LazyCollection(LazyCollectionOption.FALSE)
 	  @JoinTable(
 	      name="project_collab",
 	      joinColumns={@JoinColumn(name="project_id", referencedColumnName="project_id")},
@@ -75,7 +79,7 @@ public class Project implements Serializable {
 	@Column(name="tags")
 	private String tags;
 	
-	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Comment> comments;
 	
 	@Column(name = "public")
