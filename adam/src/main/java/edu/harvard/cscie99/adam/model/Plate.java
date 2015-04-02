@@ -58,7 +58,7 @@ public class Plate implements Serializable{
 	@OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Comment> comments;
 	
-	@OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Well> wells;
 	
 	@ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
