@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import edu.harvard.cscie99.adam.model.Compound;
@@ -18,58 +21,68 @@ import edu.harvard.cscie99.adam.profile.User;
  */
 @Component
 public class ProjectService {
+	
 
+	@Autowired
+    private SessionFactory sessionFactory;
+
+	//TODO remove
 	public boolean checkUserAccess(String user, Integer plateId, String service) {
-		// TODO implement
 		return true;
 	}
 	
-	public boolean updateProject(Project project){
-		//TODO
-		return true;
+	public Project updateProject(Project project){
+		try{
+			Session session = sessionFactory.openSession();
+			session.merge(project);
+			session.close();
+			
+			return project;
+		}
+		catch (Exception ex){
+			return null;
+		}
 	}
 	
 	public List<Project> list(){
 		
-		List<Project> projects = new ArrayList<Project>();
+		Session session = sessionFactory.openSession();
+		List<Project> projects = session.createCriteria(Project.class).list();
 		
-		for (int i = 0; i < 5; i++){
-			Project proj = new Project();
-			proj.setName("proj"+i);
-			proj.setCreationDate(new Date());
-			proj.setPublic(true);
-			proj.setType("Biological");
-			projects.add(proj);
-		}
 		return projects;
-		
 	}
 	
-	public Project createProject(String name, String type, List<Compound> compounds, String description, List<String> tags, List<User> collaborators, User owner){
+	public boolean deleteProject(Project project){
 		
-		//TODO
+		try{
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.delete(project);
+			session.getTransaction().commit();
+			session.close();
+			return true;
+		}
+		catch (Exception ex){
+			return false;
+		}
+	}
+	
+	public Project createProject(Project newProject){
 		
-		Project project = new Project();
-		project.setId(1);
-		project.setName(name);
-		project.setCreationDate(new Date());
-		project.setCollaborators(collaborators);
-		project.setOwner(owner);
-//		project.setTags(tags);
-		project.setDescription(description);
-//		project.setCompounds(compounds);
-		project.setType(type);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		session.save(newProject);
+		session.getTransaction().commit();
+		session.close();
 		
-		return project;
+		return newProject;
 	}
 	
 	public Project retrieveProject(int projectId){
-		//TODO
-		
-		Project project = new Project();
-		project.setId(1);
-		project.setName("project1");
-		project.setCreationDate(new Date());
+
+		Session session = sessionFactory.openSession();
+		Project project = (Project) session.get(Project.class, projectId);
+		session.close();
 		
 		return project;
 	}
