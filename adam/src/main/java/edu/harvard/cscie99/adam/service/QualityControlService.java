@@ -1,8 +1,18 @@
 package edu.harvard.cscie99.adam.service;
 
+
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.apache.commons.math3.stat.StatUtils;
 import org.apache.commons.math3.util.FastMath;
+
+import edu.harvard.cscie99.adam.model.Measurement;
+import edu.harvard.cscie99.adam.model.Plate;
+import edu.harvard.cscie99.adam.model.ResultSnapshot;
+import edu.harvard.cscie99.adam.model.Well;
 
 @Component
 /**
@@ -32,6 +42,9 @@ public class QualityControlService
 	//private double[][] negControls;
 	//private double[][] samples;
 	
+	@Autowired
+	private PlateService plateService;
+	
     private double[] posControlsVector;
 	private double[] negControlsVector;
 	private double[] samplesVector;
@@ -52,14 +65,38 @@ public class QualityControlService
 	// QC is perform on each map, which would have positive and negative controls and samples
 	// how to provide all these 3 data matrices?
 	// how to split the plate editor data? how to shift the data in the matrix to get just samples matrix?
-	public void QualityControlsService(double[][] posControls, double[][] negControls, double[][] samples)
+	public QualityControlService(Integer projectId) //double[][] posControls, double[][] negControls, double[][] samples)
 	{
 		//this.posControls = posControls;
 		//this.negControls = negControls;
 		//this.samples = samples;
-		posControlsVector = convertMatrixToVector(posControls);
-		negControlsVector = convertMatrixToVector(negControls);
-		samplesVector = convertMatrixToVector(samples);
+		
+		List<Plate> projectPlates = plateService.listPlates( projectId );
+		
+		//Map<Integer, List<>>
+		for (Plate plate : projectPlates)
+		{
+			for (Well well : plate.getWells())
+			{
+				for (ResultSnapshot  resultSnapshot : well.getResultSnapshots())
+				{
+					Date timeSamp = resultSnapshot.getTime();
+					
+					for (Measurement meas : resultSnapshot.getMeasurements())
+					{
+						
+						String measType = meas.getMeasurementType();
+						double measVal = meas.getValue();
+					  	
+					}
+				}
+			}
+			
+		}
+		
+		///posControlsVector = convertMatrixToVector(posControls);
+		///negControlsVector = convertMatrixToVector(negControls);
+		///samplesVector = convertMatrixToVector(samples);
 	}
 	
 	/**

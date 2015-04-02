@@ -41,13 +41,9 @@ public class Comment implements Serializable {
     @JoinColumn(name = "plate_id")
     private Plate plate;
 	
-	@ManyToOne(targetEntity = PlateResult.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "plate_result_id")
-    private PlateResult plateResult;
-	
-	@ManyToOne(targetEntity = WellResult.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "well_result_id")
-    private WellResult wellResult;
+	@ManyToOne(targetEntity = Well.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "well_id")
+    private Well well;
 	
 	@ManyToOne(targetEntity = Project.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
@@ -98,18 +94,7 @@ public class Comment implements Serializable {
 	public void setPlate(Plate plate) {
 		this.plate = plate;
 	}
-	public PlateResult getPlateResult() {
-		return plateResult;
-	}
-	public void setPlateResult(PlateResult plateResult) {
-		this.plateResult = plateResult;
-	}
-	public WellResult getWellResult() {
-		return wellResult;
-	}
-	public void setWellResult(WellResult wellResult) {
-		this.wellResult = wellResult;
-	}
+	
 	public Project getProject() {
 		return project;
 	}

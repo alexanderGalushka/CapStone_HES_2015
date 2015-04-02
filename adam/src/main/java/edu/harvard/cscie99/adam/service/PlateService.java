@@ -81,6 +81,18 @@ public class PlateService {
 		return plateList;
 	}
 	
+	//TODO 
+	public List<Plate> listPlates(int projectId){
+		
+		// lookup by specific project ID 
+		
+		Session session = sessionFactory.openSession();
+		List<Plate> plateList = session.createCriteria(Plate.class).list();
+		
+		return plateList;
+	}
+	
+	
 	public Plate retrievePlate(int plateId){
 
 		Session session = sessionFactory.openSession();

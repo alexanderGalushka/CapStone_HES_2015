@@ -6,11 +6,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
 import edu.harvard.cscie99.adam.error.ParserException;
-import edu.harvard.cscie99.adam.model.PlateResult;
+import edu.harvard.cscie99.adam.model.ResultSnapshot;
 import edu.harvard.cscie99.adam.model.Template;
 
 /**
@@ -58,10 +59,10 @@ public class ParserService {
 	    return template;
 	}
 	
-	public PlateResult parseResultsFromFile(String filename) throws ParserException{
+	public List<ResultSnapshot> parseResultsFromFile(String filename) throws ParserException{
 		
-		PlateResult plateResult = new PlateResult();
-		
+		ResultSnapshot resultSnapshot = new ResultSnapshot();
+		List<ResultSnapshot> result  = new ArrayList<>();
 		BufferedReader br;
 		try {
 			br = new BufferedReader(new FileReader(filename));
@@ -88,11 +89,11 @@ public class ParserService {
 		}
 	    
 		//TODO: remove
-		plateResult.setId(1);
+		//resultplateResult.setId(1);
 //		plateResult.setComments(new ArrayList<String>());
 //		plateResult.setLastUpdate(new Date());
 		
-	    return plateResult;
+	    return result;
 	}
 
 }

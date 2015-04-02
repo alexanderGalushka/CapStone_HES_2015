@@ -64,9 +64,6 @@ public class Plate implements Serializable{
 	@ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private User owner;
 	
-	@OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<PlateResult> plateResults;
-	
 	@ManyToMany 
 	@JoinTable(
 			name="plate_collab",
@@ -137,13 +134,6 @@ public class Plate implements Serializable{
 		this.comments = comments;
 	}
 
-	public Set<PlateResult> getPlateResults() {
-		return plateResults;
-	}
-
-	public void setPlateResults(Set<PlateResult> plateResults) {
-		this.plateResults = plateResults;
-	}
 
 	public int getId() {
 		return id;

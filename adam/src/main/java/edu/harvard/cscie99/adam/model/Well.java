@@ -62,10 +62,13 @@ public class Well implements Serializable{
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Compound> compouds;
 
-	@Column(name = "well_result")
-	private WellResult wellResult;
+	@OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<ResultSnapshot> resultSnapshots;
 	
-
+	// only used when the data is uploaded
+	@OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Comment> comments;
+	
 	public int getPlatePositionX() {
 		return platePositionX;
 	}
@@ -102,11 +105,11 @@ public class Well implements Serializable{
 	public void setControlType(ControlType controlType) {
 		this.controlType = controlType;
 	}
-	public WellResult getWellResult() {
-		return wellResult;
+	public List<ResultSnapshot> getResultSnapshots() {
+		return resultSnapshots;
 	}
-	public void setWellResults(WellResult wellResult) {
-		this.wellResult = wellResult;
+	public void setResultSnapshots(List<ResultSnapshot> resultSnapshot) {
+		this.resultSnapshots = resultSnapshots;
 	}
 
 	public ControlType getIfValid() {
@@ -115,4 +118,13 @@ public class Well implements Serializable{
 	public void setIfValid(ControlType ifValid) {
 		this.ifValid = ifValid;
 	}
+	
+	public Set<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
+	}
+
 }

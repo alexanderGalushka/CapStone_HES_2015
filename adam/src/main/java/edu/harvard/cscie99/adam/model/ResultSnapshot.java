@@ -2,6 +2,7 @@ package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -19,11 +20,11 @@ import edu.harvard.cscie99.adam.profile.User;
 
 /**
  * 
- * @author Gerson
+ * @author Alexander G.
  *
  */
 @Entity
-public class WellResult implements Serializable{
+public class ResultSnapshot implements Serializable{
 	
 	/**
 	 * Initial version
@@ -38,24 +39,16 @@ public class WellResult implements Serializable{
 	// accounted for pharmacokinetics
 	@Column(name = "time")
 	private Date time;
-	
-	// measurement type 
-	@Column(name = "label")
-	private String label;
-		
-	@OneToMany(mappedBy = "wellResult", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Comment> comments;
+			
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Measurement> measurements;
+    private List<Measurement> measurements;
 	
-	@ManyToOne(targetEntity = PlateResult.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private PlateResult plateResult;
 	
-	public Set<Measurement> getMeasurements() {
+	public List<Measurement> getMeasurements() {
 		return measurements;
 	}
-	public void setMeasurements(Set<Measurement> measurements) {
+	public void setMeasurements(List<Measurement> measurements) {
 		this.measurements = measurements;
 	}
 	public int getId() {
@@ -71,29 +64,6 @@ public class WellResult implements Serializable{
 
 	public void setTime(Date time) {
 		this.time = time;
-	}
-
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-	public Set<Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(Set<Comment> comments) {
-		this.comments = comments;
-	}
-
-	public PlateResult getPlateResult() {
-		return plateResult;
-	}
-	public void setPlateResult(PlateResult plateResult) {
-		this.plateResult = plateResult;
 	}
 
 }
