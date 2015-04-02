@@ -34,7 +34,9 @@ public class ProjectService {
 	public Project updateProject(Project project){
 		try{
 			Session session = sessionFactory.openSession();
+			session.beginTransaction();
 			session.merge(project);
+			session.getTransaction().commit();
 			session.close();
 			
 			return project;
