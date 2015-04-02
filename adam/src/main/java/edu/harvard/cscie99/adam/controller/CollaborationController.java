@@ -54,7 +54,8 @@ public class CollaborationController {
 		User collaborator = profileService.getUserDetails(username);
 			
 		project.getCollaborators().add(collaborator);
-		return projectService.updateProject(project);
+		projectService.updateProject(project);
+		return true;
 	}
 	
 	@RequestMapping(value = "/unshare/{projectId}/user/{username}", method = RequestMethod.POST)
