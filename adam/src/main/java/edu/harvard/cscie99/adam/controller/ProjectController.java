@@ -47,23 +47,8 @@ public class ProjectController {
 	@RequestMapping(value = "/project", method = RequestMethod.POST)
 	@ResponseBody
 	public Project createProject(
-//			@RequestParam(value="visibility", required=true) boolean isVisible,
-//			@RequestParam(value="name", required=true) String name,
-//			@RequestParam(value="type", required=true) String type,
-//			@RequestParam(value="compounds", required=false) List<String> compounds,
-//			@RequestParam(value="description", required=false) String description,
-//			@RequestParam(value="tags", required=false) List<String> tags,
-//			@RequestParam(value="collaborators", required=false) List<String> collaborators
 			@RequestBody Project newProject) throws UnauthorizedOperationException{
 		
-		
-//		List<User> listCollaborators = new ArrayList<User>();
-//		for (String username : collaborators){
-//			listCollaborators.add(profileService.getUserDetails(username));
-//		}
-		
-		
-//		return projectService.createProject(name, type, null, description, tags, null, null);
 		return projectService.createProject(newProject);
 	}
 	
