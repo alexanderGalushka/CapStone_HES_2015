@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,29 +31,44 @@ public class PlateController {
 	@Autowired
 	private AuthenticationService authService;
 	
-	
-	@RequestMapping(value = "/project/{project_id}/plate/list", method = RequestMethod.GET)
+	// Template CRUD - START
+	@RequestMapping(value = "/template", method = RequestMethod.GET)
 	@ResponseBody
-	public List<Plate> listPlates(
-			@PathVariable("project_id") int projectId,
-			@RequestParam(value="search", required=false) String search){
+	public List<Template> listTemplates(){
 		
-		List<Plate> plates = new ArrayList<Plate>();
-		
-		for (int i = 0; i < 10; i++){
-			Plate plate = new Plate();
-			plate.setBarcode("1234");
-			plate.setDescription("desc"+i);
-			plate.setProtocol("protocol");
-			plate.setTags("cells");
-			plates.add(plate);
-		}
-		
-		return plates;
+		return plateService.listTemplates();
 	}
 	
+	@RequestMapping(value = "/template/{template_id}", method = RequestMethod.GET)
+	@ResponseBody
+	public Template getTemplateDetails(
+			@PathVariable("template_id") int templateId){
+		
+		return plateService.retrieveTemplate(templateId);
+	}
 	
+	@RequestMapping(value = "/template", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean createTemplate(@RequestBody Template template){
+		
+		return plateService.createTemplate(template);
+	}
 	
+	@RequestMapping(value = "/template", method = RequestMethod.DELETE)
+	@ResponseBody
+	public boolean removeTemplate(@RequestBody Template template){
+		
+		return plateService.removeTemplate(template);
+	}
+	
+	@RequestMapping(value = "/template", method = RequestMethod.PUT)
+	@ResponseBody
+	public boolean editTemplate(@RequestBody Template template){
+		
+		return plateService.editTemplate(template);
+	}
+	// Template CRUD - END
+
 	@RequestMapping(value = "/template/search", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Template> searchTemplate(
@@ -66,65 +82,40 @@ public class PlateController {
 		return null;
 	}
 	
-	@RequestMapping(value = "/project/{project_id}/template/{template_id}/detail", method = RequestMethod.GET)
+	// Plate CRUD - START
+	@RequestMapping(value = "/plate", method = RequestMethod.GET)
 	@ResponseBody
-	public Template getTemplateDetails(
-			@PathVariable("project_id") int project_id,
-			@PathVariable("template_id") int template_id){
+	public List<Plate> listPlates(){
 		
-		//TODO
-		return null;
+		return plateService.listPlates();
 	}
 	
-	@RequestMapping(value = "/project/{project_id}/template/load_from_file", method = RequestMethod.POST)
+	@RequestMapping(value = "/plate/{plate_id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Template loadTemplateFromFile(
-			@PathVariable("project_id") int project_id,
-			@RequestParam(value="filename", required=false) String filename){
+	public Plate getPlate(@RequestBody int plateId){
 		
-		//TODO
-		return null;
+		return plateService.retrievePlate(plateId);
 	}
 	
-	@RequestMapping(value = "/project/{project_id}/template/save", method = RequestMethod.POST)
+	@RequestMapping(value = "/plate", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean saveTemplate(
-			@PathVariable("project_id") int project_id,
-			@RequestParam(value="template", required=true) Template templater){
+	public boolean createPlate(@RequestBody Plate plate){
 		
-		//TODO
-		return true;
+		return plateService.createPlate(plate);
 	}
 	
-	@RequestMapping(value = "/project/{project_id}/plate/create", method = RequestMethod.POST)
+	@RequestMapping(value = "/plate", method = RequestMethod.PUT)
 	@ResponseBody
-	public boolean savePlate(
-			@PathVariable("project_id") int project_id,
-			@RequestParam(value="plate", required=true) Plate plate){
+	public Plate editPlate(@RequestBody Plate plate){
 		
-		//TODO
-		return true;
+		return plateService.editPlate(plate);
 	}
 	
-	@RequestMapping(value = "/project/{project_id}/plate/{plate_id}/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/plate", method = RequestMethod.DELETE)
 	@ResponseBody
-	public boolean updatePlate(
-			@PathVariable("project_id") int project_id,
-			@RequestParam(value="plate", required=true) Plate plate){
+	public boolean removePlate(@RequestBody Plate plate){
 		
-		//TODO
-		return true;
+		return plateService.removePlate(plate);
 	}
-	
-	@RequestMapping(value = "/project/{project_id}/plate/{plate_id}/remove", method = RequestMethod.POST)
-	@ResponseBody
-	public boolean removePlate(
-			@PathVariable("project_id") int project_id,
-			@RequestParam(value="plate", required=true) Plate plate){
-		
-		//TODO
-		return true;
-	}
-	
-
+	// Plate - END
 }
