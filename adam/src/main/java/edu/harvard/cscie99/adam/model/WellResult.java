@@ -46,7 +46,7 @@ public class WellResult implements Serializable{
 	@OneToMany(mappedBy = "wellResult", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Comment> comments;
 	
-	@OneToMany(mappedBy = "wellResult", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Measurement> measurements;
 	
 	@ManyToOne(targetEntity = PlateResult.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)

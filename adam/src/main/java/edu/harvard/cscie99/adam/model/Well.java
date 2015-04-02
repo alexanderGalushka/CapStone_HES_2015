@@ -59,7 +59,7 @@ public class Well implements Serializable{
 	@Column(name = "substrate")
 	private Substrate substare; 
 	
-	@OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Compound> compouds;
 
 	@Column(name = "well_result")
