@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,63 +44,59 @@ public class ProjectController {
 	@Autowired
 	private ProfileService profileService;
 	
-	@RequestMapping(value = "/project/create", method = RequestMethod.POST)
+	@RequestMapping(value = "/project", method = RequestMethod.POST)
 	@ResponseBody
 	public Project createProject(
-			@RequestParam(value="visibility", required=true) boolean isVisible,
-			@RequestParam(value="name", required=true) String name,
-			@RequestParam(value="type", required=true) String type,
-			@RequestParam(value="compounds", required=false) List<String> compounds,
-			@RequestParam(value="description", required=false) String description,
-			@RequestParam(value="tags", required=false) List<String> tags,
-			@RequestParam(value="collaborators", required=false) List<String> collaborators) throws UnauthorizedOperationException{
+//			@RequestParam(value="visibility", required=true) boolean isVisible,
+//			@RequestParam(value="name", required=true) String name,
+//			@RequestParam(value="type", required=true) String type,
+//			@RequestParam(value="compounds", required=false) List<String> compounds,
+//			@RequestParam(value="description", required=false) String description,
+//			@RequestParam(value="tags", required=false) List<String> tags,
+//			@RequestParam(value="collaborators", required=false) List<String> collaborators
+			@RequestBody Project newProject) throws UnauthorizedOperationException{
 		
 		
-		List<User> listCollaborators = new ArrayList<User>();
-		for (String username : collaborators){
-			listCollaborators.add(profileService.getUserDetails(username));
-		}
+//		List<User> listCollaborators = new ArrayList<User>();
+//		for (String username : collaborators){
+//			listCollaborators.add(profileService.getUserDetails(username));
+//		}
 		
 		
-		return projectService.createProject(name, type, null, description, tags, null, null);
+//		return projectService.createProject(name, type, null, description, tags, null, null);
+		return projectService.createProject(newProject);
 	}
 	
-	@RequestMapping(value = "/project/{projectId}/details", method = RequestMethod.GET)
+	@RequestMapping(value = "/project", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Project> listProjects() throws UnauthorizedOperationException{
+			
+		return projectService.list();
+	}
+	
+	@RequestMapping(value = "/project/{project_id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Project getProject(
-			@PathVariable("projectId") int projectId,
-			@RequestParam(value="user", required=true) String user) throws UnauthorizedOperationException{
+			@PathVariable("project_id") int projectId) throws UnauthorizedOperationException{
 		
-//		boolean hasAccess = false;
-//		try {
-//			hasAccess = authService.checkUserAccess(user, projectId, "getProject");
-//		} catch (SessionTimeouException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		if (hasAccess){
-//			return projectService.retrieveProject(projectId);
-//		}
-//		else{
-//			throw new UnauthorizedOperationException ("User don't have permission", user, "getProject");
-//		}
-		Project project = new Project();
-		project.setDescription("description");
-		project.setId(1);
-		project.setName("name");
-		project.setPublic(true);
-		project.setType("type");
-		project.setTags("tags");
+		Project project = projectService.retrieveProject(projectId);
+		
 		return project;
 	}
 	
-	@RequestMapping(value = "/project/{projectId}/update", method = RequestMethod.GET)
-	@ResponseBody
-	public boolean updateProject(
-			@PathVariable("project") Project project) throws UnauthorizedOperationException{
+	@RequestMapping(value = "/project", method = RequestMethod.PUT)
+	public @ResponseBody Project updateProject(
+			@RequestBody Project project) {
 		
 		return projectService.updateProject(project);
+	}
+	
+	@RequestMapping(value = "/project", method = RequestMethod.DELETE)
+	@ResponseBody
+	public boolean deleteProject(
+			@RequestBody Project project) throws UnauthorizedOperationException{
+		
+		return projectService.deleteProject(project);
 	}
 	
 	@RequestMapping(value = "/project/{projectId}/add_tag/{tag}", method = RequestMethod.POST)
@@ -150,14 +147,7 @@ public class ProjectController {
 			
 		return tags;
 	}
-	
-	@RequestMapping(value = "/project/list", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Project> listProjects() throws UnauthorizedOperationException{
-			
-		return projectService.list();
-	}
-	
+		
 	@RequestMapping(value = "/project/{project_id}/compounds/list", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Compound> listCompoundsFromProject(
