@@ -4,15 +4,15 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import edu.harvard.cscie99.adam.error.ParserException;
+import edu.harvard.cscie99.adam.io.PlateFileParser;
+import edu.harvard.cscie99.adam.io.ResultFileParser;
+import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
-import edu.harvard.cscie99.adam.model.Template;
 
 /**
  * 
@@ -21,10 +21,16 @@ import edu.harvard.cscie99.adam.model.Template;
  */
 @Component
 public class ParserService {
+
+	@Autowired
+	private PlateFileParser plateParser;
+
+	@Autowired
+	private ResultFileParser resultParser;
 	
-	public Template parseTemplateFromFile(String filename) throws ParserException{
+	public Plate parsePlateFromFile(String filename) throws ParserException{
 		
-		Template template = new Template();
+		Plate plate = null;
 		
 		BufferedReader br;
 		try {
@@ -33,36 +39,26 @@ public class ParserService {
 			throw new ParserException ("File not found", filename);
 		}
 		try{
-		    try {
-		        String line = br.readLine();
-	
-		        while (line != null) {
-		            String[] fields = line.split(";");
-		            //TODO: do something with fields
-		            
-		            line = br.readLine();
-		        }
-		        
-		    } finally {
-		        br.close();
-		    }
+			plate = plateParser.parse(br);
 		}
 		catch (IOException ioe){
 	    	throw new ParserException ("Error reading file", filename);
 		}
+		finally{
+			try {
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	    
-		//TODO: remove
-		template.setId(1);
-		template.setDescription("desc");
-		template.setName("name");
-		
-	    return template;
+	    return plate;
 	}
 	
-	public List<ResultSnapshot> parseResultsFromFile(String filename) throws ParserException{
+	public ResultSnapshot parseResultsFromFile(String filename) throws ParserException{
 		
-		ResultSnapshot resultSnapshot = new ResultSnapshot();
-		List<ResultSnapshot> result  = new ArrayList<>();
+		ResultSnapshot result = new ResultSnapshot();
+		
 		BufferedReader br;
 		try {
 			br = new BufferedReader(new FileReader(filename));
@@ -70,28 +66,18 @@ public class ParserService {
 			throw new ParserException ("File not found", filename);
 		}
 		try{
-		    try {
-		        String line = br.readLine();
-	
-		        while (line != null) {
-		            String[] fields = line.split(";");
-		            //TODO: do something with fields
-		            
-		            line = br.readLine();
-		        }
-		        
-		    } finally {
-		        br.close();
-		    }
+		    resultParser.parse(br);
 		}
 		catch (IOException ioe){
 	    	throw new ParserException ("Error reading file", filename);
 		}
-	    
-		//TODO: remove
-		//resultplateResult.setId(1);
-//		plateResult.setComments(new ArrayList<String>());
-//		plateResult.setLastUpdate(new Date());
+		finally{
+			try {
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		
 	    return result;
 	}
