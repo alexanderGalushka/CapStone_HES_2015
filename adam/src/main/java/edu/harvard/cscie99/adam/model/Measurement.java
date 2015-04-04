@@ -27,6 +27,12 @@ public class Measurement implements Serializable
 	@Column(name = "value")
 	private double value;
 	
+	@Column(name = "row")
+	private int row;
+	
+	@Column(name = "column")
+	private int column;
+	
 	public String getMeasurementName() {
 		return measurementType;
 	}
@@ -50,6 +56,18 @@ public class Measurement implements Serializable
 	}
 	public void setMeasurementType(String measurementType) {
 		this.measurementType = measurementType;
+	}
+	public int getRow() {
+		return row;
+	}
+	public void setRow(int row) {
+		this.row = row;
+	}
+	public int getColumn() {
+		return column;
+	}
+	public void setColumn(int column) {
+		this.column = column;
 	}
 	
 	
