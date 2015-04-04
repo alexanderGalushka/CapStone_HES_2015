@@ -1,6 +1,7 @@
 package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -42,6 +43,10 @@ public class ResultSnapshot implements Serializable{
 			
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Measurement> measurements;
+	
+	public ResultSnapshot(){
+		this.measurements = new ArrayList<Measurement>();
+	}
 	
 	public List<Measurement> getMeasurements() {
 		return measurements;
