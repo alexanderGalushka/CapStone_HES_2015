@@ -30,7 +30,7 @@ public class Well implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public enum ControlType {POSITIVE, NEGATIVE, REFERENCE}
+	public enum ControlType {POSITIVE, NEGATIVE, COMPOUND, EMPTY}
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -54,20 +54,26 @@ public class Well implements Serializable{
 	private ControlType controlType;
 	
 	@Column(name = "if_valid")
-	private ControlType ifValid;
+	private boolean ifValid;
 	
 	@Column(name = "substrate")
 	private Substrate substare; 
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<Compound> compouds;
+	private List<Compound> compounds;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<ResultSnapshot> resultSnapshots;
 	
 	// only used when the data is uploaded
 	@OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Comment> comments;
+    private List<Comment> comments;
+	
+	public Well(){
+		compounds = new ArrayList<Compound>();
+		resultSnapshots = new ArrayList<ResultSnapshot>();
+		comments = new ArrayList<Comment>();
+	}
 	
 	public int getPlatePositionX() {
 		return platePositionX;
@@ -109,22 +115,34 @@ public class Well implements Serializable{
 		return resultSnapshots;
 	}
 	public void setResultSnapshots(List<ResultSnapshot> resultSnapshot) {
-		this.resultSnapshots = resultSnapshots;
+		this.resultSnapshots = resultSnapshot;
 	}
 
-	public ControlType getIfValid() {
+	public boolean getIfValid() {
 		return ifValid;
 	}
-	public void setIfValid(ControlType ifValid) {
+	public void setIfValid(boolean ifValid) {
 		this.ifValid = ifValid;
 	}
 	
-	public Set<Comment> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(Set<Comment> comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
+	}
+	public Substrate getSubstare() {
+		return substare;
+	}
+	public void setSubstare(Substrate substare) {
+		this.substare = substare;
+	}
+	public List<Compound> getCompounds() {
+		return compounds;
+	}
+	public void setCompounds(List<Compound> compounds) {
+		this.compounds = compounds;
 	}
 
 }
