@@ -14,12 +14,13 @@ import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
 import edu.harvard.cscie99.adam.model.Well;
 
-@Component
+
 /**
  * 
  * @author Alexander G.
  * data screening prior the data analysis
  */
+@Component
 public class QualityControlService
 {
 	// are we assuming one data point in the well when calculating all these statistical metrics?
@@ -97,6 +98,9 @@ public class QualityControlService
 		///posControlsVector = convertMatrixToVector(posControls);
 		///negControlsVector = convertMatrixToVector(negControls);
 		///samplesVector = convertMatrixToVector(samples);
+	}
+	
+	public QualityControlService(){
 	}
 	
 	/**
