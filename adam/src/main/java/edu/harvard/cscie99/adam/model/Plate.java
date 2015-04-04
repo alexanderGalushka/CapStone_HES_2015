@@ -71,6 +71,9 @@ public class Plate implements Serializable{
 			inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="user_id")})
 	private List<User> collaborators;
 	
+	@OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<AllMeasuredValues> allMeasuredValues;
+	
 	public Plate(){
 		wells = new ArrayList<Well>();
 		collaborators = new ArrayList<User>();
@@ -141,6 +144,22 @@ public class Plate implements Serializable{
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public Template getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(Template template) {
+		this.template = template;
+	}
+
+	public List<AllMeasuredValues> getAllMeasuredValues() {
+		return allMeasuredValues;
+	}
+
+	public void setAllMeasuredValues(List<AllMeasuredValues> allMeasuredValues) {
+		this.allMeasuredValues = allMeasuredValues;
 	}
 	
 }

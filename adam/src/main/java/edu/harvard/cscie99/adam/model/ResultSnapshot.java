@@ -33,17 +33,15 @@ public class ResultSnapshot implements Serializable{
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "well_result_id")
+    @Column(name = "result_snapshot_id")
 	private int id;
 	
 	// accounted for pharmacokinetics
 	@Column(name = "time")
 	private Date time;
 			
-	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Measurement> measurements;
-	
 	
 	public List<Measurement> getMeasurements() {
 		return measurements;

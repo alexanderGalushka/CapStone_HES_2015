@@ -62,7 +62,7 @@ public class Well implements Serializable{
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Compound> compouds;
 
-	@OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<ResultSnapshot> resultSnapshots;
 	
 	// only used when the data is uploaded

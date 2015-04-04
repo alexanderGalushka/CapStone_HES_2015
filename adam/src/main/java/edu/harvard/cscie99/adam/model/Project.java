@@ -85,6 +85,9 @@ public class Project implements Serializable {
 	@Column(name = "public")
 	private boolean isPublic;
 	
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<AllMeasuredValues> allMeasuredValues;
+	
 	public Project(){
 		collaborators = new ArrayList<User>();
 		comments = new ArrayList<Comment>();
