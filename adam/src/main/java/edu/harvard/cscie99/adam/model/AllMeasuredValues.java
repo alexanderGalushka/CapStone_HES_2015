@@ -40,6 +40,7 @@ public class AllMeasuredValues
 	
 	@ManyToOne(targetEntity = Project.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Project project;
+	
 	@ManyToOne(targetEntity = Plate.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Plate plate;
 	
@@ -48,6 +49,15 @@ public class AllMeasuredValues
 	
 	@Column(name = "time")
 	private Date time;
+	
+	@Column(name = "label")
+	private String label;
+	
+	@ManyToOne(targetEntity = Compound.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Compound compound;
+	
+	@ManyToOne(targetEntity = Substrate.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Substrate substrate;
 	
 	@Lob
 	@Column(length=100000)
