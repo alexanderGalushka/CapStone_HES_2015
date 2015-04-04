@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import edu.harvard.cscie99.adam.error.ParserException;
 import edu.harvard.cscie99.adam.error.SessionTimeouException;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
+import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.Template;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
 import edu.harvard.cscie99.adam.service.ParserService;
@@ -59,13 +60,13 @@ public class ParserController {
         }
 	}
 	
-	@RequestMapping(value = "/project/{project_id}/template/parse/{filename}", method = RequestMethod.POST)
+	@RequestMapping(value = "/project/{project_id}/plate/parse/{filename}", method = RequestMethod.POST)
 	@ResponseBody
-	public Template parseTemplate(
+	public Plate parsePlate(
 			@PathVariable("project_id") int projectId,
 			@PathVariable("filename") String filename) throws ParserException, UnauthorizedOperationException{
 		
-		return parserService.parseTemplateFromFile(filename);
+		return parserService.parsePlateFromFile(filename);
 	}
 	
 //	@RequestMapping(value = "/project/{project_id}/result/parse/{filename}", method = RequestMethod.POST)
