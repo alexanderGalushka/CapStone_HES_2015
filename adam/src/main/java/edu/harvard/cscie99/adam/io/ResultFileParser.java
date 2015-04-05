@@ -18,7 +18,7 @@ public class ResultFileParser {
 	public ResultSnapshot parse(BufferedReader lines) throws IOException{
 		
 		String line = lines.readLine();
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss.SSS", Locale.ENGLISH);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.ENGLISH);
 		Date measuredAt = null;
 		
 		ResultSnapshot resultSnapshot = new ResultSnapshot();
@@ -28,12 +28,12 @@ public class ResultFileParser {
         	
         	//Ignore blank lines
         	if (fields == null || fields.length == 0){
-        		continue;
+        		line = lines.readLine();
         	}
         	
         	//Ignore commented lines
         	if (fields[0].startsWith("#")){
-        		continue;
+        		line = lines.readLine();
         	}
         	
         	try{
@@ -55,7 +55,7 @@ public class ResultFileParser {
         		measure.setColumn(col);
         		measure.setRow(row);
         		measure.setValue(value);
-        		measure.setMeasurementName(label);
+        		measure.setMeasurementType(label); 
         		resultSnapshot.getMeasurements().add(measure);
         		        		
         	}
