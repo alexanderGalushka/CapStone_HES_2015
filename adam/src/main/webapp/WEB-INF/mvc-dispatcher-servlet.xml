@@ -12,6 +12,11 @@
 	<context:component-scan base-package="edu.harvard.cscie99.adam" />
 	<mvc:annotation-driven />
 	<mvc:resources mapping="/static/**" location="/" />
+	
+	<!-- <mvc:interceptors>
+	  <bean class="edu.harvard.cscie99.adam.interceptor.DBSessionInterceptor"/>
+	  <bean class="edu.harvard.cscie99.adam.interceptor.AuthInterceptor"/>
+	</mvc:interceptors> -->
 
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
