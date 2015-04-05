@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,11 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-
-import edu.harvard.cscie99.adam.profile.User;
 
 /**
  * 
@@ -37,6 +32,10 @@ public class ResultSnapshot implements Serializable{
     @Column(name = "result_snapshot_id")
 	private int id;
 	
+	//TODO JPA mappings
+	private Plate plate;
+	private Project project;
+	
 	// accounted for pharmacokinetics
 	@Column(name = "time")
 	private Date time;
@@ -51,7 +50,7 @@ public class ResultSnapshot implements Serializable{
 	public List<Measurement> getMeasurements() {
 		return measurements;
 	}
-	public void setMeasurements(List<Measurement> measurements) {
+	public void setMeasurements(List<Measurement> measurements) { 
 		this.measurements = measurements;
 	}
 	public int getId() {
@@ -67,6 +66,22 @@ public class ResultSnapshot implements Serializable{
 
 	public void setTime(Date time) {
 		this.time = time;
+	}
+
+	public Plate getPlate() {
+		return plate;
+	}
+
+	public void setPlate(Plate plate) {
+		this.plate = plate;
+	}
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 }
