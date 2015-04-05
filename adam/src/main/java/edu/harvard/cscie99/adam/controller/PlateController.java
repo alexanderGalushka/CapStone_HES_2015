@@ -99,14 +99,15 @@ public class PlateController {
 	
 	@RequestMapping(value = "/plate/{plate_id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Plate getPlate(@RequestBody int plateId){
+	public Plate getPlate(
+			@PathVariable("plate_id") int plateId){
 		
 		return plateService.retrievePlate(plateId);
 	}
 	
 	@RequestMapping(value = "/plate", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean createPlate(@RequestBody Plate plate){
+	public Plate createPlate(@RequestBody Plate plate){
 		
 		return plateService.createPlate(plate);
 	}
