@@ -56,7 +56,13 @@ public class ProjectController {
 	@ResponseBody
 	public List<Project> listProjects() throws UnauthorizedOperationException{
 			
-		return projectService.list();
+		List<Project> projects = projectService.list();
+		for (Project project : projects){
+			project.getAllMeasuredValues();
+			project.getCollaborators();
+			project.getComments();
+		}
+		return projects;
 	}
 	
 	@RequestMapping(value = "/project/{project_id}", method = RequestMethod.GET)
@@ -65,6 +71,10 @@ public class ProjectController {
 			@PathVariable("project_id") int projectId) throws UnauthorizedOperationException{
 		
 		Project project = projectService.retrieveProject(projectId);
+		
+		project.setAllMeasuredValues(null);
+		project.setComments(null);
+		project.setCollaborators(null);
 		
 		return project;
 	}
