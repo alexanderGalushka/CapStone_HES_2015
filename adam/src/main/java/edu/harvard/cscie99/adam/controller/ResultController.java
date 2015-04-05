@@ -63,11 +63,11 @@ public class ResultController {
 		if (file != null && !file.isEmpty()){
 		
 			byte[] bytes = file.getBytes();
-			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(name)));
+			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File("/home/adam_files/"+name)));
 			stream.write(bytes);
 			stream.close();
 		
-			resultSnapshot = parserService.parseResultsFromFile(name);
+			resultSnapshot = parserService.parseResultsFromFile("/home/adam_files/"+name);
 		}
 		
 		resultService.saveResultSnapshot(resultSnapshot);
