@@ -142,9 +142,9 @@ public class PlateController {
 			stream.write(bytes);
 			stream.close();
 		
-			parserService.parsePlateFromFile(name);
+			plate = parserService.parsePlateFromFile(name);
 		}
 		
-		return plate;
+		return plateService.createPlate(plate);
 	}
 }
