@@ -91,7 +91,7 @@ public class Project implements Serializable {
 	@Column(name = "label")
 	private String label;
 	
-	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<AllMeasuredValues> allMeasuredValues;
 	
 	public Project(){
