@@ -3,7 +3,6 @@ package edu.harvard.cscie99.adam.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -45,15 +44,15 @@ public class Plate implements Serializable{
 	
 	@Column(name = "barcode")
 	private String barcode;
-	
-	@Column(name = "description")
-	private String description;
-	
-	@Column(name = "protocol")
-	private String protocol;
-	
+
 	@Column(name = "tags")
 	private String tags;
+	
+	@Column(name = "label")
+	private String label;
+	
+	@OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<WellLabel> wellLabels;
 	
 	@OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Comment> comments;
@@ -92,18 +91,12 @@ public class Plate implements Serializable{
 	public void setBarcode(String barcode) {
 		this.barcode = barcode;
 	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public String getProtocol() {
-		return protocol;
-	}
-	public void setProtocol(String protocol) {
-		this.protocol = protocol;
-	}
+//	public String getDescription() {
+//		return description;
+//	}
+//	public void setDescription(String description) {
+//		this.description = description;
+//	}
 	public String getTags() {
 		return tags;
 	}
@@ -160,6 +153,31 @@ public class Plate implements Serializable{
 
 	public void setAllMeasuredValues(List<AllMeasuredValues> allMeasuredValues) {
 		this.allMeasuredValues = allMeasuredValues;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	public List<WellLabel> getWellLabels() {
+		return wellLabels;
+	}
+
+	public void setWellLabels(List<WellLabel> wellLabels) {
+		this.wellLabels = wellLabels;
+	}
+	
+	public Well getWell(int row, int column){
+		for (Well well : wells){
+			if (well.getPlatePositionX() == row && well.getPlatePositionY() == column){
+				return well;
+			}
+		}
+		return null;
 	}
 	
 }

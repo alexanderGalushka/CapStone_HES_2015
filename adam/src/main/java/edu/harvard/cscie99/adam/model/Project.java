@@ -85,6 +85,12 @@ public class Project implements Serializable {
 	@Column(name = "public")
 	private boolean isPublic;
 	
+	@Column(name = "protocol_id")
+	private String protocolId;
+	
+	@Column(name = "label")
+	private String label;
+	
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<AllMeasuredValues> allMeasuredValues;
 	
@@ -166,6 +172,30 @@ public class Project implements Serializable {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getProtocolId() {
+		return protocolId;
+	}
+
+	public void setProtocolId(String protocolId) {
+		this.protocolId = protocolId;
+	}
+
+	public List<AllMeasuredValues> getAllMeasuredValues() {
+		return allMeasuredValues;
+	}
+
+	public void setAllMeasuredValues(List<AllMeasuredValues> allMeasuredValues) {
+		this.allMeasuredValues = allMeasuredValues;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
 	}
 	
 	

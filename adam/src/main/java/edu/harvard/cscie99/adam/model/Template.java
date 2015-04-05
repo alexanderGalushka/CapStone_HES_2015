@@ -32,11 +32,11 @@ public class Template implements Serializable{
     @Column(name = "template_id")
 	private int id;
 	
-	@Column(name = "name")
-	private String name;
-	
-	@Column(name = "description")
-	private String description;
+//	@Column(name = "name")
+//	private String name;
+//	
+//	@Column(name = "description")
+//	private String description;
 	
 	@Column(name = "numWellsX")
 	private int numWellsX;
@@ -50,6 +50,9 @@ public class Template implements Serializable{
 	
 	@Column(name = "plate_type")
 	private Plate.PlateType type;
+	
+	@Column(name = "color")
+	private Integer color;
 	
 	@Column(name = "tags")
 	private String tags;
@@ -81,18 +84,18 @@ public class Template implements Serializable{
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
+//	public String getName() {
+//		return name;
+//	}
+//	public void setName(String name) {
+//		this.name = name;
+//	}
+//	public String getDescription() {
+//		return description;
+//	}
+//	public void setDescription(String description) {
+//		this.description = description;
+//	}
 	public int getNumWellsX() {
 		return numWellsX;
 	}
@@ -130,6 +133,12 @@ public class Template implements Serializable{
 	}
 	public void setPlates(Set<Plate> plates) {
 		this.plates = plates;
+	}
+	public Integer getColor() {
+		return color;
+	}
+	public void setColor(Integer color) {
+		this.color = color;
 	}
 
 }
