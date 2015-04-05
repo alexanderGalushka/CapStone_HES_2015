@@ -30,15 +30,9 @@ public class Measurement implements Serializable
 	@Column(name = "row")
 	private int row;
 	
-	@Column(name = "column")
+	@Column(name = "col")
 	private int column;
 	
-	public String getMeasurementName() {
-		return measurementType;
-	}
-	public void setMeasurementName(String measurementType) {
-		this.measurementType = measurementType;
-	}
 	public double getValue() {
 		return value;
 	}
@@ -50,12 +44,6 @@ public class Measurement implements Serializable
 	}
 	public void setId(int id) {
 		this.id = id;
-	}
-	public String getMeasurementType() {
-		return measurementType;
-	}
-	public void setMeasurementType(String measurementType) {
-		this.measurementType = measurementType;
 	}
 	public int getRow() {
 		return row;
@@ -69,6 +57,10 @@ public class Measurement implements Serializable
 	public void setColumn(int column) {
 		this.column = column;
 	}
-	
-	
+	public String getMeasurementType() {
+		return measurementType;
+	}
+	public void setMeasurementType(String measurementType) {
+		this.measurementType = measurementType;
+	}
 }
