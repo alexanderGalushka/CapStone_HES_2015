@@ -51,7 +51,7 @@ public class Plate implements Serializable{
 	@Column(name = "label")
 	private String label;
 	
-	@OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<WellLabel> wellLabels;
 	
 	@OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
