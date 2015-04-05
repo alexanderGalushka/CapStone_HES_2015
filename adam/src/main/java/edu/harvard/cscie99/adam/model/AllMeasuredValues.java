@@ -47,21 +47,24 @@ public class AllMeasuredValues
 	@Column(name = "measurement_type")
 	private String measurementType;
 	
+	@Column(name = "label_name")
+	private String LabelName;
+	
+	@Column(name = "label_value")
+	private String labelValue;
+	
 	@Column(name = "time")
 	private Date time;
 	
-	@Column(name = "label")
-	private String label;
-	
-	@ManyToOne(targetEntity = Compound.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Compound compound;
-	
-	@ManyToOne(targetEntity = Substrate.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Substrate substrate;
+//	@ManyToOne(targetEntity = Compound.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//	private Compound compound;
+//	
+//	@ManyToOne(targetEntity = Substrate.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//	private Substrate substrate;
 	
 	@Lob
 	@Column(length=100000)
-	private byte[] jsonValues;
+	private String jsonValues;
 
 	public int getId() {
 		return id;
@@ -103,13 +106,46 @@ public class AllMeasuredValues
 		this.time = time;
 	}
 
-	public byte[] getJsonValues() {
+	public String getJsonValues() {
 		return jsonValues;
 	}
 
-	public void setJsonValues(byte[] jsonValues) {
+	public void setJsonValues(String jsonValues) {
 		this.jsonValues = jsonValues;
 	}
+
+	public String getLabelValue() {
+		return labelValue;
+	}
+
+	public void setLabelValue(String labelValue) {
+		this.labelValue = labelValue;
+	}
+
+	public String getLabelName() {
+		return LabelName;
+	}
+
+	public void setLabelName(String labelName) {
+		LabelName = labelName;
+	}
+
+//
+//	public Compound getCompound() {
+//		return compound;
+//	}
+//
+//	public void setCompound(Compound compound) {
+//		this.compound = compound;
+//	}
+//
+//	public Substrate getSubstrate() {
+//		return substrate;
+//	}
+//
+//	public void setSubstrate(Substrate substrate) {
+//		this.substrate = substrate;
+//	}
 
 		
 }
