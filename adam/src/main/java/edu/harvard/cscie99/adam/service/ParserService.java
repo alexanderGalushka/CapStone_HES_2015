@@ -57,7 +57,7 @@ public class ParserService {
 	
 	public ResultSnapshot parseResultsFromFile(String filename) throws ParserException{
 		
-		ResultSnapshot result = new ResultSnapshot();
+		ResultSnapshot result = null;
 		
 		BufferedReader br;
 		try {
@@ -66,7 +66,7 @@ public class ParserService {
 			throw new ParserException ("File not found", filename);
 		}
 		try{
-		    resultParser.parse(br);
+		    result = resultParser.parse(br);
 		}
 		catch (IOException ioe){
 	    	throw new ParserException ("Error reading file", filename);

@@ -146,7 +146,6 @@ public class PlateService {
 		for (int i =0; i<5; i++){
 			Plate plate = new Plate();
 			plate.setBarcode("1234");
-			plate.setDescription("desc");
 			plate.setId(1);
 //			plate.setName("name");
 			
