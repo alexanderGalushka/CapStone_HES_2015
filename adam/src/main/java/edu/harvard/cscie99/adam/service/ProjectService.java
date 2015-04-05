@@ -10,7 +10,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import edu.harvard.cscie99.adam.model.Compound;
+//import edu.harvard.cscie99.adam.model.Compound;
 import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.profile.User;
 
