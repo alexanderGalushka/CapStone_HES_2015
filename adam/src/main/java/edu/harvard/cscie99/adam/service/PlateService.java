@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+import javax.transaction.Transactional.TxType;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate3.SessionFactoryUtils;
 import org.springframework.stereotype.Component;
 
 import edu.harvard.cscie99.adam.model.Plate;
@@ -76,7 +80,20 @@ public class PlateService {
 	
 	public List<Plate> listPlates(){
 		Session session = sessionFactory.openSession();
+		
+//		Session session = SessionFactoryUtils.doGetSession(sessionFactory, false);
+//		Session session = sessionFactory.getCurrentSession();
 		List<Plate> plateList = session.createCriteria(Plate.class).list();
+		
+		for (Plate plate : plateList){
+			plate.getAllMeasuredValues().isEmpty();
+			plate.getCollaborators().isEmpty();
+			plate.getComments().isEmpty();
+			plate.getWellLabels().isEmpty();
+			plate.getWells().isEmpty();
+		}
+		
+		session.close();
 		
 		return plateList;
 	}
@@ -89,6 +106,16 @@ public class PlateService {
 		Session session = sessionFactory.openSession();
 		List<Plate> plateList = session.createCriteria(Plate.class).list();
 		
+		for (Plate plate : plateList){
+			plate.getAllMeasuredValues();
+			plate.getCollaborators();
+			plate.getComments();
+			plate.getWellLabels();
+			plate.getWells();
+		}
+		
+		session.close();
+		
 		return plateList;
 	}
 	
@@ -97,12 +124,19 @@ public class PlateService {
 
 		Session session = sessionFactory.openSession();
 		Plate plate = (Plate) session.get(Plate.class, plateId);
+		
+		plate.getAllMeasuredValues().isEmpty();
+		plate.getCollaborators().isEmpty();
+		plate.getComments().isEmpty();
+		plate.getWellLabels().isEmpty();
+		plate.getWells().isEmpty();
+		
 		session.close();
 		
 		return plate;
 	}
 	
-	public boolean createPlate(Plate plate){
+	public Plate createPlate(Plate plate){
 
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
@@ -110,7 +144,7 @@ public class PlateService {
 		session.getTransaction().commit();
 		session.close();
 		
-		return true;
+		return plate;
 	}
 	
 	public boolean removePlate(Plate plate){
