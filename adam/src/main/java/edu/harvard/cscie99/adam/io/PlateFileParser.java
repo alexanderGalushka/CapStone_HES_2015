@@ -5,9 +5,11 @@ import java.io.IOException;
 
 import org.springframework.stereotype.Component;
 
-import edu.harvard.cscie99.adam.model.Compound;
+
+//import edu.harvard.cscie99.adam.model.Compound;
 import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.Well;
+import edu.harvard.cscie99.adam.model.WellLabel;
 
 /**
  * 
@@ -67,11 +69,11 @@ public class PlateFileParser {
         		well.setPlatePositionX(row);
         		well.setPlatePositionY(col);
         		
-        		well.setLabels(labelValue);
-        		Compound comp = new Compound();
-        		comp.setName(compound);
-        		comp.setDilution(quantity);
-        		well.getCompounds().add(comp);
+        		WellLabel label = new WellLabel();
+        		label.setName(labelName);
+        		label.setValue(labelValue);
+        		
+        		well.getWellLabels().add(label);
         		plate.getWells().add(well);
         		        		
         	}
