@@ -1,5 +1,9 @@
 package edu.harvard.cscie99.adam.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +14,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import edu.harvard.cscie99.adam.error.ParserException;
 import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.Template;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
+import edu.harvard.cscie99.adam.service.ParserService;
 import edu.harvard.cscie99.adam.service.PlateService;
 
 @RestController
@@ -21,9 +28,12 @@ import edu.harvard.cscie99.adam.service.PlateService;
 public class PlateController {
 	
 	//TODO implement
-	
+
 	@Autowired
 	private PlateService plateService;
+
+	@Autowired
+	private ParserService parserService;
 	
 	@Autowired
 	private AuthenticationService authService;
@@ -115,4 +125,25 @@ public class PlateController {
 		return plateService.removePlate(plate);
 	}
 	// Plate - END
+	
+	//Upload plate
+	@RequestMapping(value="/upload_plate", method=RequestMethod.POST)
+	public @ResponseBody Plate handlePlateUpload(
+			@RequestParam("name") String name,
+			@RequestParam("file") MultipartFile file) throws IOException, ParserException{
+		
+		Plate plate = null;
+		
+		if (file != null && !file.isEmpty()){
+		
+			byte[] bytes = file.getBytes();
+			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(name)));
+			stream.write(bytes);
+			stream.close();
+		
+			parserService.parsePlateFromFile(name);
+		}
+		
+		return plate;
+	}
 }
