@@ -1,4 +1,4 @@
-package edu.harvard.cscie99.adam.persistence;
+package edu.harvard.cscie99.adam.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
