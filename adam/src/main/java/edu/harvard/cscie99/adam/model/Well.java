@@ -32,18 +32,18 @@ public class Well implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public enum ControlType {POSITIVE, NEGATIVE, COMPOUND, EMPTY}
+	public enum ControlType {POS, NEG, COMP, EMPTY}
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "well_id")
 	private Integer id;
 	
-	@Column(name = "plate_position_x")
-	private int platePositionX;
+	@Column(name = "row")
+	private int row;
 	
-	@Column(name = "plate_position_y")
-	private int platePositionY;
+	@Column(name = "col")
+	private int col;
 	
 	// add each label to this string separated by space character
 //	@Column(name = "labels")
@@ -53,7 +53,7 @@ public class Well implements Serializable{
 	private ControlType controlType;
 	
 	@Column(name = "if_valid")
-	private boolean ifValid;
+	private boolean ifValid = true;
 	
 //	@Column(name = "substrate")
 //	private Substrate substare; 
@@ -83,18 +83,7 @@ public class Well implements Serializable{
 		comments = new ArrayList<Comment>();
 	}
 	
-	public int getPlatePositionX() {
-		return platePositionX;
-	}
-	public void setPlatePositionX(int platePositionX) {
-		this.platePositionX = platePositionX;
-	}
-	public int getPlatePositionY() {
-		return platePositionY;
-	}
-	public void setPlatePositionY(int platePositionY) {
-		this.platePositionY = platePositionY;
-	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -159,6 +148,26 @@ public class Well implements Serializable{
 
 	public void setWellLabels(List<WellLabel> wellLabels) {
 		this.wellLabels = wellLabels;
+	}
+
+
+	public int getRow() {
+		return row;
+	}
+
+
+	public void setRow(int row) {
+		this.row = row;
+	}
+
+
+	public int getCol() {
+		return col;
+	}
+
+
+	public void setCol(int col) {
+		this.col = col;
 	}
 
 }
