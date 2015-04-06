@@ -53,6 +53,9 @@ public class ResultController {
 	@Autowired
 	private ProfileService profileService;
 	
+	public static final String C_RESULT_FILE_PATH = "/home/adam_files/results/";
+//	public static final String C_RESULT_FILE_PATH = "c:/adam_files/results/";
+	
 	@RequestMapping(value="/upload_result", method=RequestMethod.POST)
 	public @ResponseBody ResultSnapshot handleResultUpload(
 			@RequestParam(value="name", required=false) String name,
@@ -63,11 +66,11 @@ public class ResultController {
 		if (file != null && !file.isEmpty()){
 		
 			byte[] bytes = file.getBytes();
-			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File("/home/adam_files/"+name)));
+			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(C_RESULT_FILE_PATH + name)));
 			stream.write(bytes);
 			stream.close();
 		
-			resultSnapshot = parserService.parseResultsFromFile("/home/adam_files/"+name);
+			resultSnapshot = parserService.parseResultsFromFile(C_RESULT_FILE_PATH + name);
 		}
 		
 		resultService.saveResultSnapshot(resultSnapshot);

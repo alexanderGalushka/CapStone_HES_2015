@@ -38,6 +38,9 @@ public class PlateController {
 	@Autowired
 	private AuthenticationService authService;
 	
+	public static final String C_PLATE_FILE_PATH = "/home/adam_files/plates/";
+//	public static final String C_PLATE_FILE_PATH = "c:/adam_files/plates/";
+	
 	// Template CRUD - START
 	@RequestMapping(value = "/template", method = RequestMethod.GET)
 	@ResponseBody
@@ -138,11 +141,11 @@ public class PlateController {
 		if (file != null && !file.isEmpty()){
 		
 			byte[] bytes = file.getBytes();
-			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(name)));
+			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(C_PLATE_FILE_PATH + name)));
 			stream.write(bytes);
 			stream.close();
 		
-			plate = parserService.parsePlateFromFile(name);
+			plate = parserService.parsePlateFromFile(C_PLATE_FILE_PATH + name);
 		}
 		
 		return plateService.createPlate(plate);
