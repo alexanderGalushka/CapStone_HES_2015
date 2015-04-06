@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.model.Template;
+import edu.harvard.cscie99.adam.model.Well;
+import edu.harvard.cscie99.adam.model.WellLabel;
 
 /**
  * 
@@ -140,6 +142,17 @@ public class PlateService {
 
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
+		
+		for (Well well : plate.getWells()){
+			for (WellLabel wellLabel : well.getWellLabels()){
+				session.save(wellLabel);
+			}
+			session.save(well);
+		}
+		
+		for (WellLabel label : plate.getWellLabels()){
+			session.save(label);
+		}
 		session.save(plate);
 		session.getTransaction().commit();
 		session.close();
