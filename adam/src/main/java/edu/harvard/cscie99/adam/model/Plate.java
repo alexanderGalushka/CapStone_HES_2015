@@ -77,6 +77,7 @@ public class Plate implements Serializable{
 		wells = new ArrayList<Well>();
 		collaborators = new ArrayList<User>();
 		comments = new ArrayList<Comment>();
+		wellLabels = new ArrayList<WellLabel>();
 	}
 	
 //	public int getId() {
@@ -173,7 +174,7 @@ public class Plate implements Serializable{
 	
 	public Well getWell(int row, int column){
 		for (Well well : wells){
-			if (well.getPlatePositionX() == row && well.getPlatePositionY() == column){
+			if (well.getRow() == row && well.getCol() == column){
 				return well;
 			}
 		}
