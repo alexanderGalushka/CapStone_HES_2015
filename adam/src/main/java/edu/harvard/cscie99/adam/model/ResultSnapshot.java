@@ -12,7 +12,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import edu.harvard.cscie99.adam.profile.User;
 
 /**
  * 
@@ -32,9 +35,11 @@ public class ResultSnapshot implements Serializable{
     @Column(name = "result_snapshot_id")
 	private int id;
 	
-	//TODO JPA mappings
-	private Plate plate;
-	private Project project;
+	@ManyToOne(targetEntity = Plate.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Plate plate;
+	
+	@ManyToOne(targetEntity = Plate.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Project project;
 	
 	// accounted for pharmacokinetics
 	@Column(name = "time")
