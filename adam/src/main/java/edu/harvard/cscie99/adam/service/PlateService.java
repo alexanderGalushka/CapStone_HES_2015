@@ -114,7 +114,17 @@ public class PlateService {
 			plate.getCollaborators().isEmpty();
 			plate.getComments().isEmpty();
 			plate.getWellLabels().isEmpty();
-			plate.getWells().isEmpty();
+			if (!plate.getWells().isEmpty()){
+				for (Well well : plate.getWells()){
+					well.getComments().isEmpty();
+					well.getWellLabels().isEmpty();
+					if (!well.getResultSnapshots().isEmpty()){
+						for (ResultSnapshot rs : well.getResultSnapshots()){
+							rs.getMeasurements().isEmpty();
+						}
+					}
+				}
+			}
 		}
 		
 		session.close();
