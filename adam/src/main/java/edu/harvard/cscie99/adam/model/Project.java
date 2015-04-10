@@ -92,7 +92,7 @@ public class Project implements Serializable {
 	private String label;
 	
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<AllMeasuredValues> allMeasuredValues;
+	private List<DataSet> dataSet;
 	
 	public Project(){
 		collaborators = new ArrayList<User>();
@@ -182,12 +182,12 @@ public class Project implements Serializable {
 		this.protocolId = protocolId;
 	}
 
-	public List<AllMeasuredValues> getAllMeasuredValues() {
-		return allMeasuredValues;
+	public List<DataSet> getDataSet() {
+		return dataSet;
 	}
 
-	public void setAllMeasuredValues(List<AllMeasuredValues> allMeasuredValues) {
-		this.allMeasuredValues = allMeasuredValues;
+	public void setDataSet(List<DataSet> dataSet) {
+		this.dataSet = dataSet;
 	}
 
 	public String getLabel() {

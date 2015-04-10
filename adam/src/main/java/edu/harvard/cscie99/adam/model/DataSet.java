@@ -13,7 +13,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class AllMeasuredValues 
+public class DataSet 
 {
 // - ALEX's work (let's pair program these attributes (Gerson))
 //

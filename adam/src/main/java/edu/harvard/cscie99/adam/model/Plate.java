@@ -71,7 +71,7 @@ public class Plate implements Serializable{
 	private List<User> collaborators;
 	
 	@OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<AllMeasuredValues> allMeasuredValues;
+	private List<DataSet> dataSet;
 	
 	public Plate(){
 		wells = new ArrayList<Well>();
@@ -148,12 +148,12 @@ public class Plate implements Serializable{
 		this.template = template;
 	}
 
-	public List<AllMeasuredValues> getAllMeasuredValues() {
-		return allMeasuredValues;
+	public List<DataSet> getDataSet() {
+		return dataSet;
 	}
 
-	public void setAllMeasuredValues(List<AllMeasuredValues> allMeasuredValues) {
-		this.allMeasuredValues = allMeasuredValues;
+	public void setDataSet(List<DataSet> dataSet) {
+		this.dataSet = dataSet;
 	}
 
 	public String getLabel() {
