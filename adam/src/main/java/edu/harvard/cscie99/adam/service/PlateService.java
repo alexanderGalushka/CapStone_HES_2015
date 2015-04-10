@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.Project;
+import edu.harvard.cscie99.adam.model.ResultSnapshot;
 import edu.harvard.cscie99.adam.model.Template;
 import edu.harvard.cscie99.adam.model.Well;
 import edu.harvard.cscie99.adam.model.WellLabel;
@@ -88,7 +89,7 @@ public class PlateService {
 		List<Plate> plateList = session.createCriteria(Plate.class).list();
 		
 		for (Plate plate : plateList){
-			plate.getAllMeasuredValues().isEmpty();
+			plate.getDataSet().isEmpty();
 			plate.getCollaborators().isEmpty();
 			plate.getComments().isEmpty();
 			plate.getWellLabels().isEmpty();
@@ -109,11 +110,11 @@ public class PlateService {
 		List<Plate> plateList = session.createCriteria(Plate.class).list();
 		
 		for (Plate plate : plateList){
-			plate.getAllMeasuredValues();
-			plate.getCollaborators();
-			plate.getComments();
-			plate.getWellLabels();
-			plate.getWells();
+			plate.getDataSet().isEmpty();
+			plate.getCollaborators().isEmpty();
+			plate.getComments().isEmpty();
+			plate.getWellLabels().isEmpty();
+			plate.getWells().isEmpty();
 		}
 		
 		session.close();
@@ -127,11 +128,21 @@ public class PlateService {
 		Session session = sessionFactory.openSession();
 		Plate plate = (Plate) session.get(Plate.class, plateId);
 		
-		plate.getAllMeasuredValues().isEmpty();
+		plate.getDataSet().isEmpty();
 		plate.getCollaborators().isEmpty();
 		plate.getComments().isEmpty();
 		plate.getWellLabels().isEmpty();
-		plate.getWells().isEmpty();
+		if (!plate.getWells().isEmpty()){
+			for (Well well : plate.getWells()){
+				well.getComments().isEmpty();
+				well.getWellLabels().isEmpty();
+				if (!well.getResultSnapshots().isEmpty()){
+					for (ResultSnapshot rs : well.getResultSnapshots()){
+						rs.getMeasurements().isEmpty();
+					}
+				}
+			}
+		}
 		
 		session.close();
 		
