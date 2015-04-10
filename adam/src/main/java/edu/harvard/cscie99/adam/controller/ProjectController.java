@@ -58,9 +58,9 @@ public class ProjectController {
 			
 		List<Project> projects = projectService.list();
 		for (Project project : projects){
-			project.getAllMeasuredValues();
-			project.getCollaborators();
-			project.getComments();
+			project.getDataSet().isEmpty();
+			project.getCollaborators().isEmpty();
+			project.getComments().isEmpty();
 		}
 		return projects;
 	}
@@ -72,7 +72,7 @@ public class ProjectController {
 		
 		Project project = projectService.retrieveProject(projectId);
 		
-		project.setAllMeasuredValues(null);
+		project.setDataSet(null);
 		project.setComments(null);
 		project.setCollaborators(null);
 		
