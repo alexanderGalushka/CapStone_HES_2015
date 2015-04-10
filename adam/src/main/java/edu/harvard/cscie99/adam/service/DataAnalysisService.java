@@ -1,10 +1,18 @@
 package edu.harvard.cscie99.adam.service;
 
+import java.util.List;
+
+import javax.websocket.Session;
+
 import org.apache.commons.math3.fitting.PolynomialCurveFitter;
 import org.apache.commons.math3.fitting.WeightedObservedPoints;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
+import org.hibernate.Query;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import edu.harvard.cscie99.adam.model.DataSet;
 import edu.harvard.cscie99.adam.model.Decay;
 import edu.harvard.cscie99.adam.model.Growth;
 import edu.harvard.cscie99.adam.model.Linear;
@@ -18,6 +26,9 @@ import edu.harvard.cscie99.adam.model.Polynom;
 @Component
 public class DataAnalysisService 
 {
+	@Autowired
+    private SessionFactory sessionFactory;
+	
 	/**
 	 * Covers covers line and semilog line fit (y = slope*x + intercept; y = slope*log(x) + intercept)
 	 * @param x array of X-axis values
@@ -216,6 +227,39 @@ public class DataAnalysisService
 		}
 		
 		return result;
+	}
+	
+	public List<DataSet> getValuesUsingFilter(Integer projectId, Integer plateId, String measurementType, String labelName, String labelValue){
+		
+		StringBuffer sb = new StringBuffer();
+//		sb.append("from allmeasuredvalues as values ");
+		
+		if (projectId != null){
+			sb.append("values.project_project_id = " + projectId.toString() + " and ");
+		}
+		if (plateId != null){
+			sb.append("values.plate_plate_id = " + plateId.toString() + " and ");
+		}
+		if (measurementType != null){
+			sb.append("values.measurement_type = '" + measurementType + "' and ");
+		}
+		if (labelName != null){
+			sb.append("values.label_name = '" + labelName + "' and ");
+		}
+		if (labelValue != null){
+			sb.append("values.label_value = '" + labelName + "' and ");
+		}
+		
+		String queryString = "from allmeasuredvalues as values ";
+		if (sb.length() >= 5){
+			queryString = "where " + sb.toString().substring(0, sb.toString().length() - 5);
+		}
+		
+		org.hibernate.Session session = sessionFactory.openSession();
+		Query query = session.createQuery(queryString);
+		List<DataSet> resultList = query.list();
+		
+		return resultList;
 	}
 	
 
