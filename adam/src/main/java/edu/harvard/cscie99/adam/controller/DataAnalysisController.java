@@ -66,13 +66,13 @@ public class DataAnalysisController
 	{
 		
 		List<Curve> listOfCurves = new ArrayList<>();
-//		listOfCurves.add(dataAnalysisService.getLinearRegression(x, y, "line"));
-//		listOfCurves.add(dataAnalysisService.getLinearRegression(x, y, "semilog"));
-//		listOfCurves.add(dataAnalysisService.getPolynomialFit(x, y, 2));
-//		listOfCurves.add(dataAnalysisService.getPolynomialFit(x, y, 3));
-//		listOfCurves.add(dataAnalysisService.getPolynomialFit(x, y, 3));
-//		listOfCurves.add(dataAnalysisService.getDecay(x, y));
-//		listOfCurves.add(dataAnalysisService.getGrowth(x, y));
+		listOfCurves.add(dataAnalysisService.getLinearRegression(x, y, "line"));
+		listOfCurves.add(dataAnalysisService.getLinearRegression(x, y, "semilog"));
+		listOfCurves.add(dataAnalysisService.getPolynomialFit(x, y, 2));
+		listOfCurves.add(dataAnalysisService.getPolynomialFit(x, y, 3));
+		listOfCurves.add(dataAnalysisService.getPolynomialFit(x, y, 3));
+		listOfCurves.add(dataAnalysisService.getDecay(x, y));
+		listOfCurves.add(dataAnalysisService.getGrowth(x, y));
 		//add one more: michaelis-menten
 		
 		return listOfCurves;
