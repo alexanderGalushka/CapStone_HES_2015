@@ -84,9 +84,9 @@ public class ProjectService {
 
 		Session session = sessionFactory.openSession();
 		Project project = (Project) session.get(Project.class, projectId);
-		project.getAllMeasuredValues();
-		project.getComments();
-		project.getCollaborators();
+		project.getDataSet().isEmpty();
+		project.getComments().isEmpty();
+		project.getCollaborators().isEmpty();
 		session.close();
 		
 		return project;

@@ -20,7 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
-import edu.harvard.cscie99.adam.model.AllMeasuredValues;
+import edu.harvard.cscie99.adam.model.DataSet;
 import edu.harvard.cscie99.adam.model.Measurement;
 import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
@@ -161,8 +161,6 @@ public class ResultService {
 		return saveResultMeasurements(results, labelNamesMap);
 	}
 
-
-
 	private boolean saveResultMeasurements(
 			ResultSnapshot results,
 			HashMap<String, HashMap<String, HashMap<String, ArrayList<Double>>>> labelNamesMap) throws JsonProcessingException {
@@ -175,7 +173,7 @@ public class ResultService {
 		for (String labelName : labelNamesMap.keySet()){
 			for (String labelValue : labelNamesMap.get(labelName).keySet()){
 				for (String measurementType : labelNamesMap.get(labelName).get(labelValue).keySet()){
-					AllMeasuredValues allMeasuredValues = new AllMeasuredValues();
+					DataSet allMeasuredValues = new DataSet();
 					allMeasuredValues.setLabelName(labelName);
 					allMeasuredValues.setLabelValue(labelValue);
 					allMeasuredValues.setMeasurementType(measurementType);
