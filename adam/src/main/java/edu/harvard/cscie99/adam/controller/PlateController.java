@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import edu.harvard.cscie99.adam.error.ParserException;
 import edu.harvard.cscie99.adam.model.Plate;
-import edu.harvard.cscie99.adam.model.Template;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
 import edu.harvard.cscie99.adam.service.ParserService;
 import edu.harvard.cscie99.adam.service.PlateService;
@@ -38,59 +37,8 @@ public class PlateController {
 	@Autowired
 	private AuthenticationService authService;
 	
-	public static final String C_PLATE_FILE_PATH = "/home/adam_files/plates/";
-//	public static final String C_PLATE_FILE_PATH = "c:/adam_files/plates/";
-	
-	// Template CRUD - START
-	@RequestMapping(value = "/template", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Template> listTemplates(){
-		
-		return plateService.listTemplates();
-	}
-	
-	@RequestMapping(value = "/template/{template_id}", method = RequestMethod.GET)
-	@ResponseBody
-	public Template getTemplateDetails(
-			@PathVariable("template_id") int templateId){
-		
-		return plateService.retrieveTemplate(templateId);
-	}
-	
-	@RequestMapping(value = "/template", method = RequestMethod.POST)
-	@ResponseBody
-	public boolean createTemplate(@RequestBody Template template){
-		
-		return plateService.createTemplate(template);
-	}
-	
-	@RequestMapping(value = "/template", method = RequestMethod.DELETE)
-	@ResponseBody
-	public boolean removeTemplate(@RequestBody Template template){
-		
-		return plateService.removeTemplate(template);
-	}
-	
-	@RequestMapping(value = "/template", method = RequestMethod.PUT)
-	@ResponseBody
-	public boolean editTemplate(@RequestBody Template template){
-		
-		return plateService.editTemplate(template);
-	}
-	// Template CRUD - END
-
-	@RequestMapping(value = "/template/search", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Template> searchTemplate(
-			@RequestParam(value="id", required=false) int id,
-			@RequestParam(value="name", required=false) String name,
-			@RequestParam(value="description", required=false) String description,
-			@RequestParam(value="tag", required=false) String tag,
-			@RequestParam(value="type", required=false) Plate.PlateType type){
-		
-		//TODO
-		return null;
-	}
+//	public static final String C_PLATE_FILE_PATH = "/home/adam_files/plates/";
+	public static final String C_PLATE_FILE_PATH = "c:/adam_files/plates/";
 	
 	// Plate CRUD - START
 	@RequestMapping(value = "/plate", method = RequestMethod.GET)
