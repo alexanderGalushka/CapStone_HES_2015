@@ -35,14 +35,14 @@ public class DataSet
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "all_measured_values_id")
+    @Column(name = "dataset_id")
 	private int id;
 	
-	@ManyToOne(targetEntity = Project.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Project project;
+	@Column
+	private Integer projectId;
 	
-	@ManyToOne(targetEntity = Plate.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Plate plate;
+	@Column
+	private Integer plateId;
 	
 	@Column(name = "measurement_type")
 	private String measurementType;
@@ -72,22 +72,6 @@ public class DataSet
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public Project getProject() {
-		return project;
-	}
-
-	public void setProject(Project project) {
-		this.project = project;
-	}
-
-	public Plate getPlate() {
-		return plate;
-	}
-
-	public void setPlate(Plate plate) {
-		this.plate = plate;
 	}
 
 	public String getMeasurementType() {
@@ -128,6 +112,22 @@ public class DataSet
 
 	public void setLabelName(String labelName) {
 		LabelName = labelName;
+	}
+
+	public Integer getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(Integer projectId) {
+		this.projectId = projectId;
+	}
+
+	public Integer getPlateId() {
+		return plateId;
+	}
+
+	public void setPlateId(Integer plateId) {
+		this.plateId = plateId;
 	}
 
 //

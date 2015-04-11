@@ -91,12 +91,13 @@ public class Project implements Serializable {
 	@Column(name = "label")
 	private String label;
 	
-	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<DataSet> dataSet;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Plate> plate;
 	
 	public Project(){
 		collaborators = new ArrayList<User>();
 		comments = new ArrayList<Comment>();
+		plate = new ArrayList<Plate>();
 	}
 	
 	public Integer getId() {
@@ -182,20 +183,20 @@ public class Project implements Serializable {
 		this.protocolId = protocolId;
 	}
 
-	public List<DataSet> getDataSet() {
-		return dataSet;
-	}
-
-	public void setDataSet(List<DataSet> dataSet) {
-		this.dataSet = dataSet;
-	}
-
 	public String getLabel() {
 		return label;
 	}
 
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	public List<Plate> getPlate() {
+		return plate;
+	}
+
+	public void setPlate(List<Plate> plate) {
+		this.plate = plate;
 	}
 	
 	

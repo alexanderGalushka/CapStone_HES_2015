@@ -42,6 +42,9 @@ public class Plate implements Serializable{
 	@ManyToOne(targetEntity = Template.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Template template;
 	
+//	@ManyToOne(targetEntity = Project.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private Project project;
+	
 	@Column(name = "barcode")
 	private String barcode;
 
@@ -69,9 +72,6 @@ public class Plate implements Serializable{
 			joinColumns={@JoinColumn(name="plate_id", referencedColumnName="plate_id")},
 			inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="user_id")})
 	private List<User> collaborators;
-	
-	@OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<DataSet> dataSet;
 	
 	public Plate(){
 		wells = new ArrayList<Well>();
@@ -147,15 +147,7 @@ public class Plate implements Serializable{
 	public void setTemplate(Template template) {
 		this.template = template;
 	}
-
-	public List<DataSet> getDataSet() {
-		return dataSet;
-	}
-
-	public void setDataSet(List<DataSet> dataSet) {
-		this.dataSet = dataSet;
-	}
-
+	
 	public String getLabel() {
 		return label;
 	}
@@ -180,5 +172,13 @@ public class Plate implements Serializable{
 		}
 		return null;
 	}
+
+//	public Project getProject() {
+//		return project;
+//	}
+//
+//	public void setProject(Project project) {
+//		this.project = project;
+//	}
 	
 }
