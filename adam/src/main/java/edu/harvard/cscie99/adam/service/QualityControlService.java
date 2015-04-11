@@ -82,7 +82,7 @@ public class QualityControlService
 		//this.negControls = negControls;
 		//this.samples = samples;
 		
-		List<Plate> projectPlates = plateService.listPlates( projectId );
+//		List<Plate> projectPlates = plateService.listPlates( projectId );
 		
 		//Map<Integer, List<>>
 		
