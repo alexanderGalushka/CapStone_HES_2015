@@ -38,10 +38,10 @@ public class DataSet
     @Column(name = "dataset_id")
 	private int id;
 	
-	@Column
+	@Column(name = "project_id")
 	private Integer projectId;
 	
-	@Column
+	@Column(name = "plate_id")
 	private Integer plateId;
 	
 	@Column(name = "measurement_type")
