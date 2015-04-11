@@ -16,6 +16,7 @@ import org.apache.commons.math3.util.FastMath;
 import edu.harvard.cscie99.adam.model.DataSet;
 import edu.harvard.cscie99.adam.model.Measurement;
 import edu.harvard.cscie99.adam.model.Plate;
+import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
 import edu.harvard.cscie99.adam.model.Well;
 
@@ -51,6 +52,9 @@ public class QualityControlService
 	
 	@Autowired
 	private PlateService plateService;
+	
+	@Autowired
+	private ProjectService projectService;
 	
 	@Autowired
 	private QueryService queryService;
@@ -137,6 +141,53 @@ public class QualityControlService
 	
 	public List<DataSet> getNormalizedData(Integer projectId)
 	{
+		
+		// ##################################
+		//by: Gerson
+		
+		//Get the Project data
+		Project project = projectService.retrieveProject(projectId);
+		
+		for (Plate projPlate : project.getPlates()){
+			
+			//Get the Plate's data using plateService
+			Plate plate = plateService.retrievePlate(projPlate.getId());
+			
+			//At this point, we have all the wells from the plate, and the result snapshots associated to plate
+			
+			for (Well well : plate.getWells()){
+				//Do something with Wells
+			}
+			
+			for (ResultSnapshot result : plate.getResults()){
+				//Do something with results
+				result.getTime();
+				
+				for (Measurement measure : result.getMeasurements()){
+					//HINT: there is a method in plate called getWell(X, Y).
+					//You can use this to associate the Well data (labels, controls) to the readout values
+					Well someWell = plate.getWell(measure.getRow(), measure.getColumn());
+					
+					if (someWell.getControlType() == Well.ControlType.POS){
+						//Do something with value
+						Double value = measure.getValue();
+					}
+					
+					if (someWell.getControlType() == Well.ControlType.NEG){
+						//Do something else with value
+						Double value = measure.getValue();
+					}
+				}
+			}
+		}
+		
+		//Probably you will end up creating a HashMap<List<Double>> for positive controls, other for measures, and use this to calculate Z-factors, normalize, etc etc... 
+		//Cheers!
+		// ##################################
+		
+		
+		
+		
 		// somehow get list of plate IDs per project
 		List<Integer> plateIds = queryService.getPlateIdsPerProject(projectId);
 		Map<Integer, List<DataSet>> dataSetsPerPlate = new HashMap<>();
