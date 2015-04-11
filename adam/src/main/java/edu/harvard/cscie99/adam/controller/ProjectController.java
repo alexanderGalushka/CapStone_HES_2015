@@ -60,8 +60,7 @@ public class ProjectController {
 			
 		List<Project> projects = projectService.list();
 		for (Project project : projects){
-//			project.getDataSet().isEmpty();
-			project.getCollaborators().isEmpty();
+			project.getPlates().isEmpty();
 		}
 		return projects;
 	}
@@ -74,7 +73,8 @@ public class ProjectController {
 		Project project = projectService.retrieveProject(projectId);
 		
 //		project.setDataSet(null);
-		project.setCollaborators(null);
+//		project.setCollaborators(null);
+		project.getPlates().isEmpty();
 		
 		return project;
 	}
@@ -118,7 +118,23 @@ public class ProjectController {
 			
 		Project project = projectService.retrieveProject(projectId);
 		Plate plate = plateService.retrievePlate(plateId);
-		project.getPlate().add(plate);
+		project.getPlates().add(plate);
+		
+		projectService.updateProject(project);
+		
+		return true;
+		
+	}
+	
+	@RequestMapping(value = "/project/{projectId}/remove_plate/{plateId}", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean removePlateFromProject(
+			@PathVariable("projectId") int projectId,
+			@PathVariable("plateId") int plateId) throws UnauthorizedOperationException{
+			
+		Project project = projectService.retrieveProject(projectId);
+		Plate plate = plateService.retrievePlate(plateId);
+		project.getPlates().remove(plate);
 		
 		projectService.updateProject(project);
 		
@@ -134,27 +150,26 @@ public class ProjectController {
 		Project project = projectService.retrieveProject(projectId);
 		
 		List<Plate> plates = new ArrayList<Plate>();
-		for (Plate plate : project.getPlate()){
+		for (Plate plate : project.getPlates()){
 			plates.add(plateService.retrievePlate(plate.getId()));
 		}
 		
 		return plates;
-		
 	}
 	
-	@RequestMapping(value = "/project/{projectId}/add_comment/{comment}", method = RequestMethod.POST)
-	@ResponseBody
-	public boolean addCommentToProject(
-			@PathVariable("projectId") int projectId,
-			@PathVariable("comment") String comment) throws UnauthorizedOperationException{
-		
-		Project project = projectService.retrieveProject(projectId);
-//			project.getComments().add(comment);
-		projectService.updateProject(project);
-		
-		return true;
-		
-	}
+//	@RequestMapping(value = "/project/{projectId}/add_comment/{comment}", method = RequestMethod.POST)
+//	@ResponseBody
+//	public boolean addCommentToProject(
+//			@PathVariable("projectId") int projectId,
+//			@PathVariable("comment") String comment) throws UnauthorizedOperationException{
+//		
+//		Project project = projectService.retrieveProject(projectId);
+////			project.getComments().add(comment);
+//		projectService.updateProject(project);
+//		
+//		return true;
+//		
+//	}
 	
 	@RequestMapping(value = "/tags/list", method = RequestMethod.GET)
 	@ResponseBody
