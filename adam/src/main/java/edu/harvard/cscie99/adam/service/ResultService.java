@@ -1,11 +1,13 @@
 package edu.harvard.cscie99.adam.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -167,29 +169,99 @@ public class ResultService {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		
-		Session session = sessionFactory.openSession();
-		session.beginTransaction();
+//		Session session = sessionFactory.openSession();
+//		session.beginTransaction();
 		
 		for (String labelName : labelNamesMap.keySet()){
 			for (String labelValue : labelNamesMap.get(labelName).keySet()){
+				
 				for (String measurementType : labelNamesMap.get(labelName).get(labelValue).keySet()){
+					
+					Session session = sessionFactory.openSession();
+					session.beginTransaction();
+					
 					DataSet allMeasuredValues = new DataSet();
 					allMeasuredValues.setLabelName(labelName);
 					allMeasuredValues.setLabelValue(labelValue);
 					allMeasuredValues.setMeasurementType(measurementType);
-					allMeasuredValues.setPlate(results.getPlate());
-					allMeasuredValues.setProject(results.getProject());
+					allMeasuredValues.setPlateId(results.getPlate().getId());
+					allMeasuredValues.setProjectId(results.getProject().getId());
+					allMeasuredValues.setTime(results.getTime());
 					
 					List<Double> values = labelNamesMap.get(labelName).get(labelValue).get(measurementType);
 					String jsonValues = mapper.writeValueAsString(values);
 					allMeasuredValues.setJsonValues(jsonValues);
-					session.save(allMeasuredValues);
+					session.saveOrUpdate(allMeasuredValues);
+					session.getTransaction().commit();
+					session.close();
 				}
 			}
 		}
-		session.getTransaction().commit();
-		session.close();
+//		session.getTransaction().commit();
+//		session.close();
 		return true;
+	}
+	
+	public DataSet queryResultsData(Integer projectId, Integer plateId, String labelName, String labelValue, String measurementType, Date time) throws JsonProcessingException{
+		
+		Session session = sessionFactory.openSession();
+		DataSet filteredValues = new DataSet();
+		ObjectMapper mapper = new ObjectMapper();
+		
+		StringBuilder query = new StringBuilder();
+		query.append("FROM DataSet D ");
+		
+		StringBuilder criteria = new StringBuilder("WHERE ");
+		if (projectId != null){
+			criteria.append("D.projectId = " + projectId + " AND");
+			filteredValues.setProjectId(projectId);
+		}
+		if (plateId != null){
+			criteria.append("D.plateId = " + plateId + " AND");
+			filteredValues.setPlateId(plateId);
+		}
+		if (labelName != null && labelName.length()>0){
+			criteria.append("D.labelName = " + labelName + " AND");
+			filteredValues.setLabelName(labelName);
+		}
+		if (labelValue != null && labelValue.length()>0){
+			criteria.append("D.labelValue = " + labelValue + " AND");
+			filteredValues.setLabelValue(labelValue);
+		}
+		if (measurementType != null && measurementType.length()>0){
+			criteria.append("D.measurementType = " + measurementType + " AND");
+			filteredValues.setMeasurementType(measurementType);
+		}
+		
+		String queryStr = null;
+		if (criteria.toString().length() > 6){
+			query.append (criteria);
+			queryStr = query.toString().substring(0, query.toString().length() - 4);
+		}
+		else{
+			queryStr = query.toString();
+		}
+		
+		Query hibernateQuery = session.createQuery(queryStr);
+		List<DataSet> results = hibernateQuery.list();
+		
+		List<Double> listValues = new ArrayList<Double>();
+		for (DataSet result : results){
+			
+//			List<Double> values = labelNamesMap.get(labelName).get(labelValue).get(measurementType);
+			String jsonValues = result.getJsonValues();
+			ArrayList<Double> doubles = null;
+			try {
+				doubles = mapper.readValue(jsonValues, ArrayList.class);
+				listValues.addAll(doubles);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		filteredValues.setJsonValues(mapper.writeValueAsString(listValues));
+		
+		return filteredValues;
 	}
 
 }

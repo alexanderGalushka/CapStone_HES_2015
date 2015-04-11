@@ -23,6 +23,7 @@ import edu.harvard.cscie99.adam.error.LogoutFailedException;
 import edu.harvard.cscie99.adam.error.ParserException;
 import edu.harvard.cscie99.adam.error.SessionTimeouException;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
+import edu.harvard.cscie99.adam.model.DataSet;
 import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
@@ -53,8 +54,8 @@ public class ResultController {
 	@Autowired
 	private ProfileService profileService;
 	
-	public static final String C_RESULT_FILE_PATH = "/home/adam_files/results/";
-//	public static final String C_RESULT_FILE_PATH = "c:/adam_files/results/";
+//	public static final String C_RESULT_FILE_PATH = "/home/adam_files/results/";
+	public static final String C_RESULT_FILE_PATH = "c:/adam_files/results/";
 	
 	@RequestMapping(value="/upload_result", method=RequestMethod.POST)
 	public @ResponseBody ResultSnapshot handleResultUpload(
@@ -82,9 +83,20 @@ public class ResultController {
 	public @ResponseBody boolean prepareResultsData(
 			@RequestBody ResultSnapshot result) throws JsonProcessingException {
 		
-		ResultSnapshot resultSnapshot = null;
+		return resultService.prepareResultsData(result);
+	}
+	
+	@RequestMapping(value="/getResults", method=RequestMethod.GET)
+	public @ResponseBody DataSet queryResults(
+			@RequestParam(value="projectId", required=false) Integer projectId,
+			@RequestParam(value="plateId", required=false) Integer plateId,
+			@RequestParam(value="labelName", required=false) String labelName,
+			@RequestParam(value="labelValue", required=false) String labelValue,
+			@RequestParam(value="measurementType", required=false) String measurementType,
+			@RequestParam(value="time", required=false) Date time
+			) throws JsonProcessingException {
 		
-		return resultService.prepareResultsData(resultSnapshot);
+		return resultService.queryResultsData(projectId, plateId, labelName, labelValue, measurementType, time);
 	}
 	
 }
