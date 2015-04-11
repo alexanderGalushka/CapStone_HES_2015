@@ -12,13 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.harvard.cscie99.adam.error.SessionTimeouException;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
-import edu.harvard.cscie99.adam.model.Comment;
 import edu.harvard.cscie99.adam.model.Plate;
 //import edu.harvard.cscie99.adam.model.Compound;
 import edu.harvard.cscie99.adam.model.Project;
-import edu.harvard.cscie99.adam.profile.User;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
 import edu.harvard.cscie99.adam.service.PlateService;
 import edu.harvard.cscie99.adam.service.ProfileService;
@@ -65,7 +62,6 @@ public class ProjectController {
 		for (Project project : projects){
 //			project.getDataSet().isEmpty();
 			project.getCollaborators().isEmpty();
-			project.getComments().isEmpty();
 		}
 		return projects;
 	}
@@ -78,7 +74,6 @@ public class ProjectController {
 		Project project = projectService.retrieveProject(projectId);
 		
 //		project.setDataSet(null);
-		project.setComments(null);
 		project.setCollaborators(null);
 		
 		return project;
@@ -161,16 +156,6 @@ public class ProjectController {
 		
 	}
 	
-	@RequestMapping(value = "/project/{projectId}/updates", method = RequestMethod.POST)
-	@ResponseBody
-	public List<Comment> getProjectUpdates(
-			@PathVariable("projectId") int projectId) throws UnauthorizedOperationException{
-		
-		
-		Project project = projectService.retrieveProject(projectId);
-		return project.getComments();
-	}
-	
 	@RequestMapping(value = "/tags/list", method = RequestMethod.GET)
 	@ResponseBody
 	public List<String> listRecentTags(@RequestParam(value="number", required=false) int numberOfTags) throws UnauthorizedOperationException{
@@ -179,27 +164,5 @@ public class ProjectController {
 			
 		return tags;
 	}
-		
-//	@RequestMapping(value = "/project/{project_id}/compounds/list", method = RequestMethod.GET)
-//	@ResponseBody
-//	public List<Compound> listCompoundsFromProject(
-//			@PathVariable("projectId") int projectId) throws UnauthorizedOperationException{
-//			
-////		User user = UserContext.getUser(request);
-////		List<Project> projects = projectService.list();
-////			
-////		return projects;
-//		
-//		List<Compound> compounds = new ArrayList<Compound>();
-//		
-//		for (int i = 0; i < 10; i++){
-//			Compound compound = new Compound();
-//			compound.setId(i);
-//			compound.setName("compound" + i);
-//			compounds.add(compound);
-//		}
-//		
-//		return compounds;
-//	}
 	
 }
