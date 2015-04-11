@@ -45,9 +45,6 @@ public class Plate implements Serializable{
     @Column(name = "plate_id")
 	private int id;
 	
-	@ManyToOne(targetEntity = Template.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Template template;
-	
 //	@ManyToOne(targetEntity = Project.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //	private Project project;
 	
@@ -62,9 +59,6 @@ public class Plate implements Serializable{
 	
 	@OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<WellLabel> wellLabels;
-	
-	@OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Comment> comments;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Well> wells;
@@ -82,7 +76,6 @@ public class Plate implements Serializable{
 	public Plate(){
 		wells = new ArrayList<Well>();
 		collaborators = new ArrayList<User>();
-		comments = new ArrayList<Comment>();
 		wellLabels = new ArrayList<WellLabel>();
 	}
 	
@@ -128,30 +121,13 @@ public class Plate implements Serializable{
 	public void setCollaborators(List<User> collaborators) {
 		this.collaborators = collaborators;
 	}
-
-	public List<Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
-
-
+	
 	public int getId() {
 		return id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public Template getTemplate() {
-		return template;
-	}
-
-	public void setTemplate(Template template) {
-		this.template = template;
 	}
 	
 	public String getLabel() {
