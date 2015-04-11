@@ -25,6 +25,7 @@ import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
 import edu.harvard.cscie99.adam.model.DataSet;
 import edu.harvard.cscie99.adam.model.Measurement;
 import edu.harvard.cscie99.adam.model.Plate;
+import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
 import edu.harvard.cscie99.adam.model.Well;
 import edu.harvard.cscie99.adam.model.WellLabel;
@@ -40,6 +41,12 @@ public class ResultService {
 	
 	@Autowired
     private SessionFactory sessionFactory;
+	
+	@Autowired
+	private PlateService plateService;
+	
+	@Autowired
+	private ProjectService projectService;
 	
 	public List<Well> search(int projectId, int resultId, int plateId, Date creationDate, String comment, User owner){
 		
@@ -59,23 +66,39 @@ public class ResultService {
 	
 	
 
-	public List<Well> retrieveResult(int projectId, int resultId){
+	public ResultSnapshot retrieveResult(int resultId){
 		
-		//TODO retrieve from DB
+		Session session = sessionFactory.openSession();
+		ResultSnapshot result = (ResultSnapshot) session.get(ResultSnapshot.class, resultId);
+		loadResult(result);
 		
-		Plate plate = new Plate();
-		plate.setId(1);
-//		plate.setName("plate");
+		session.close();
 		
-		List<Well> wells = new ArrayList<>();
-		for (int j = 0; j < 10; j++){
-			Well wellResult = new Well();
-			//wellResult.setCreationTime(new Date());
-			wellResult.setId(j);
-			wells.add(wellResult);
+		return result;
+	}
+	
+	private void loadResult(ResultSnapshot result){
+//		result.getPlate();
+//		result.getProject();
+		if (!result.getMeasurements().isEmpty()){
+			for (Measurement measure : result.getMeasurements()){
+				measure.getColumn();
+				measure.getMeasurementType();
+				measure.getRow();
+				measure.getValue();
+			}
 		}
-				
-		return wells;
+	}
+	
+	public List<ResultSnapshot> listResults(){
+		
+		Session session = sessionFactory.openSession();
+		List<ResultSnapshot> results = session.createCriteria(ResultSnapshot.class).list();
+		for (ResultSnapshot result : results){
+			loadResult(result);
+		}
+		
+		return results;
 	}
 	
 	public ResultSnapshot saveResultSnapshot(ResultSnapshot result){
@@ -93,12 +116,38 @@ public class ResultService {
 		}
 	}
 	
+	private Plate getPlateAssociatedToResult(ResultSnapshot result){
+		for (Plate plate : plateService.listPlates()){
+			if (!plate.getResults().isEmpty()){
+				for (ResultSnapshot plateResult : plate.getResults()){
+					if (plateResult.getId() == result.getId()){
+						return plate;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	private Project getProjectAssociatedToPlate(Plate plate){
+		for (Project project : projectService.list()){
+			if (!project.getPlates().isEmpty()){
+				for (Plate projectPlate : project.getPlates()){
+					if (plate.getId() == projectPlate.getId()){
+						return project;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
 	public boolean prepareResultsData(ResultSnapshot results) throws JsonProcessingException{
 		
 		HashMap<String, HashMap<String, List<Well>>> labelTree = new HashMap<String, HashMap<String, List<Well>>>();
 		HashMap<Well, ArrayList<String[]>> linkingMap = new HashMap<Well, ArrayList<String[]>>();
 		
-		Plate plate = results.getPlate();
+		Plate plate = getPlateAssociatedToResult(results);
 		//Force to load Wells
 		plate.getWells();
 		
@@ -136,27 +185,29 @@ public class ResultService {
 			
 			List<String[]> labelNameValuePairs = linkingMap.get(well);
 			
-			for (String[] labelNameValuePair : labelNameValuePairs){
-				
-				HashMap<String, HashMap<String, ArrayList<Double>>> labelValuesMap = labelNamesMap.get(labelNameValuePair[0]);
-				if (labelValuesMap == null){
-					labelValuesMap = new HashMap<String, HashMap<String, ArrayList<Double>>>();
-					labelNamesMap.put(labelNameValuePair[0], labelValuesMap);
+			if (labelNameValuePairs != null){
+				for (String[] labelNameValuePair : labelNameValuePairs){
+					
+					HashMap<String, HashMap<String, ArrayList<Double>>> labelValuesMap = labelNamesMap.get(labelNameValuePair[0]);
+					if (labelValuesMap == null){
+						labelValuesMap = new HashMap<String, HashMap<String, ArrayList<Double>>>();
+						labelNamesMap.put(labelNameValuePair[0], labelValuesMap);
+					}
+					
+					HashMap<String, ArrayList<Double>> measureTypeMap = labelValuesMap.get(labelNameValuePair[1]);
+					if (measureTypeMap == null){
+						measureTypeMap = new HashMap<String, ArrayList<Double>>();
+						labelValuesMap.put(labelNameValuePair[1], measureTypeMap);
+					}
+					
+					ArrayList<Double> valueList = measureTypeMap.get(measure.getMeasurementType());
+					if (valueList == null){
+						valueList = new ArrayList<Double>();
+						measureTypeMap.put(measure.getMeasurementType(), valueList);
+					}
+					
+					labelNamesMap.get(labelNameValuePair[0]).get(labelNameValuePair[1]).get(measure.getMeasurementType()).add(measure.getValue());
 				}
-				
-				HashMap<String, ArrayList<Double>> measureTypeMap = labelValuesMap.get(labelNameValuePair[1]);
-				if (measureTypeMap == null){
-					measureTypeMap = new HashMap<String, ArrayList<Double>>();
-					labelValuesMap.put(labelNameValuePair[1], measureTypeMap);
-				}
-				
-				ArrayList<Double> valueList = measureTypeMap.get(measure.getMeasurementType());
-				if (valueList == null){
-					valueList = new ArrayList<Double>();
-					measureTypeMap.put(measure.getMeasurementType(), valueList);
-				}
-				
-				labelNamesMap.get(labelNameValuePair[0]).get(labelNameValuePair[1]).get(measure.getMeasurementType()).add(measure.getValue());
 			}
 		}
 		
@@ -184,8 +235,12 @@ public class ResultService {
 					allMeasuredValues.setLabelName(labelName);
 					allMeasuredValues.setLabelValue(labelValue);
 					allMeasuredValues.setMeasurementType(measurementType);
-					allMeasuredValues.setPlateId(results.getPlate().getId());
-					allMeasuredValues.setProjectId(results.getProject().getId());
+					
+					Plate plate = getPlateAssociatedToResult(results);
+					Project project = getProjectAssociatedToPlate(plate);
+					
+					allMeasuredValues.setPlateId(plate.getId());
+					allMeasuredValues.setProjectId(project.getId());
 					allMeasuredValues.setTime(results.getTime());
 					
 					List<Double> values = labelNamesMap.get(labelName).get(labelValue).get(measurementType);
