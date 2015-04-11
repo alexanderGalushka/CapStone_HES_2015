@@ -9,6 +9,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import edu.harvard.cscie99.adam.model.Measurement;
 import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
 import edu.harvard.cscie99.adam.model.Well;
@@ -28,38 +29,6 @@ public class PlateService {
 	
 	public List<Plate> listPlates(){
 		Session session = sessionFactory.openSession();
-		
-//		Session session = SessionFactoryUtils.doGetSession(sessionFactory, false);
-//		Session session = sessionFactory.getCurrentSession();
-		List<Plate> plateList = session.createCriteria(Plate.class).list();
-		
-		for (Plate plate : plateList){
-//			plate.getDataSet().isEmpty();
-			plate.getCollaborators().isEmpty();
-			plate.getWellLabels().isEmpty();
-			if (!plate.getWells().isEmpty()){
-				for (Well well : plate.getWells()){
-					well.getWellLabels().isEmpty();
-					if (!well.getResultSnapshots().isEmpty()){
-						for (ResultSnapshot rs : well.getResultSnapshots()){
-							rs.getMeasurements().isEmpty();
-						}
-					}
-				}
-			}
-		}
-		
-		session.close();
-		
-		return plateList;
-	}
-	
-	//TODO 
-	public List<Plate> listPlates(int projectId){
-		
-		// lookup by specific project ID 
-		
-		Session session = sessionFactory.openSession();
 		List<Plate> plateList = session.createCriteria(Plate.class).list();
 		
 		for (Plate plate : plateList){
@@ -70,7 +39,6 @@ public class PlateService {
 		
 		return plateList;
 	}
-	
 	
 	public Plate retrievePlate(int plateId){
 
@@ -91,16 +59,16 @@ public class PlateService {
 			for (WellLabel wellLabel : well.getWellLabels()){
 				session.saveOrUpdate(wellLabel);
 			}
-			session.saveOrUpdate(well);
+			session.save(well);
 		}
 		
 		for (WellLabel label : plate.getWellLabels()){
-			session.saveOrUpdate(label);
+			session.save(label);
 		}
 		for (Well well : plate.getWells()){
-			session.saveOrUpdate(well);
+			session.save(well);
 		}
-		session.saveOrUpdate(plate);
+		session.save(plate);
 		session.getTransaction().commit();
 		session.close();
 		
@@ -122,7 +90,17 @@ public class PlateService {
 
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
+		
 		session.merge(plate);
+		session.getTransaction().commit();
+		session.close();
+		
+		session = sessionFactory.openSession();
+		session.beginTransaction();
+//		for (ResultSnapshot result : plate.getResults()){
+//			result.setPlate(plate);
+//			session.saveOrUpdate(result);
+//		}
 		session.getTransaction().commit();
 		session.close();
 		
@@ -131,7 +109,7 @@ public class PlateService {
 	
 	public void loadPlate(Plate plate){
 //		plate.getDataSet().isEmpty();
-		plate.getCollaborators().isEmpty();
+//		plate.getCollaborators().isEmpty();
 		plate.getWellLabels().isEmpty();
 		if (!plate.getWells().isEmpty()){
 			for (Well well : plate.getWells()){
@@ -143,26 +121,37 @@ public class PlateService {
 				}
 			}
 		}
-	}
-	
-	public List<Plate> search(Map<String, Object> parameters){
-		//TODO
-		//list plates from DB
-		
-		List<Plate> plates = new ArrayList<Plate>();
-		
-		for (int i =0; i<5; i++){
-			Plate plate = new Plate();
-			plate.setBarcode("1234");
-			plate.setId(1);
-//			plate.setName("name");
-			
-			plates.add(plate);
+		if (!plate.getResults().isEmpty()){
+			for (ResultSnapshot result : plate.getResults()){
+				if (!result.getMeasurements().isEmpty()){
+					for (Measurement measure : result.getMeasurements()){
+						measure.getColumn();
+						measure.getMeasurementType();
+						measure.getRow();
+						measure.getValue();
+					}
+				}
+				result.getTime();
+			}
 		}
-		
-		return plates;
 	}
 	
-	
+//	public List<Plate> search(Map<String, Object> parameters){
+//		//TODO
+//		//list plates from DB
+//		
+//		List<Plate> plates = new ArrayList<Plate>();
+//		
+//		for (int i =0; i<5; i++){
+//			Plate plate = new Plate();
+//			plate.setBarcode("1234");
+//			plate.setId(1);
+////			plate.setName("name");
+//			
+//			plates.add(plate);
+//		}
+//		
+//		return plates;
+//	}
 
 }
