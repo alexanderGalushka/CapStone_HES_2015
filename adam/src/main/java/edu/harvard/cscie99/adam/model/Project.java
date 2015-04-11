@@ -79,8 +79,8 @@ public class Project implements Serializable {
 	@Column(name="tags")
 	private String tags;
 	
-	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Comment> comments;
+//	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private List<Comment> comments;
 	
 	@Column(name = "public")
 	private boolean isPublic;
@@ -96,7 +96,6 @@ public class Project implements Serializable {
 	
 	public Project(){
 		collaborators = new ArrayList<User>();
-		comments = new ArrayList<Comment>();
 		plate = new ArrayList<Plate>();
 	}
 	
@@ -136,13 +135,6 @@ public class Project implements Serializable {
 	public void setTags(String tags) {
 		this.tags = tags;
 	}
-	public List<Comment> getComments() {
-		return comments;
-	}
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
-
 	public boolean isPublic() {
 		return isPublic;
 	}
