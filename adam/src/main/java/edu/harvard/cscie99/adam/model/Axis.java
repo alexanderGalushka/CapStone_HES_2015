@@ -13,5 +13,23 @@ public class Axis {
 	private Type type;
 	private List<Double> points;
 	private List<Boolean> outliers;
-	private Comment[] comments;
+	
+	public Type getType() {
+		return type;
+	}
+	public void setType(Type type) {
+		this.type = type;
+	}
+	public List<Double> getPoints() {
+		return points;
+	}
+	public void setPoints(List<Double> points) {
+		this.points = points;
+	}
+	public List<Boolean> getOutliers() {
+		return outliers;
+	}
+	public void setOutliers(List<Boolean> outliers) {
+		this.outliers = outliers;
+	}
 }
