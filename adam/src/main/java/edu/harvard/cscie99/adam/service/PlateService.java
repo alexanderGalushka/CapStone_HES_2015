@@ -4,19 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.transaction.Transactional;
-import javax.transaction.Transactional.TxType;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate3.SessionFactoryUtils;
 import org.springframework.stereotype.Component;
 
 import edu.harvard.cscie99.adam.model.Plate;
-import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
-import edu.harvard.cscie99.adam.model.Template;
 import edu.harvard.cscie99.adam.model.Well;
 import edu.harvard.cscie99.adam.model.WellLabel;
 
@@ -32,55 +26,6 @@ public class PlateService {
 	@Autowired
     private SessionFactory sessionFactory;
 	
-	public List<Template> listTemplates(){
-		Session session = sessionFactory.openSession();
-		List<Template> templateList = session.createCriteria(Template.class).list();
-		
-		return templateList;
-	}
-	
-	public Template retrieveTemplate(int templateId){
-
-		Session session = sessionFactory.openSession();
-		Template template = (Template) session.get(Template.class, templateId);
-		session.close();
-		
-		return template;
-	}
-	
-	public boolean createTemplate(Template template){
-
-		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		session.saveOrUpdate(template);
-		session.getTransaction().commit();
-		session.close();
-		
-		return true;
-	}
-	
-	public boolean removeTemplate(Template template){
-
-		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		session.delete(template);
-		session.getTransaction().commit();
-		session.close();
-		
-		return true;
-	}
-	
-	public boolean editTemplate(Template template){
-
-		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		session.merge(template);
-		session.getTransaction().commit();
-		session.close();
-		
-		return true;
-	}
-	
 	public List<Plate> listPlates(){
 		Session session = sessionFactory.openSession();
 		
@@ -91,11 +36,9 @@ public class PlateService {
 		for (Plate plate : plateList){
 //			plate.getDataSet().isEmpty();
 			plate.getCollaborators().isEmpty();
-			plate.getComments().isEmpty();
 			plate.getWellLabels().isEmpty();
 			if (!plate.getWells().isEmpty()){
 				for (Well well : plate.getWells()){
-					well.getComments().isEmpty();
 					well.getWellLabels().isEmpty();
 					if (!well.getResultSnapshots().isEmpty()){
 						for (ResultSnapshot rs : well.getResultSnapshots()){
@@ -189,11 +132,9 @@ public class PlateService {
 	public void loadPlate(Plate plate){
 //		plate.getDataSet().isEmpty();
 		plate.getCollaborators().isEmpty();
-		plate.getComments().isEmpty();
 		plate.getWellLabels().isEmpty();
 		if (!plate.getWells().isEmpty()){
 			for (Well well : plate.getWells()){
-				well.getComments().isEmpty();
 				well.getWellLabels().isEmpty();
 				if (!well.getResultSnapshots().isEmpty()){
 					for (ResultSnapshot rs : well.getResultSnapshots()){
