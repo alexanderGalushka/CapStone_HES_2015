@@ -9,19 +9,21 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.harvard.cscie99.adam.model.DataSet;
 
+@Component
 public class QueryService 
 {
 	@Autowired
     private SessionFactory sessionFactory;
 	
 
-public DataSet queryResultsData(Integer projectId, Integer plateId, String labelName, String labelValue, String measurementType, Date time) throws JsonProcessingException{
+	public DataSet queryResultsData(Integer projectId, Integer plateId, String labelName, String labelValue, String measurementType, Date time) throws JsonProcessingException{
 		
 		Session session = sessionFactory.openSession();
 		DataSet filteredValues = new DataSet();
@@ -132,7 +134,5 @@ public DataSet queryResultsData(Integer projectId, Integer plateId, String label
 		// TODO
 		return null;
 	}
-	
-	
 	
 }
