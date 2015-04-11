@@ -10,6 +10,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+
+import edu.harvard.cscie99.adam.model.Plate;
 //import edu.harvard.cscie99.adam.model.Compound;
 import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.profile.User;
@@ -25,6 +27,9 @@ public class ProjectService {
 
 	@Autowired
     private SessionFactory sessionFactory;
+	
+	@Autowired
+	private PlateService plateService;
 
 	//TODO remove
 	public boolean checkUserAccess(String user, Integer plateId, String service) {
@@ -50,6 +55,9 @@ public class ProjectService {
 		
 		Session session = sessionFactory.openSession();
 		List<Project> projects = session.createCriteria(Project.class).list();
+		for (Project project : projects){
+			loadProject(project);
+		}
 		
 		return projects;
 	}
@@ -73,7 +81,7 @@ public class ProjectService {
 		
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-		session.save(newProject);
+		session.saveOrUpdate(newProject);
 		session.getTransaction().commit();
 		session.close();
 		
@@ -84,12 +92,24 @@ public class ProjectService {
 
 		Session session = sessionFactory.openSession();
 		Project project = (Project) session.get(Project.class, projectId);
-		project.getDataSet().isEmpty();
-		project.getComments().isEmpty();
-		project.getCollaborators().isEmpty();
+		loadProject(project);
+		if (!project.getPlate().isEmpty()){
+			
+		}
 		session.close();
 		
 		return project;
+	}
+	
+	public void loadProject(Project project){
+//		project.getDataSet().isEmpty();
+		project.getComments().isEmpty();
+		project.getCollaborators().isEmpty();
+		if (!project.getPlate().isEmpty()){
+			for (Plate plate : project.getPlate()){
+				plateService.loadPlate(plate);	
+			}
+		}
 	}
 	
 	public Set<Project> listMyProjects()
