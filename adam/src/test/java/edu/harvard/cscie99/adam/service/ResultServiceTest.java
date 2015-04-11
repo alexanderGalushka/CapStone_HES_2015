@@ -36,6 +36,12 @@ public class ResultServiceTest {
 	
 	@Autowired
     private SessionFactory sessionFactory;
+	
+	@Test
+	public void testServiceProject(){
+		//TODO
+		assertTrue(true);
+	}
 
 //	@Test
 //	public void testAllMeasurementUniqueFeatures() {
