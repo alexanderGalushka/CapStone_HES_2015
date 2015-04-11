@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.harvard.cscie99.adam.error.SessionTimeouException;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
 import edu.harvard.cscie99.adam.model.Comment;
+import edu.harvard.cscie99.adam.model.Plate;
 //import edu.harvard.cscie99.adam.model.Compound;
 import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.profile.User;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
+import edu.harvard.cscie99.adam.service.PlateService;
 import edu.harvard.cscie99.adam.service.ProfileService;
 import edu.harvard.cscie99.adam.service.ProjectService;
 import edu.harvard.cscie99.adam.service.TagService;
@@ -34,6 +36,9 @@ public class ProjectController {
 
 	@Autowired
 	private ProjectService projectService;
+	
+	@Autowired
+	private PlateService plateService;
 
 	@Autowired
 	private TagService tagService;
@@ -58,7 +63,7 @@ public class ProjectController {
 			
 		List<Project> projects = projectService.list();
 		for (Project project : projects){
-			project.getDataSet().isEmpty();
+//			project.getDataSet().isEmpty();
 			project.getCollaborators().isEmpty();
 			project.getComments().isEmpty();
 		}
@@ -72,7 +77,7 @@ public class ProjectController {
 		
 		Project project = projectService.retrieveProject(projectId);
 		
-		project.setDataSet(null);
+//		project.setDataSet(null);
 		project.setComments(null);
 		project.setCollaborators(null);
 		
@@ -107,6 +112,38 @@ public class ProjectController {
 		projectService.updateProject(project);
 		
 		return true;
+		
+	}
+	
+	@RequestMapping(value = "/project/{projectId}/add_plate/{plateId}", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean addPlateToProject(
+			@PathVariable("projectId") int projectId,
+			@PathVariable("plateId") int plateId) throws UnauthorizedOperationException{
+			
+		Project project = projectService.retrieveProject(projectId);
+		Plate plate = plateService.retrievePlate(plateId);
+		project.getPlate().add(plate);
+		
+		projectService.updateProject(project);
+		
+		return true;
+		
+	}
+	
+	@RequestMapping(value = "/project/{projectId}/list_plates", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Plate> listPlatesFromProject(
+			@PathVariable("projectId") int projectId) throws UnauthorizedOperationException{
+			
+		Project project = projectService.retrieveProject(projectId);
+		
+		List<Plate> plates = new ArrayList<Plate>();
+		for (Plate plate : project.getPlate()){
+			plates.add(plateService.retrievePlate(plate.getId()));
+		}
+		
+		return plates;
 		
 	}
 	
