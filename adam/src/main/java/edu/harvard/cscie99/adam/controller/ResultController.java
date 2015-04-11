@@ -54,8 +54,8 @@ public class ResultController {
 	@Autowired
 	private ProfileService profileService;
 	
-//	public static final String C_RESULT_FILE_PATH = "/home/adam_files/results/";
-	public static final String C_RESULT_FILE_PATH = "c:/adam_files/results/";
+	public static final String C_RESULT_FILE_PATH = "/home/adam_files/results/";
+//	public static final String C_RESULT_FILE_PATH = "c:/adam_files/results/";
 	
 	@RequestMapping(value="/upload_result", method=RequestMethod.POST)
 	public @ResponseBody ResultSnapshot handleResultUpload(
