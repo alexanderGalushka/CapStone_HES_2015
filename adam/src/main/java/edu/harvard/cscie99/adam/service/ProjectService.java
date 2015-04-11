@@ -1,6 +1,5 @@
 package edu.harvard.cscie99.adam.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -30,11 +29,6 @@ public class ProjectService {
 	
 	@Autowired
 	private PlateService plateService;
-
-	//TODO remove
-	public boolean checkUserAccess(String user, Integer plateId, String service) {
-		return true;
-	}
 	
 	public Project updateProject(Project project){
 		try{
@@ -79,9 +73,11 @@ public class ProjectService {
 	
 	public Project createProject(Project newProject){
 		
+		newProject.setCreationDate(new Date());
+		
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-		session.saveOrUpdate(newProject);
+		session.save(newProject);
 		session.getTransaction().commit();
 		session.close();
 		
@@ -102,8 +98,6 @@ public class ProjectService {
 	}
 	
 	public void loadProject(Project project){
-//		project.getDataSet().isEmpty();
-		project.getComments().isEmpty();
 		project.getCollaborators().isEmpty();
 		if (!project.getPlate().isEmpty()){
 			for (Plate plate : project.getPlate()){
