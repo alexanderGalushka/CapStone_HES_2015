@@ -52,7 +52,7 @@ public class PlateService {
 
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-		session.save(template);
+		session.saveOrUpdate(template);
 		session.getTransaction().commit();
 		session.close();
 		
@@ -89,7 +89,7 @@ public class PlateService {
 		List<Plate> plateList = session.createCriteria(Plate.class).list();
 		
 		for (Plate plate : plateList){
-			plate.getDataSet().isEmpty();
+//			plate.getDataSet().isEmpty();
 			plate.getCollaborators().isEmpty();
 			plate.getComments().isEmpty();
 			plate.getWellLabels().isEmpty();
@@ -120,21 +120,7 @@ public class PlateService {
 		List<Plate> plateList = session.createCriteria(Plate.class).list();
 		
 		for (Plate plate : plateList){
-			plate.getDataSet().isEmpty();
-			plate.getCollaborators().isEmpty();
-			plate.getComments().isEmpty();
-			plate.getWellLabels().isEmpty();
-			if (!plate.getWells().isEmpty()){
-				for (Well well : plate.getWells()){
-					well.getComments().isEmpty();
-					well.getWellLabels().isEmpty();
-					if (!well.getResultSnapshots().isEmpty()){
-						for (ResultSnapshot rs : well.getResultSnapshots()){
-							rs.getMeasurements().isEmpty();
-						}
-					}
-				}
-			}
+			loadPlate(plate);
 		}
 		
 		session.close();
@@ -147,23 +133,7 @@ public class PlateService {
 
 		Session session = sessionFactory.openSession();
 		Plate plate = (Plate) session.get(Plate.class, plateId);
-		
-		plate.getDataSet().isEmpty();
-		plate.getCollaborators().isEmpty();
-		plate.getComments().isEmpty();
-		plate.getWellLabels().isEmpty();
-		if (!plate.getWells().isEmpty()){
-			for (Well well : plate.getWells()){
-				well.getComments().isEmpty();
-				well.getWellLabels().isEmpty();
-				if (!well.getResultSnapshots().isEmpty()){
-					for (ResultSnapshot rs : well.getResultSnapshots()){
-						rs.getMeasurements().isEmpty();
-					}
-				}
-			}
-		}
-		
+		loadPlate(plate);
 		session.close();
 		
 		return plate;
@@ -176,15 +146,18 @@ public class PlateService {
 		
 		for (Well well : plate.getWells()){
 			for (WellLabel wellLabel : well.getWellLabels()){
-				session.save(wellLabel);
+				session.saveOrUpdate(wellLabel);
 			}
-			session.save(well);
+			session.saveOrUpdate(well);
 		}
 		
 		for (WellLabel label : plate.getWellLabels()){
-			session.save(label);
+			session.saveOrUpdate(label);
 		}
-		session.save(plate);
+		for (Well well : plate.getWells()){
+			session.saveOrUpdate(well);
+		}
+		session.saveOrUpdate(plate);
 		session.getTransaction().commit();
 		session.close();
 		
@@ -213,7 +186,23 @@ public class PlateService {
 		return plate;
 	}
 	
-	
+	public void loadPlate(Plate plate){
+//		plate.getDataSet().isEmpty();
+		plate.getCollaborators().isEmpty();
+		plate.getComments().isEmpty();
+		plate.getWellLabels().isEmpty();
+		if (!plate.getWells().isEmpty()){
+			for (Well well : plate.getWells()){
+				well.getComments().isEmpty();
+				well.getWellLabels().isEmpty();
+				if (!well.getResultSnapshots().isEmpty()){
+					for (ResultSnapshot rs : well.getResultSnapshots()){
+						rs.getMeasurements().isEmpty();
+					}
+				}
+			}
+		}
+	}
 	
 	public List<Plate> search(Map<String, Object> parameters){
 		//TODO
