@@ -34,6 +34,11 @@ public class ProjectService {
 		try{
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
+			
+			for (Plate plate : project.getPlates()){
+				session.saveOrUpdate(plate);
+			}
+			
 			session.merge(project);
 			session.getTransaction().commit();
 			session.close();
@@ -89,7 +94,7 @@ public class ProjectService {
 		Session session = sessionFactory.openSession();
 		Project project = (Project) session.get(Project.class, projectId);
 		loadProject(project);
-		if (!project.getPlate().isEmpty()){
+		if (!project.getPlates().isEmpty()){
 			
 		}
 		session.close();
@@ -98,9 +103,8 @@ public class ProjectService {
 	}
 	
 	public void loadProject(Project project){
-		project.getCollaborators().isEmpty();
-		if (!project.getPlate().isEmpty()){
-			for (Plate plate : project.getPlate()){
+		if (!project.getPlates().isEmpty()){
+			for (Plate plate : project.getPlates()){
 				plateService.loadPlate(plate);	
 			}
 		}
