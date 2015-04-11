@@ -72,15 +72,10 @@ public class Well implements Serializable{
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<ResultSnapshot> resultSnapshots;
 	
-	// only used when the data is uploaded
-	@OneToMany(mappedBy = "well", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Comment> comments;
-	
 	public Well(){
 //		compounds = new ArrayList<Compound>();
 		wellLabels = new ArrayList<WellLabel>();
 		resultSnapshots = new ArrayList<ResultSnapshot>();
-		comments = new ArrayList<Comment>();
 	}
 	
 	
@@ -121,14 +116,7 @@ public class Well implements Serializable{
 	public void setIfValid(boolean ifValid) {
 		this.ifValid = ifValid;
 	}
-	
-	public List<Comment> getComments() {
-		return comments;
-	}
 
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
 //	public Substrate getSubstare() {
 //		return substare;
 //	}
