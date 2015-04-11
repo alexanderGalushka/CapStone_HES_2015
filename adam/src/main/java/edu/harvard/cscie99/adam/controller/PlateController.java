@@ -17,10 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import edu.harvard.cscie99.adam.error.ParserException;
+import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
 import edu.harvard.cscie99.adam.model.Plate;
+import edu.harvard.cscie99.adam.model.Project;
+import edu.harvard.cscie99.adam.model.ResultSnapshot;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
 import edu.harvard.cscie99.adam.service.ParserService;
 import edu.harvard.cscie99.adam.service.PlateService;
+import edu.harvard.cscie99.adam.service.ResultService;
 
 @RestController
 @RequestMapping(value = "/")
@@ -32,13 +36,16 @@ public class PlateController {
 	private PlateService plateService;
 
 	@Autowired
+	private ResultService resultService;
+
+	@Autowired
 	private ParserService parserService;
 	
 	@Autowired
 	private AuthenticationService authService;
 	
-	public static final String C_PLATE_FILE_PATH = "/home/adam_files/plates/";
-//	public static final String C_PLATE_FILE_PATH = "c:/adam_files/plates/";
+//	public static final String C_PLATE_FILE_PATH = "/home/adam_files/plates/";
+	public static final String C_PLATE_FILE_PATH = "c:/adam_files/plates/";
 	
 	// Plate CRUD - START
 	@RequestMapping(value = "/plate", method = RequestMethod.GET)
@@ -97,5 +104,36 @@ public class PlateController {
 		}
 		
 		return plateService.createPlate(plate);
+	}
+	
+	@RequestMapping(value = "/plate/{plateId}/add_result/{resultId}", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean addResultToPlate(
+			@PathVariable("plateId") int plateId,
+			@PathVariable("resultId") int resultId) throws UnauthorizedOperationException{
+			
+		Plate plate = plateService.retrievePlate(plateId);
+		ResultSnapshot result = resultService.retrieveResult(resultId);
+		plate.getResults().add(result);
+		
+		plateService.editPlate(plate);
+		
+		return true;
+	}
+	
+	@RequestMapping(value = "/plate/{plateId}/remove_result/{resultId}", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean removeResultFromPlate(
+			@PathVariable("plateId") int plateId,
+			@PathVariable("resultId") int resultId) throws UnauthorizedOperationException{
+			
+		Plate plate = plateService.retrievePlate(plateId);
+		ResultSnapshot result = resultService.retrieveResult(resultId);
+		plate.getResults().remove(result);
+		
+		plateService.editPlate(plate);
+		
+		return true;
+		
 	}
 }
