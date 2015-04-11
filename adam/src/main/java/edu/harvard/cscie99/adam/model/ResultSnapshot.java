@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -35,11 +36,9 @@ public class ResultSnapshot implements Serializable{
     @Column(name = "result_snapshot_id")
 	private int id;
 	
-	@ManyToOne(targetEntity = Plate.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Plate plate;
-	
-	@ManyToOne(targetEntity = Plate.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Project project;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name="plate_id")
+//    private Plate plate;
 	
 	// accounted for pharmacokinetics
 	@Column(name = "time")
@@ -73,20 +72,33 @@ public class ResultSnapshot implements Serializable{
 		this.time = time;
 	}
 
-	public Plate getPlate() {
-		return plate;
+//	public Plate getPlate() {
+//		return plate;
+//	}
+//
+//	public void setPlate(Plate plate) {
+//		this.plate = plate;
+//	}
+	
+	@Override
+	public boolean equals(Object obj){
+		
+		if (obj == null){
+			return false;
+		}
+		if (!(obj instanceof ResultSnapshot)){
+			return false;
+		}
+		ResultSnapshot other = (ResultSnapshot) obj;
+		if (other.getId() != getId()){
+			return false;
+		}
+		
+		return true;
 	}
-
-	public void setPlate(Plate plate) {
-		this.plate = plate;
+	
+	@Override
+	public int hashCode(){
+		return 31;
 	}
-
-	public Project getProject() {
-		return project;
-	}
-
-	public void setProject(Project project) {
-		this.project = project;
-	}
-
 }

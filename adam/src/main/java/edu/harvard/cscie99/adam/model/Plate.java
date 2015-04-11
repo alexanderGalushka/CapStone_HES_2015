@@ -57,25 +57,28 @@ public class Plate implements Serializable{
 	@Column(name = "label")
 	private String label;
 	
-	@OneToMany(mappedBy = "plate", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<WellLabel> wellLabels;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<Well> wells;
+	
+	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	private List<ResultSnapshot> results;
 	
 	@ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private User owner;
 	
-	@ManyToMany 
-	@JoinTable(
-			name="plate_collab",
-			joinColumns={@JoinColumn(name="plate_id", referencedColumnName="plate_id")},
-			inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="user_id")})
-	private List<User> collaborators;
+//	@ManyToMany 
+//	@JoinTable(
+//			name="plate_collab",
+//			joinColumns={@JoinColumn(name="plate_id", referencedColumnName="plate_id")},
+//			inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="user_id")})
+//	private List<User> collaborators;
 	
 	public Plate(){
 		wells = new ArrayList<Well>();
-		collaborators = new ArrayList<User>();
+		results = new ArrayList<ResultSnapshot>();
 		wellLabels = new ArrayList<WellLabel>();
 	}
 	
@@ -115,12 +118,12 @@ public class Plate implements Serializable{
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
-	public List<User> getCollaborators() {
-		return collaborators;
-	}
-	public void setCollaborators(List<User> collaborators) {
-		this.collaborators = collaborators;
-	}
+//	public List<User> getCollaborators() {
+//		return collaborators;
+//	}
+//	public void setCollaborators(List<User> collaborators) {
+//		this.collaborators = collaborators;
+//	}
 	
 	public int getId() {
 		return id;
@@ -154,6 +157,44 @@ public class Plate implements Serializable{
 		}
 		return null;
 	}
+	
+	public List<ResultSnapshot> getResults() {
+		return results;
+	}
+
+	public void setResults(List<ResultSnapshot> results) {
+		this.results = results;
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		
+		if (obj == null){
+			return false;
+		}
+		if (!(obj instanceof Plate)){
+			return false;
+		}
+		Plate other = (Plate) obj;
+		if (other.getId() != getId()){
+			return false;
+		}
+		
+		return true;
+	}
+	
+	@Override
+	public int hashCode(){
+		return 17;
+	}
+//
+//	public Project getProject() {
+//		return project;
+//	}
+//
+//	public void setProject(Project project) {
+//		this.project = project;
+//	}
 
 //	public Project getProject() {
 //		return project;

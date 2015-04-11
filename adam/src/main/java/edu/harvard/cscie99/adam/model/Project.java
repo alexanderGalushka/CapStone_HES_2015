@@ -68,13 +68,13 @@ public class Project implements Serializable {
 	@ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private User owner;
 	
-	@ManyToMany
-	@LazyCollection(LazyCollectionOption.FALSE)
-	  @JoinTable(
-	      name="project_collab",
-	      joinColumns={@JoinColumn(name="project_id", referencedColumnName="project_id")},
-	      inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="user_id")})
-	private List<User> collaborators;
+//	@ManyToMany
+//	@LazyCollection(LazyCollectionOption.FALSE)
+//	  @JoinTable(
+//	      name="project_collab",
+//	      joinColumns={@JoinColumn(name="project_id", referencedColumnName="project_id")},
+//	      inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="user_id")})
+//	private List<User> collaborators;
 	
 	@Column(name="tags")
 	private String tags;
@@ -92,11 +92,10 @@ public class Project implements Serializable {
 	private String label;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Plate> plate;
+	private List<Plate> plates;
 	
 	public Project(){
-		collaborators = new ArrayList<User>();
-		plate = new ArrayList<Plate>();
+		plates = new ArrayList<Plate>();
 	}
 	
 	public Integer getId() {
@@ -122,12 +121,6 @@ public class Project implements Serializable {
 	}
 	public void setOwner(User owner) {
 		this.owner = owner;
-	}
-	public List<User> getCollaborators() {
-		return collaborators;
-	}
-	public void setCollaborators(List<User> collaborators) {
-		this.collaborators = collaborators;
 	}
 	public String getTags() {
 		return tags;
@@ -183,14 +176,33 @@ public class Project implements Serializable {
 		this.label = label;
 	}
 
-	public List<Plate> getPlate() {
-		return plate;
+	public List<Plate> getPlates() {
+		return plates;
 	}
 
-	public void setPlate(List<Plate> plate) {
-		this.plate = plate;
+	public void setPlates(List<Plate> plates) {
+		this.plates = plates;
 	}
 	
+	@Override
+	public boolean equals(Object obj){
+		
+		if (obj == null){
+			return false;
+		}
+		if (!(obj instanceof Project)){
+			return false;
+		}
+		Project other = (Project) obj;
+		if (other.getId() != getId()){
+			return false;
+		}
+		
+		return true;
+	}
 	
-
+	@Override
+	public int hashCode(){
+		return 31;
+	}
 }
