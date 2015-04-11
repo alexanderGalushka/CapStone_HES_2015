@@ -1,3 +1,4 @@
+
 package edu.harvard.cscie99.adam.controller;
 
 import java.io.BufferedOutputStream;
@@ -83,11 +84,30 @@ public class ResultController {
 		return resultSnapshot;
 	}
 	
-	@RequestMapping(value="/resultsnapshot/prepare", method=RequestMethod.POST)
+	@RequestMapping(value="/resultsnapshot/{result_id}/prepare", method=RequestMethod.POST)
 	public @ResponseBody boolean prepareResultsData(
-			@RequestBody ResultSnapshot result) throws JsonProcessingException {
+			@PathVariable("result_id") int resultId) throws JsonProcessingException {
 		
-		return resultService.prepareResultsData(result);
+		ResultSnapshot resultSnapshot = resultService.retrieveResult(resultId);
+		
+		return resultService.prepareResultsData(resultSnapshot);
+	}
+	
+	@RequestMapping(value="/resultsnapshot/{result_id}", method=RequestMethod.GET)
+	public @ResponseBody ResultSnapshot getResults(
+			@PathVariable("result_id") int resultId) throws JsonProcessingException {
+		
+		ResultSnapshot resultSnapshot = resultService.retrieveResult(resultId);
+		
+		return resultSnapshot;
+	}
+	
+	@RequestMapping(value="/resultsnapshot", method=RequestMethod.GET)
+	public @ResponseBody List<ResultSnapshot> listResults() throws JsonProcessingException {
+		
+		List<ResultSnapshot> resultList = resultService.listResults();
+		
+		return resultList;
 	}
 	
 	@RequestMapping(value="/getResults", method=RequestMethod.GET)
