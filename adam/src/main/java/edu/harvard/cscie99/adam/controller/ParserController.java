@@ -20,6 +20,7 @@ import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.Template;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
 import edu.harvard.cscie99.adam.service.ParserService;
+import edu.harvard.cscie99.adam.service.PlateService;
 
 /**
  * 
@@ -32,6 +33,9 @@ public class ParserController {
 	
 	@Autowired
 	private ParserService parserService;
+	
+	@Autowired
+	private PlateService plateService;
 	
 	@Autowired
 	private AuthenticationService authService;
@@ -66,7 +70,9 @@ public class ParserController {
 			@PathVariable("project_id") int projectId,
 			@PathVariable("filename") String filename) throws ParserException, UnauthorizedOperationException{
 		
-		return parserService.parsePlateFromFile(filename);
+		Plate plate = parserService.parsePlateFromFile(filename);
+		
+		return plateService.createPlate(plate);	
 	}
 	
 //	@RequestMapping(value = "/project/{project_id}/result/parse/{filename}", method = RequestMethod.POST)
