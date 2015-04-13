@@ -202,66 +202,6 @@ public class ResultService {
 		return true;
 	}
 	
-	public DataSet queryResultsData(Integer projectId, Integer plateId, String labelName, String labelValue, String measurementType, Date time) throws JsonProcessingException{
-		
-		Session session = sessionFactory.openSession();
-		DataSet filteredValues = new DataSet();
-		ObjectMapper mapper = new ObjectMapper();
-		
-		StringBuilder query = new StringBuilder();
-		query.append("FROM DataSet D ");
-		
-		StringBuilder criteria = new StringBuilder("WHERE ");
-		if (projectId != null){
-			criteria.append("D.projectId = " + projectId + " AND");
-			filteredValues.setProjectId(projectId);
-		}
-		if (plateId != null){
-			criteria.append("D.plateId = " + plateId + " AND");
-			filteredValues.setPlateId(plateId);
-		}
-		if (labelName != null && labelName.length()>0){
-			criteria.append("D.labelName = " + labelName + " AND");
-			filteredValues.setLabelName(labelName);
-		}
-		if (labelValue != null && labelValue.length()>0){
-			criteria.append("D.labelValue = " + labelValue + " AND");
-			filteredValues.setLabelValue(labelValue);
-		}
-		if (measurementType != null && measurementType.length()>0){
-			criteria.append("D.measurementType = " + measurementType + " AND");
-			filteredValues.setMeasurementType(measurementType);
-		}
-		
-		String queryStr = null;
-		if (criteria.toString().length() > 6){
-			query.append (criteria);
-			queryStr = query.toString().substring(0, query.toString().length() - 4);
-		}
-		else{
-			queryStr = query.toString();
-		}
-		
-		Query hibernateQuery = session.createQuery(queryStr);
-		List<DataSet> results = hibernateQuery.list();
-		
-		List<Double> listValues = new ArrayList<Double>();
-		for (DataSet result : results){
-			
-//			List<Double> values = labelNamesMap.get(labelName).get(labelValue).get(measurementType);
-			String jsonValues = result.getJsonValues();
-			ArrayList<Double> doubles = null;
-			try {
-				doubles = mapper.readValue(jsonValues, ArrayList.class);
-				listValues.addAll(doubles);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		filteredValues.setJsonValues(mapper.writeValueAsString(listValues));
-		
-		return filteredValues;
-	}
+	
 
 }

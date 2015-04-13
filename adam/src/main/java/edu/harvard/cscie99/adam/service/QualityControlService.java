@@ -2,13 +2,18 @@ package edu.harvard.cscie99.adam.service;
 
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.apache.commons.math3.stat.StatUtils;
 import org.apache.commons.math3.util.FastMath;
 
+import edu.harvard.cscie99.adam.model.DataSet;
 import edu.harvard.cscie99.adam.model.Measurement;
 import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
@@ -20,6 +25,7 @@ import edu.harvard.cscie99.adam.model.Well;
  * @author Alexander G.
  * data screening prior the data analysis
  */
+
 @Component
 public class QualityControlService
 {
@@ -45,6 +51,10 @@ public class QualityControlService
 	
 	@Autowired
 	private PlateService plateService;
+	
+	@Autowired
+	private QueryService queryService;
+	
 	
     private double[] posControlsVector;
 	private double[] negControlsVector;
@@ -75,7 +85,8 @@ public class QualityControlService
 		List<Plate> projectPlates = plateService.listPlates( projectId );
 		
 		//Map<Integer, List<>>
-		for (Plate plate : projectPlates)
+		
+		/*for (Plate plate : projectPlates)
 		{
 			for (Well well : plate.getWells())
 			{
@@ -94,6 +105,7 @@ public class QualityControlService
 			}
 			
 		}
+		*/
 		
 		///posControlsVector = convertMatrixToVector(posControls);
 		///negControlsVector = convertMatrixToVector(negControls);
@@ -123,6 +135,35 @@ public class QualityControlService
 		
 	}
 	
+	public List<DataSet> getNormalizedData(Integer projectId)
+	{
+		// somehow get list of plate IDs per project
+		List<Integer> plateIds = queryService.getPlateIdsPerProject(projectId);
+		Map<Integer, List<DataSet>> dataSetsPerPlate = new HashMap<>();
+		
+		for (Integer idPl : plateIds)
+		{
+			Set<String> tempSetOfMeasType = new HashSet<>();
+			Set<Date> tempSetOfTimeStamps = new HashSet<>();
+			
+			for (DataSet ds : queryService.getValuesUsingFilter(projectId, idPl, "all",
+                "all", "all", "all")) // "all" is probably not right!!!, maybe "*"
+			{
+				tempSetOfMeasType.add(ds.getMeasurementType());
+				tempSetOfTimeStamps.add(ds.getTime());
+			}
+		}
+		
+		// get the list of timestamps
+		
+		// get the list of measurement_types
+		
+		// run queries for each combination
+		
+		// still 3 for loops LOL
+		
+		return null;
+	}
 	
 	public boolean evaluateZPrimeFactor()
 	{

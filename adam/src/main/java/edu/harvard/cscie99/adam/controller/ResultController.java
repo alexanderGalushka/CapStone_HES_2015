@@ -31,6 +31,7 @@ import edu.harvard.cscie99.adam.profile.User;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
 import edu.harvard.cscie99.adam.service.ParserService;
 import edu.harvard.cscie99.adam.service.ProfileService;
+import edu.harvard.cscie99.adam.service.QueryService;
 import edu.harvard.cscie99.adam.service.ResultService;
 
 /**
@@ -53,6 +54,9 @@ public class ResultController {
 	
 	@Autowired
 	private ProfileService profileService;
+	
+	@Autowired
+	private QueryService queryService;
 	
 	public static final String C_RESULT_FILE_PATH = "/home/adam_files/results/";
 //	public static final String C_RESULT_FILE_PATH = "c:/adam_files/results/";
@@ -96,7 +100,7 @@ public class ResultController {
 			@RequestParam(value="time", required=false) Date time
 			) throws JsonProcessingException {
 		
-		return resultService.queryResultsData(projectId, plateId, labelName, labelValue, measurementType, time);
+		return queryService.queryResultsData(projectId, plateId, labelName, labelValue, measurementType, time);
 	}
 	
 }

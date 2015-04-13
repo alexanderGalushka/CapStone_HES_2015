@@ -32,7 +32,13 @@ public class Plate implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public enum PlateType {STANDARD, DEEP, PERFORATED}
+	
+	/**
+	 * Plate with no controls is "PLAIN"
+	 * Plate with only negative controls is "SEMI"
+	 * Plate with both positive and negative controls is "FULL"
+	 */
+	public enum PlateType {PLAIN, SEMI, FULL}
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
