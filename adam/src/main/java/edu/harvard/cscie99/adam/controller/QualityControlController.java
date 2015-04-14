@@ -29,7 +29,7 @@ public class QualityControlController
 	private AuthenticationService authService;
 	
 	
-	@RequestMapping(value = "/project/{project_id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/project/{project_id}/get_normalized_data", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<Integer, List<QCdataTimeWrapper>> getNormalizedData(
 			@PathVariable("project_id") int projectId) throws  UnauthorizedOperationException{
