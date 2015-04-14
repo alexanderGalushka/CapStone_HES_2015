@@ -1,12 +1,13 @@
 package edu.harvard.cscie99.adam.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class QCdataTimeWrapper 
 {
-
+    
 	private Date timeStamp;
-	private QCdata qcData;
+	private List<QCdata> qcDataList;
 	
 	public Date getTimeStamp() 
 	{
@@ -16,13 +17,13 @@ public class QCdataTimeWrapper
 	{
 		this.timeStamp = timeStamp;
 	}
-	public QCdata getQcData()
+	public List<QCdata> getQcData()
 	{
-		return qcData;
+		return qcDataList;
 	}
-	public void setQcData(QCdata qcData) 
+	public void setQcData(List<QCdata> qcDataList) 
 	{
-		this.qcData = qcData;
+		this.qcDataList = qcDataList;
 	}
 	
 	
