@@ -20,6 +20,7 @@ import edu.harvard.cscie99.adam.model.DataSet;
 import edu.harvard.cscie99.adam.model.Measurement;
 import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.Project;
+import edu.harvard.cscie99.adam.model.QCdata;
 import edu.harvard.cscie99.adam.model.QCdataTimeWrapper;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
 import edu.harvard.cscie99.adam.model.Well;
@@ -143,6 +144,11 @@ public class QualityControlService
 		
 	}
 	
+	/**
+	 * Quality Control ultimate method to aggregate data by time and measurement types for each plate ID, perform statistical calculations
+	 * @param projectId
+	 * @return the Map, where the key is the Plate ID (Integer), and the values is the collection of QCdataTimeWrappers
+	 */
 	public Map<Integer, List<QCdataTimeWrapper>> getNormalizedData(Integer projectId)
 	{
 		
@@ -165,13 +171,16 @@ public class QualityControlService
 		
 			//At this point, we have all the wells from the plate, and the result snapshots associated to plate
 			
-            Boolean getMeasuemntTypesFlag = false; // use this flag for the first iteration of results just to get all measurements type for plate
+            Boolean getMeasuemntTypesFlag = false; // use this flag for the first iteration of results just to get all measurement types for plate
+            
             Set<String> measurementTypes = new HashSet<>();
             Stack<String> measurementTypesStack = new Stack<>(); // to be used for measurements grouping
-			for (ResultSnapshot result : plate.getResults())
+			
+            for (ResultSnapshot result : plate.getResults())
 			{
 				
 				Date timestamp = result.getTime();
+				List<QCdata> qcDataList = new ArrayList<>();
 				
 				if (false == getMeasuemntTypesFlag)
 				{
@@ -182,7 +191,6 @@ public class QualityControlService
 					getMeasuemntTypesFlag = true;
 
 					measurementTypesStack.addAll(measurementTypes);
-					
 				}
 				
 				while (!measurementTypesStack.isEmpty())
@@ -208,18 +216,15 @@ public class QualityControlService
 							Integer column = measure.getColumn();
 							Integer row = measure.getRow();
 							
-							allRawValues.add(row*column - 1 , value);
-							
+							allRawValues.add((row+1)*(column+1) - 1 , value); // row and the column are 0 based, that's why "+1"
 
-							
 							// shuffle the data in 3 buckets
-							Well someWell = plate.getWell(measure.getRow(), measure.getColumn());
+							Well someWell = plate.getWell(row,column);
 		
 							if (someWell.getControlType() == Well.ControlType.POS)
 							{
 								bagOfPosValues.add(value);
-							}
-							
+							}			
 							else if (someWell.getControlType() == Well.ControlType.NEG)
 							{
 								bagOfNegValues.add(value);
@@ -233,72 +238,70 @@ public class QualityControlService
 								//no data
 								// TODO
 							}
-							
-
-						
-						}
-						
+						 }	
 					}
+					//create the low level data object, further add it to the list of this type of objects
+					QCdata qcData = new QCdata();
+					qcData.setMeasurementType(measTypeToFilter);
 					
 					if (bagOfPosValues.isEmpty() && bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
 					{
 						// no Z and Z' to calc
 						// return raw values
+						qcData.setValues(allRawValues);
+						
 					}
 					else if(bagOfPosValues.isEmpty() && !bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
 					{
 						// no Z and Z' to calc
 						// return normalized values
+						
+						double[] negControlsVector1 = ArrayUtils.toPrimitive(bagOfNegValues.toArray(new Double[bagOfNegValues.size()]));
+						double meanNeg1 = calculateMeanVector(negControlsVector1);
+						qcData.setValues(calculateNormalized(bagOfsampleValues,meanNeg1));
+						
 					}
 					else if(!bagOfPosValues.isEmpty() && !bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
 					{
+						//this is the most common case
 						// calc Z and Z' 
 						// return %Effect values
-						/*
-						List<Double> bagOfPosValues = new ArrayList<>();
-						List<Double> bagOfNegValues = new ArrayList<>();
-						List<Double> bagOfsampleValues = new ArrayList<>();
+
+						// TODO crate a ""toPrimitiveDouble function
+						double[] posControlsVector1 = ArrayUtils.toPrimitive(bagOfPosValues.toArray(new Double[bagOfPosValues.size()]));
+						double[] negControlsVector1 = ArrayUtils.toPrimitive(bagOfNegValues.toArray(new Double[bagOfNegValues.size()]));
+						double[] samplesVector1 = ArrayUtils.toPrimitive(bagOfsampleValues.toArray(new Double[bagOfsampleValues.size()]));
 						
-						double[] posControlsVector1 = ArrayUtils.toPrimitive(bagOfPosValues.toArray());
+						double stdDevPos1 = calculateStdDevVector(posControlsVector1); 
+						double stdDevNeg1 = calculateStdDevVector(negControlsVector1);
+						double stdDevSample1 = calculateStdDevVector(samplesVector1);
 						
-						stdDevPos = calculateStdDevVector(posControlsVector1); 
-						stdDevNeg = calculateStdDevVector(negControlsVector);
-						stdDevSample = calculateStdDevVector(samplesVector);
+						double meanPos1 = calculateMeanVector(posControlsVector1); 
+						double meanNeg1 = calculateMeanVector(negControlsVector1); 
+						double meanSample1 = calculateMeanVector(samplesVector1);
 						
-						meanPos = calculateMeanVector(posControlsVector1); 
-						meanNeg = calculateMeanVector(negControlsVector); 
-						meanSample = calculateMeanVector(samplesVector);
+						double zPrimeFactor1 = calculalteZprimeFactor(stdDevPos1, stdDevNeg1, meanPos1, meanNeg1);
+						double zFactor1 = calculateZFactor (stdDevSample1, stdDevPos1, meanSample1, meanPos1);
 						
-						zPrimeFactor = calculalteZprimeFactor(stdDevPos, stdDevNeg, meanPos, meanNeg);
-						zScoresVector = calculateZscores (samplesVector, stdDevNeg, meanNeg); // It has to be displayed in the heatmap! do we want to translate it to matrix? 
-						zFactor = calculateZFactor (stdDevSample, stdDevPos, meanSample, meanPos);
-						*/
+						qcData.setzFactor(zFactor1);
+						qcData.setzPrimeFactor(zPrimeFactor1);
+						qcData.setValues(calculatePercentEffect(bagOfsampleValues, meanPos1, meanNeg1));
 						
 					}
 					
-					
-					// TODO
-					// create object QCdata
+					qcDataList.add(qcData);
 					
 				}
-				
-				// TODO
-				
-				// create object  QCdataTimeWrapper
-				
+
 				QCdataTimeWrapper qcDataTimeWrapper = new QCdataTimeWrapper();
 				qcDataTimeWrapper.setTimeStamp(timestamp);
-				//qcDataTimeWrapper.setQcData(qcDataList); TODO
+				qcDataTimeWrapper.setQcData(qcDataList); 
 				listOfQCdataTimeWrappers.add(qcDataTimeWrapper);
 			}
 			
 			
-			resutMap.put(projPlate.getId(), null);
+			resutMap.put(projPlate.getId(), listOfQCdataTimeWrappers);
 		}
-		// TODO 
-	    // create Map<Integer, List<QCdataTimeWrapper>>, key is the plate id
-		
-
 		
 		return resutMap;
 	}
@@ -352,6 +355,33 @@ public class QualityControlService
 			zScores[i] = (samplesVector[i] - meanNeg)/stdDevNeg;
 		}
 		return zScores;
+	}
+	
+	private List<Double> calculatePercentEffect (List<Double> samplesVector, double meanPos, double meanNeg)
+	{
+		List<Double> result = new ArrayList<>();
+		for (Double val : samplesVector)
+		{
+			result.add( (val-meanNeg)/(meanPos-meanNeg) );
+		}
+		return result;
+	}
+	
+	private List<Double> calculateNormalized (List<Double> samplesVector, double meanNeg)
+	{
+		List<Double> result = new ArrayList<>();
+		for (Double val : samplesVector)
+		{
+			if (val > meanNeg)
+			{
+				result.add( (val-meanNeg)/(meanNeg) );
+			}
+			else
+			{
+				result.add( (meanNeg-val)/(meanNeg) );
+			}
+		}
+		return result;
 	}
 	
 	private double calculateZFactor (double stdDevSample, double stdDevPos, double meanSample, double meanPos)
