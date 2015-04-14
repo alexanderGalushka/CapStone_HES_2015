@@ -1,9 +1,12 @@
 package edu.harvard.cscie99.adam.service;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -23,41 +26,65 @@ public class QueryService
     private SessionFactory sessionFactory;
 	
 
-	public DataSet queryResultsData(Integer projectId, Integer plateId, String labelName, String labelValue, String measurementType, Date time) throws JsonProcessingException{
+	public DataSet queryResultsData(Integer projectId, Integer plateId, String labelName, String labelValue, String measurementType, String time) throws JsonProcessingException{
 		
 		Session session = sessionFactory.openSession();
 		DataSet filteredValues = new DataSet();
 		ObjectMapper mapper = new ObjectMapper();
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.ENGLISH);
 		
 		StringBuilder query = new StringBuilder();
 		query.append("FROM DataSet D ");
 		
 		StringBuilder criteria = new StringBuilder("WHERE ");
 		if (projectId != null){
-			criteria.append("D.projectId = " + projectId + " AND");
-			filteredValues.setProjectId(projectId);
+			criteria.append("D.projectId = " + projectId + " AND ");
+			filteredValues.setProjectId("" + projectId);
+		}
+		else{
+			filteredValues.setProjectId("ALL");
 		}
 		if (plateId != null){
-			criteria.append("D.plateId = " + plateId + " AND");
-			filteredValues.setPlateId(plateId);
+			criteria.append("D.plateId = " + plateId + " AND ");
+			filteredValues.setPlateId("" + plateId);
+		}
+		else{
+			filteredValues.setPlateId("ALL");
 		}
 		if (labelName != null && labelName.length()>0){
-			criteria.append("D.labelName = " + labelName + " AND");
+			criteria.append("D.labelName = " + labelName + " AND ");
 			filteredValues.setLabelName(labelName);
 		}
+		else{
+			filteredValues.setLabelName("ALL");
+		}
 		if (labelValue != null && labelValue.length()>0){
-			criteria.append("D.labelValue = " + labelValue + " AND");
+			criteria.append("D.labelValue = " + labelValue + " AND ");
 			filteredValues.setLabelValue(labelValue);
 		}
+		else{
+			filteredValues.setLabelValue("ALL");
+		}
 		if (measurementType != null && measurementType.length()>0){
-			criteria.append("D.measurementType = " + measurementType + " AND");
+			criteria.append("D.measurementType = " + measurementType + " AND ");
 			filteredValues.setMeasurementType(measurementType);
+		}
+		else{
+			filteredValues.setMeasurementType("ALL");
+		}
+		if (time != null && time.length() > 0){
+			criteria.append("D.time = " + time + " AND ");
+			filteredValues.setTime(time);
+		}
+		else{
+			filteredValues.setTime("ALL");
 		}
 		
 		String queryStr = null;
 		if (criteria.toString().length() > 6){
 			query.append (criteria);
-			queryStr = query.toString().substring(0, query.toString().length() - 4);
+			queryStr = query.toString().substring(0, query.toString().length() - 5);
 		}
 		else{
 			queryStr = query.toString();
@@ -81,6 +108,7 @@ public class QueryService
 		}
 		
 		filteredValues.setJsonValues(mapper.writeValueAsString(listValues));
+		session.close();
 		
 		return filteredValues;
 	}

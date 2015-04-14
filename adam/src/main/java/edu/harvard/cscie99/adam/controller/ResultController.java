@@ -117,7 +117,7 @@ public class ResultController {
 			@RequestParam(value="labelName", required=false) String labelName,
 			@RequestParam(value="labelValue", required=false) String labelValue,
 			@RequestParam(value="measurementType", required=false) String measurementType,
-			@RequestParam(value="time", required=false) Date time
+			@RequestParam(value="time", required=false) String time
 			) throws JsonProcessingException {
 		
 		return queryService.queryResultsData(projectId, plateId, labelName, labelValue, measurementType, time);

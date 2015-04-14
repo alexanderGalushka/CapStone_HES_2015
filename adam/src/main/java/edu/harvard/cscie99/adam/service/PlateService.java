@@ -1,8 +1,10 @@
 package edu.harvard.cscie99.adam.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -31,13 +33,18 @@ public class PlateService {
 		Session session = sessionFactory.openSession();
 		List<Plate> plateList = session.createCriteria(Plate.class).list();
 		
+		HashSet<Plate> uniquePlates = new HashSet<Plate>();
 		for (Plate plate : plateList){
+			uniquePlates.add(plate);
+		}
+		
+		for (Plate plate : uniquePlates){
 			loadPlate(plate);
 		}
 		
 		session.close();
 		
-		return plateList;
+		return new ArrayList<Plate>(uniquePlates);
 	}
 	
 	public Plate retrievePlate(int plateId){
@@ -114,11 +121,7 @@ public class PlateService {
 		if (!plate.getWells().isEmpty()){
 			for (Well well : plate.getWells()){
 				well.getWellLabels().isEmpty();
-				if (!well.getResultSnapshots().isEmpty()){
-					for (ResultSnapshot rs : well.getResultSnapshots()){
-						rs.getMeasurements().isEmpty();
-					}
-				}
+				well.getResultSnapshots().isEmpty();
 			}
 		}
 		if (!plate.getResults().isEmpty()){

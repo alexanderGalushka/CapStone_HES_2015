@@ -1,11 +1,14 @@
 package edu.harvard.cscie99.adam.service;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -223,37 +226,44 @@ public class ResultService {
 //		Session session = sessionFactory.openSession();
 //		session.beginTransaction();
 		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.ENGLISH);
+		
+		Plate plate = getPlateAssociatedToResult(results);
+		String plateId = "" + plate.getId();
+		String projectId = "" + getProjectAssociatedToPlate(plate).getId();
+		
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		
 		for (String labelName : labelNamesMap.keySet()){
 			for (String labelValue : labelNamesMap.get(labelName).keySet()){
 				
 				for (String measurementType : labelNamesMap.get(labelName).get(labelValue).keySet()){
 					
-					Session session = sessionFactory.openSession();
-					session.beginTransaction();
-					
-					DataSet allMeasuredValues = new DataSet();
-					allMeasuredValues.setLabelName(labelName);
-					allMeasuredValues.setLabelValue(labelValue);
-					allMeasuredValues.setMeasurementType(measurementType);
-					
-					Plate plate = getPlateAssociatedToResult(results);
-					Project project = getProjectAssociatedToPlate(plate);
-					
-					allMeasuredValues.setPlateId(plate.getId());
-					allMeasuredValues.setProjectId(project.getId());
-					allMeasuredValues.setTime(results.getTime());
-					
-					List<Double> values = labelNamesMap.get(labelName).get(labelValue).get(measurementType);
-					String jsonValues = mapper.writeValueAsString(values);
-					allMeasuredValues.setJsonValues(jsonValues);
-					session.saveOrUpdate(allMeasuredValues);
-					session.getTransaction().commit();
-					session.close();
+					try{
+						
+						DataSet allMeasuredValues = new DataSet();
+						allMeasuredValues.setLabelName(labelName);
+						allMeasuredValues.setLabelValue(labelValue);
+						allMeasuredValues.setMeasurementType(measurementType);
+						allMeasuredValues.setPlateId(plateId);
+						allMeasuredValues.setProjectId(projectId);
+						allMeasuredValues.setTime(dateFormat.format(results.getTime()));
+						
+						List<Double> values = labelNamesMap.get(labelName).get(labelValue).get(measurementType);
+						String jsonValues = mapper.writeValueAsString(values);
+						allMeasuredValues.setJsonValues(jsonValues);
+						session.saveOrUpdate(allMeasuredValues);
+					}
+					catch(Throwable t){
+						System.out.println(t);
+					}
 				}
 			}
 		}
-//		session.getTransaction().commit();
-//		session.close();
+		session.getTransaction().commit();
+		session.close();
+		
 		return true;
 	}
 	

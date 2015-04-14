@@ -57,7 +57,7 @@ public class Plate implements Serializable{
 	@Column(name = "label")
 	private String label;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	private List<WellLabel> wellLabels;
 	
 	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)

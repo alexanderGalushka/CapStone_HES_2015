@@ -39,22 +39,22 @@ public class DataSet
 	private int id;
 	
 	@Column(name = "project_id")
-	private Integer projectId;
+	private String projectId;
 	
 	@Column(name = "plate_id")
-	private Integer plateId;
+	private String plateId;
 	
 	@Column(name = "measurement_type")
 	private String measurementType;
 	
 	@Column(name = "label_name")
-	private String LabelName;
+	private String labelName;
 	
 	@Column(name = "label_value")
 	private String labelValue;
 	
 	@Column(name = "time")
-	private Date time;
+	private String time;
 	
 //	@ManyToOne(targetEntity = Compound.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //	private Compound compound;
@@ -82,11 +82,11 @@ public class DataSet
 		this.measurementType = measurementType;
 	}
 
-	public Date getTime() {
+	public String getTime() {
 		return time;
 	}
 
-	public void setTime(Date time) {
+	public void setTime(String time) {
 		this.time = time;
 	}
 
@@ -107,45 +107,28 @@ public class DataSet
 	}
 
 	public String getLabelName() {
-		return LabelName;
+		return labelName;
 	}
 
 	public void setLabelName(String labelName) {
-		LabelName = labelName;
+		this.labelName = labelName;
 	}
 
-	public Integer getProjectId() {
+	public String getProjectId() {
 		return projectId;
 	}
 
-	public void setProjectId(Integer projectId) {
+	public void setProjectId(String projectId) {
 		this.projectId = projectId;
 	}
 
-	public Integer getPlateId() {
+	public String getPlateId() {
 		return plateId;
 	}
 
-	public void setPlateId(Integer plateId) {
+	public void setPlateId(String plateId) {
 		this.plateId = plateId;
 	}
-
-//
-//	public Compound getCompound() {
-//		return compound;
-//	}
-//
-//	public void setCompound(Compound compound) {
-//		this.compound = compound;
-//	}
-//
-//	public Substrate getSubstrate() {
-//		return substrate;
-//	}
-//
-//	public void setSubstrate(Substrate substrate) {
-//		this.substrate = substrate;
-//	}
 
 		
 }

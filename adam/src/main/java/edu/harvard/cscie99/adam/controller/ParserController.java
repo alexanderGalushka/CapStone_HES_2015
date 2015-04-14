@@ -29,57 +29,58 @@ import edu.harvard.cscie99.adam.service.PlateService;
 @RestController
 @RequestMapping(value = "/")
 public class ParserController {
-	
+
 	@Autowired
 	private ParserService parserService;
-	
+
 	@Autowired
 	private PlateService plateService;
-	
+
 	@Autowired
 	private AuthenticationService authService;
-	
+
 	@RequestMapping(value = "/upload/{filename}", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean uploadFile(
-			@PathVariable("filename") String filename,
-			@RequestParam("file") MultipartFile file){
-		
-		//TODO: save filename and path in DB
-		
+	public boolean uploadFile(@PathVariable("filename") String filename,
+			@RequestParam("file") MultipartFile file) {
+
+		// TODO: save filename and path in DB
+
 		if (!file.isEmpty()) {
-            try {
-                byte[] bytes = file.getBytes();
-                BufferedOutputStream stream =
-                        new BufferedOutputStream(new FileOutputStream(new File(filename)));
-                stream.write(bytes);
-                stream.close();
-                return true;
-            } catch (Exception e) {
-                return false;
-            }
-        } else {
-            return false;
-        }
+			try {
+				byte[] bytes = file.getBytes();
+				BufferedOutputStream stream = new BufferedOutputStream(
+						new FileOutputStream(new File(filename)));
+				stream.write(bytes);
+				stream.close();
+				return true;
+			} catch (Exception e) {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
-	
+
 	@RequestMapping(value = "/project/{project_id}/plate/parse/{filename}", method = RequestMethod.POST)
 	@ResponseBody
-	public Plate parsePlate(
-			@PathVariable("project_id") int projectId,
-			@PathVariable("filename") String filename) throws ParserException, UnauthorizedOperationException{
-		
+	public Plate parsePlate(@PathVariable("project_id") int projectId,
+			@PathVariable("filename") String filename) throws ParserException,
+			UnauthorizedOperationException {
+
 		Plate plate = parserService.parsePlateFromFile(filename);
-		
-		return plateService.createPlate(plate);	
+
+		return plateService.createPlate(plate);
 	}
-	
-//	@RequestMapping(value = "/project/{project_id}/result/parse/{filename}", method = RequestMethod.POST)
-//	@ResponseBody
-//	public PlateResult parseResults(
-//			@PathVariable("project_id") int projectId,
-//			@PathVariable("filename") String filename) throws ParserException, UnauthorizedOperationException{
-//		
-//		return parserService.parseResultsFromFile(filename);
-//	}
+
+	// @RequestMapping(value = "/project/{project_id}/result/parse/{filename}",
+	// method = RequestMethod.POST)
+	// @ResponseBody
+	// public PlateResult parseResults(
+	// @PathVariable("project_id") int projectId,
+	// @PathVariable("filename") String filename) throws ParserException,
+	// UnauthorizedOperationException{
+	//
+	// return parserService.parseResultsFromFile(filename);
+	// }
 }
