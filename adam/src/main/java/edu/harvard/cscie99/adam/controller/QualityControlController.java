@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
-import edu.harvard.cscie99.adam.model.DataSet;
 import edu.harvard.cscie99.adam.model.QCdataTimeWrapper;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
 import edu.harvard.cscie99.adam.service.ParserService;
@@ -29,12 +28,12 @@ public class QualityControlController
 	private AuthenticationService authService;
 	
 	
-	@RequestMapping(value = "/project/{project_id}/get_normalized_data", method = RequestMethod.GET)
+	@RequestMapping(value = "/project/{project_id}/qualify_data", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<Integer, List<QCdataTimeWrapper>> getNormalizedData(
 			@PathVariable("project_id") int projectId) throws  UnauthorizedOperationException{
 		
-		return qualityControlService.getNormalizedData(projectId);
+		return qualityControlService.qualifyData(projectId);
 	}
 	
 }

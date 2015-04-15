@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,12 +25,14 @@ public class QueryService
     private SessionFactory sessionFactory;
 	
 
+	@SuppressWarnings("unchecked")
 	public DataSet queryResultsData(Integer projectId, Integer plateId, String labelName, String labelValue, String measurementType, String time) throws JsonProcessingException{
 		
 		Session session = sessionFactory.openSession();
 		DataSet filteredValues = new DataSet();
 		ObjectMapper mapper = new ObjectMapper();
 		
+		@SuppressWarnings("unused")
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.ENGLISH);
 		
 		StringBuilder query = new StringBuilder();
@@ -114,6 +115,7 @@ public class QueryService
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	public List<DataSet> getValuesUsingFilter(Integer projectId, Integer plateId, String measurementType,
 			                                  String timeStamp, String labelName, String labelValue)
 	{

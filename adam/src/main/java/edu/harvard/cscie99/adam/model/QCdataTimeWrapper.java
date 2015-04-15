@@ -9,6 +9,11 @@ public class QCdataTimeWrapper
 	private Date timeStamp;
 	private List<QCdata> qcDataList;
 	
+	//need provide the data layout
+	private Integer numberOfRows;
+	private Integer numberOfColumns;
+	
+	
 	public Date getTimeStamp() 
 	{
 		return timeStamp;
@@ -24,6 +29,22 @@ public class QCdataTimeWrapper
 	public void setQcData(List<QCdata> qcDataList) 
 	{
 		this.qcDataList = qcDataList;
+	}
+	public Integer getNumberOfRows()
+	{
+		return numberOfRows;
+	}
+	public void setNumberOfRows(Integer numberOfRows)
+	{
+		this.numberOfRows = numberOfRows;
+	}
+	public Integer getNumberOfColumns() 
+	{
+		return numberOfColumns;
+	}
+	public void setNumberOfColumns(Integer numberOfColumns)
+	{
+		this.numberOfColumns = numberOfColumns;
 	}
 	
 	

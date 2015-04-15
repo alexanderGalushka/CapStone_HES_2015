@@ -11,9 +11,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -47,6 +44,12 @@ public class Plate implements Serializable{
 	
 //	@ManyToOne(targetEntity = Project.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //	private Project project;
+	
+	@Column(name = "numberOfRows")
+	private Integer numberOfRows;
+	
+	@Column(name = "numberOfColumns")
+	private Integer numberOfColumns;
 	
 	@Column(name = "barcode")
 	private String barcode;
@@ -164,6 +167,22 @@ public class Plate implements Serializable{
 
 	public void setResults(List<ResultSnapshot> results) {
 		this.results = results;
+	}
+	
+	public Integer getNumberOfRows() {
+		return numberOfRows;
+	}
+
+	public void setNumberOfRows(Integer numberOfRows) {
+		this.numberOfRows = numberOfRows;
+	}
+
+	public Integer getNumberOfColumns() {
+		return numberOfColumns;
+	}
+
+	public void setNumberOfColumns(Integer numberOfColumns) {
+		this.numberOfColumns = numberOfColumns;
 	}
 	
 	@Override
