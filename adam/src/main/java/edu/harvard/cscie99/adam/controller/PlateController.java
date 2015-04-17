@@ -48,14 +48,14 @@ public class PlateController {
 //	public static final String C_PLATE_FILE_PATH = "c:/adam_files/plates/";
 	
 	// Plate CRUD - START
-	@RequestMapping(value = "/plate", method = RequestMethod.GET)
+	@RequestMapping(value = "/rest/plate", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Plate> listPlates(){
 		
 		return plateService.listPlates();
 	}
 	
-	@RequestMapping(value = "/plate/{plate_id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/rest/plate/{plate_id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Plate getPlate(
 			@PathVariable("plate_id") int plateId){
@@ -63,21 +63,21 @@ public class PlateController {
 		return plateService.retrievePlate(plateId);
 	}
 	
-	@RequestMapping(value = "/plate", method = RequestMethod.POST)
+	@RequestMapping(value = "/rest/plate", method = RequestMethod.POST)
 	@ResponseBody
 	public Plate createPlate(@RequestBody Plate plate){
 		
 		return plateService.createPlate(plate);
 	}
 	
-	@RequestMapping(value = "/plate", method = RequestMethod.PUT)
+	@RequestMapping(value = "/rest/plate", method = RequestMethod.PUT)
 	@ResponseBody
 	public Plate editPlate(@RequestBody Plate plate){
 		
 		return plateService.editPlate(plate);
 	}
 	
-	@RequestMapping(value = "/plate", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/rest/plate", method = RequestMethod.DELETE)
 	@ResponseBody
 	public boolean removePlate(@RequestBody Plate plate){
 		
@@ -88,6 +88,27 @@ public class PlateController {
 	//Upload plate
 	@RequestMapping(value="/upload_plate", method=RequestMethod.POST)
 	public @ResponseBody Plate handlePlateUpload(
+			@RequestParam("name") String name,
+			@RequestParam("file") MultipartFile file) throws IOException, ParserException{
+		
+		Plate plate = null;
+		
+		if (file != null && !file.isEmpty()){
+		
+			byte[] bytes = file.getBytes();
+			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(C_PLATE_FILE_PATH + name)));
+			stream.write(bytes);
+			stream.close();
+		
+			plate = parserService.parsePlateFromFile(C_PLATE_FILE_PATH + name);
+		}
+		
+		return plateService.createPlate(plate);
+	}
+	
+	//Upload plate
+	@RequestMapping(value="/upload_plate_with_result", method=RequestMethod.POST)
+	public @ResponseBody Plate handlePlateAndResultUpload(
 			@RequestParam("name") String name,
 			@RequestParam("file") MultipartFile file) throws IOException, ParserException{
 		
