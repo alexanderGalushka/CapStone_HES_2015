@@ -72,10 +72,14 @@ public class ResultService {
 	public ResultSnapshot retrieveResult(int resultId){
 		
 		Session session = sessionFactory.openSession();
-		ResultSnapshot result = (ResultSnapshot) session.get(ResultSnapshot.class, resultId);
-		loadResult(result);
-		
-		session.close();
+		ResultSnapshot result = null;
+		try{
+			result = (ResultSnapshot) session.get(ResultSnapshot.class, resultId);
+			loadResult(result);
+		}
+		finally{
+			session.close();	
+		}
 		
 		return result;
 	}
@@ -96,26 +100,36 @@ public class ResultService {
 	public List<ResultSnapshot> listResults(){
 		
 		Session session = sessionFactory.openSession();
-		List<ResultSnapshot> results = session.createCriteria(ResultSnapshot.class).list();
-		for (ResultSnapshot result : results){
-			loadResult(result);
+		List<ResultSnapshot> results = null;
+		
+		try{
+			results = session.createCriteria(ResultSnapshot.class).list();
+			for (ResultSnapshot result : results){
+				loadResult(result);
+			}
+		}
+		finally{
+			session.close();	
 		}
 		
 		return results;
 	}
 	
 	public ResultSnapshot saveResultSnapshot(ResultSnapshot result){
+		Session session = sessionFactory.openSession();
+		
 		try{
-			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			session.save(result);
 			session.getTransaction().commit();
-			session.close();
 			
 			return result;
 		}
 		catch (Exception ex){
 			return null;
+		}
+		finally{
+			session.close();	
 		}
 	}
 	
@@ -233,40 +247,42 @@ public class ResultService {
 		String projectId = "" + getProjectAssociatedToPlate(plate).getId();
 		
 		Session session = sessionFactory.openSession();
-		session.beginTransaction();
 		
-		for (String labelName : labelNamesMap.keySet()){
-			for (String labelValue : labelNamesMap.get(labelName).keySet()){
-				
-				for (String measurementType : labelNamesMap.get(labelName).get(labelValue).keySet()){
+		try{
+			session.beginTransaction();
+			
+			for (String labelName : labelNamesMap.keySet()){
+				for (String labelValue : labelNamesMap.get(labelName).keySet()){
 					
-					try{
+					for (String measurementType : labelNamesMap.get(labelName).get(labelValue).keySet()){
 						
-						DataSet allMeasuredValues = new DataSet();
-						allMeasuredValues.setLabelName(labelName);
-						allMeasuredValues.setLabelValue(labelValue);
-						allMeasuredValues.setMeasurementType(measurementType);
-						allMeasuredValues.setPlateId(plateId);
-						allMeasuredValues.setProjectId(projectId);
-						allMeasuredValues.setTime(dateFormat.format(results.getTime()));
-						
-						List<Double> values = labelNamesMap.get(labelName).get(labelValue).get(measurementType);
-						String jsonValues = mapper.writeValueAsString(values);
-						allMeasuredValues.setJsonValues(jsonValues);
-						session.saveOrUpdate(allMeasuredValues);
-					}
-					catch(Throwable t){
-						System.out.println(t);
+						try{
+							
+							DataSet allMeasuredValues = new DataSet();
+							allMeasuredValues.setLabelName(labelName);
+							allMeasuredValues.setLabelValue(labelValue);
+							allMeasuredValues.setMeasurementType(measurementType);
+							allMeasuredValues.setPlateId(plateId);
+							allMeasuredValues.setProjectId(projectId);
+							allMeasuredValues.setTime(dateFormat.format(results.getTime()));
+							
+							List<Double> values = labelNamesMap.get(labelName).get(labelValue).get(measurementType);
+							String jsonValues = mapper.writeValueAsString(values);
+							allMeasuredValues.setJsonValues(jsonValues);
+							session.saveOrUpdate(allMeasuredValues);
+						}
+						catch(Throwable t){
+							System.out.println(t);
+						}
 					}
 				}
 			}
+			session.getTransaction().commit();
 		}
-		session.getTransaction().commit();
-		session.close();
+		finally{
+			session.close();	
+		}
 		
 		return true;
 	}
-	
-	
-
 }

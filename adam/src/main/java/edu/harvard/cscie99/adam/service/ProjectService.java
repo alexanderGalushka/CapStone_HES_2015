@@ -31,8 +31,9 @@ public class ProjectService {
 	private PlateService plateService;
 	
 	public Project updateProject(Project project){
+		
+		Session session = sessionFactory.openSession();
 		try{
-			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			
 			for (Plate plate : project.getPlates()){
@@ -41,21 +42,30 @@ public class ProjectService {
 			
 			session.merge(project);
 			session.getTransaction().commit();
-			session.close();
 			
 			return project;
 		}
 		catch (Exception ex){
 			return null;
 		}
+		finally{
+			session.close();	
+		}
 	}
 	
 	public List<Project> list(){
 		
 		Session session = sessionFactory.openSession();
-		List<Project> projects = session.createCriteria(Project.class).list();
-		for (Project project : projects){
-			loadProject(project);
+		List<Project> projects = null;
+		
+		try{
+			projects = session.createCriteria(Project.class).list();
+			for (Project project : projects){
+				loadProject(project);
+			}
+		}
+		finally{
+			session.close();	
 		}
 		
 		return projects;
@@ -63,28 +73,35 @@ public class ProjectService {
 	
 	public boolean deleteProject(Project project){
 		
+		Session session = sessionFactory.openSession();
+		
 		try{
-			Session session = sessionFactory.openSession();
 			session.beginTransaction();
 			session.delete(project);
 			session.getTransaction().commit();
-			session.close();
 			return true;
 		}
 		catch (Exception ex){
 			return false;
+		}
+		finally{
+			session.close();	
 		}
 	}
 	
 	public Project createProject(Project newProject){
 		
 		newProject.setCreationDate(new Date());
-		
 		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		session.save(newProject);
-		session.getTransaction().commit();
-		session.close();
+		
+		try{
+			session.beginTransaction();
+			session.save(newProject);
+			session.getTransaction().commit();
+		}
+		finally{
+			session.close();	
+		}
 		
 		return newProject;
 	}
@@ -92,13 +109,18 @@ public class ProjectService {
 	public Project retrieveProject(int projectId){
 
 		Session session = sessionFactory.openSession();
-		Project project = (Project) session.get(Project.class, projectId);
-		loadProject(project);
-		if (!project.getPlates().isEmpty()){
-			
-		}
-		session.close();
+		Project project = null;
 		
+		try{
+			project = (Project) session.get(Project.class, projectId);
+			loadProject(project);
+			if (!project.getPlates().isEmpty()){
+				
+			}
+		}
+		finally{
+			session.close();	
+		}
 		return project;
 	}
 	

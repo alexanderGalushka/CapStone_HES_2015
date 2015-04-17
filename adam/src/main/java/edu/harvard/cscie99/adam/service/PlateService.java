@@ -31,18 +31,23 @@ public class PlateService {
 	
 	public List<Plate> listPlates(){
 		Session session = sessionFactory.openSession();
-		List<Plate> plateList = session.createCriteria(Plate.class).list();
+		HashSet<Plate> uniquePlates = null;
 		
-		HashSet<Plate> uniquePlates = new HashSet<Plate>();
-		for (Plate plate : plateList){
-			uniquePlates.add(plate);
+		try{
+			List<Plate> plateList = session.createCriteria(Plate.class).list();
+			
+			uniquePlates = new HashSet<Plate>();
+			for (Plate plate : plateList){
+				uniquePlates.add(plate);
+			}
+			
+			for (Plate plate : uniquePlates){
+				loadPlate(plate);
+			}
 		}
-		
-		for (Plate plate : uniquePlates){
-			loadPlate(plate);
+		finally {
+			session.close();
 		}
-		
-		session.close();
 		
 		return new ArrayList<Plate>(uniquePlates);
 	}
@@ -50,9 +55,14 @@ public class PlateService {
 	public Plate retrievePlate(int plateId){
 
 		Session session = sessionFactory.openSession();
-		Plate plate = (Plate) session.get(Plate.class, plateId);
-		loadPlate(plate);
-		session.close();
+		Plate plate = null;
+		try{
+			plate = (Plate) session.get(Plate.class, plateId);
+			loadPlate(plate);
+		}
+		finally {
+			session.close();
+		}
 		
 		return plate;
 	}
@@ -60,24 +70,28 @@ public class PlateService {
 	public Plate createPlate(Plate plate){
 
 		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		
-		for (Well well : plate.getWells()){
-			for (WellLabel wellLabel : well.getWellLabels()){
-				session.saveOrUpdate(wellLabel);
+		try{
+			session.beginTransaction();
+			
+			for (Well well : plate.getWells()){
+				for (WellLabel wellLabel : well.getWellLabels()){
+					session.saveOrUpdate(wellLabel);
+				}
+				session.save(well);
 			}
-			session.save(well);
+			
+			for (WellLabel label : plate.getWellLabels()){
+				session.save(label);
+			}
+			for (Well well : plate.getWells()){
+				session.save(well);
+			}
+			session.save(plate);
+			session.getTransaction().commit();
 		}
-		
-		for (WellLabel label : plate.getWellLabels()){
-			session.save(label);
+		finally{
+			session.close();	
 		}
-		for (Well well : plate.getWells()){
-			session.save(well);
-		}
-		session.save(plate);
-		session.getTransaction().commit();
-		session.close();
 		
 		return plate;
 	}
@@ -85,10 +99,14 @@ public class PlateService {
 	public boolean removePlate(Plate plate){
 
 		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		session.delete(plate);
-		session.getTransaction().commit();
-		session.close();
+		try{
+			session.beginTransaction();
+			session.delete(plate);
+			session.getTransaction().commit();
+		}
+		finally{
+			session.close();	
+		}
 		
 		return true;
 	}
@@ -96,20 +114,14 @@ public class PlateService {
 	public Plate editPlate(Plate plate){
 
 		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		
-		session.merge(plate);
-		session.getTransaction().commit();
-		session.close();
-		
-		session = sessionFactory.openSession();
-		session.beginTransaction();
-//		for (ResultSnapshot result : plate.getResults()){
-//			result.setPlate(plate);
-//			session.saveOrUpdate(result);
-//		}
-		session.getTransaction().commit();
-		session.close();
+		try{
+			session.beginTransaction();
+			session.merge(plate);
+			session.getTransaction().commit();
+		}
+		finally{
+			session.close();	
+		}
 		
 		return plate;
 	}
