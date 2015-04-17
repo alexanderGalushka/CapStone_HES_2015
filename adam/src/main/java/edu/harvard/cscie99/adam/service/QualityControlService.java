@@ -67,11 +67,16 @@ public class QualityControlService
 	 * @return the Map, where the key is the Plate ID (Integer), and the values is the collection of QCdataTimeWrappers
 	 */
 	public Map<Integer, List<QCdataTimeWrapper>> qualifyData(Integer projectId)
-	{
-		
+	{	
 		//Get the Project data
 		Project project = projectService.retrieveProject(projectId);
 		
+		return actualDataQualification (project);
+	}
+
+	
+	public Map<Integer, List<QCdataTimeWrapper>> actualDataQualification (Project project)
+	{
 		List<QCdataTimeWrapper> listOfQCdataTimeWrappers = new ArrayList<>();
 		
 		Map<Integer, List<QCdataTimeWrapper>> resultMap = new HashMap<>();
@@ -225,7 +230,8 @@ public class QualityControlService
             resultMap.put(plate.getId(), listOfQCdataTimeWrappers);
 		}
 		
-		return resultMap;			
+		return resultMap;
+		
 	}
 	
 	private double[] convertToPrimitiveDouble( List<Double> arayToConvert )
