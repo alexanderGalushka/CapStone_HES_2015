@@ -56,7 +56,7 @@ public class ProjectController {
 			HttpServletRequest request) throws UnauthorizedOperationException{
 
 		User owner = authService.getCurrentUser(request);
-		newProject.setOwner(owner);
+		newProject.setOwner(owner.getUsername());
 		
 		return projectService.createProject(newProject);
 	}
@@ -76,7 +76,7 @@ public class ProjectController {
 			
 		List<Project> projects = projectService.list();
 		for (Project project : projects){
-			project.getPlates().isEmpty();
+			project.setPlates(null);
 		}
 		return projects;
 	}
@@ -88,7 +88,7 @@ public class ProjectController {
 		
 		Project project = projectService.retrieveProject(projectId);
 		
-		project.getPlates().isEmpty();
+		project.setPlates(null);
 		
 		return project;
 	}
@@ -99,12 +99,20 @@ public class ProjectController {
 			@RequestBody Project project,
 			HttpServletRequest request) {
 		
-		project.setId(projectId);
+		Project currentProject = projectService.retrieveProject(projectId);
+		currentProject.setCollaborators(project.getCollaborators());
+		currentProject.setDescription(project.getDescription());
+		currentProject.setLabel(project.getLabel());
+		currentProject.setName(project.getName());
+		currentProject.setPublic(project.isPublic());
+		currentProject.setTags(project.getTags());
+		currentProject.setType(project.getType());
 		
-		User owner = authService.getCurrentUser(request);
-		project.setOwner(owner);
+		projectService.updateProject(currentProject);
 		
-		return projectService.updateProject(project);
+		//Dont return plates
+		currentProject.setPlates(null);
+		return currentProject;
 	}
 	
 	@RequestMapping(value = "/rest/project/{project_id}", method = RequestMethod.DELETE)
@@ -142,6 +150,7 @@ public class ProjectController {
 		Project project = projectService.retrieveProject(projectId);
 		Plate plate = plateService.retrievePlate(plateId);
 		project.getPlates().add(plate);
+		plate.setProjectId("" + project.getId().intValue());
 		
 		projectService.updateProject(project);
 		
@@ -158,6 +167,7 @@ public class ProjectController {
 		Project project = projectService.retrieveProject(projectId);
 		Plate plate = plateService.retrievePlate(plateId);
 		project.getPlates().remove(plate);
+		plate.setProjectId(null);
 		
 		projectService.updateProject(project);
 		
