@@ -89,9 +89,12 @@ public class ProjectController {
 		return project;
 	}
 	
-	@RequestMapping(value = "/rest/project", method = RequestMethod.PUT)
+	@RequestMapping(value = "/rest/project/{project_id}", method = RequestMethod.PUT)
 	public @ResponseBody Project updateProject(
+			@PathVariable("project_id") int projectId,
 			@RequestBody Project project) {
+		
+		project.setId(projectId);
 		
 		return projectService.updateProject(project);
 	}

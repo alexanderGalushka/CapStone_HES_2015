@@ -70,9 +70,12 @@ public class PlateController {
 		return plateService.createPlate(plate);
 	}
 	
-	@RequestMapping(value = "/rest/plate", method = RequestMethod.PUT)
+	@RequestMapping(value = "/rest/plate/{plate_id}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Plate editPlate(@RequestBody Plate plate){
+	public Plate editPlate(@RequestBody Plate plate,
+			@PathVariable("plate_id") int plateId){
+		
+		plate.setId(plateId);
 		
 		return plateService.editPlate(plate);
 	}
