@@ -5,7 +5,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.hibernate.Query;
@@ -13,15 +12,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import edu.harvard.cscie99.adam.error.LoginFailedException;
-import edu.harvard.cscie99.adam.error.SessionTimeouException;
-import edu.harvard.cscie99.adam.model.DataSet;
-import edu.harvard.cscie99.adam.profile.Permission;
 import edu.harvard.cscie99.adam.profile.User;
 
 /**
@@ -169,5 +160,16 @@ public class AuthenticationService
 		return generatedPassword;
 	   //****************************************//
    }
+
+	public User getCurrentUser(HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		
+		if (session.getAttribute(AuthenticationService.C_USER_SESSION) != null){
+			return (User)session.getAttribute(AuthenticationService.C_USER_SESSION);
+		}
+		
+		return null;
+	}
 	
 }
