@@ -1,78 +1,99 @@
-//package edu.harvard.cscie99.adam.controller;
-//
-//import java.util.List;
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RequestMethod;
-//import org.springframework.web.bind.annotation.RequestParam;
-//import org.springframework.web.bind.annotation.ResponseBody;
-//import org.springframework.web.bind.annotation.RestController;
-//
-//import edu.harvard.cscie99.adam.error.SessionTimeouException;
-//import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
-//import edu.harvard.cscie99.adam.model.Project;
-//import edu.harvard.cscie99.adam.profile.User;
-//import edu.harvard.cscie99.adam.service.AuthenticationService;
-//import edu.harvard.cscie99.adam.service.ProfileService;
-//import edu.harvard.cscie99.adam.service.ProjectService;
-//
-///**
-// * 
-// * @author Gerson
-// *
-// */
-//@RestController
-//@RequestMapping(value = "/")
-//public class CollaborationController {
-//	
-//	@Autowired
-//	private ProjectService projectService;
-//	
-//	@Autowired
-//	private AuthenticationService authService;
-//	
-//	@Autowired
-//	private ProfileService profileService;
-//	
-//	@RequestMapping(value = "/users/list", method = RequestMethod.GET)
-//	@ResponseBody
-//	public List<User> listAllUsers(){
-//		
-//		return profileService.listAllUsers();
-//	}
-//	
-//	@RequestMapping(value = "/share/{projectId}/user/{username}", method = RequestMethod.GET)
-//	@ResponseBody
-//	public boolean addCollaboratorToProject(
-//			@PathVariable("projectId") int projectId,
-//			@PathVariable("username") String username){
-//		
-//		
-//		Project project = projectService.retrieveProject(projectId);
-//		User collaborator = profileService.getUserDetails(username);
-//			
-//		project.getCollaborators().add(collaborator);
-//		projectService.updateProject(project);
-//		return true;
-//	}
-//	
-//	@RequestMapping(value = "/unshare/{projectId}/user/{username}", method = RequestMethod.POST)
-//	@ResponseBody
-//	public Project removeCollaboratorFromProject(
-//			@PathVariable("projectId") int projectId,
-//			@PathVariable("username") String username) throws UnauthorizedOperationException{
-//		
-//		
-//		Project project = projectService.retrieveProject(projectId);
-//		User collaborator = profileService.getUserDetails(username);
-//		
-//		project.getCollaborators().remove(collaborator);
-//		projectService.updateProject(project);
-//		
-//		return project;
-//		
-//	}
-//	
-//}
+package edu.harvard.cscie99.adam.controller;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import edu.harvard.cscie99.adam.profile.User;
+import edu.harvard.cscie99.adam.service.AuthenticationService;
+import edu.harvard.cscie99.adam.service.UserService;
+
+@RestController
+@RequestMapping(value = "/")
+public class CollaborationController {
+	
+	//TODO implement
+
+	@Autowired
+	private AuthenticationService authService;
+
+	@Autowired
+	private UserService userService;
+
+	@RequestMapping(value = "/rest/user", method = RequestMethod.GET)
+	public @ResponseBody List<User> getListUser(){
+		
+		List<User> listUser = userService.listUsers(null);
+		
+		for (User user : listUser){
+			user.setPassword(null);
+		}
+		return listUser;
+	}
+	
+	@RequestMapping(value = "/rest/user/others", method = RequestMethod.GET)
+	@ResponseBody
+	public List<User> listOtherUsers(HttpServletRequest request){
+		
+		User currentUser = authService.getCurrentUser(request);
+		
+		List<User> listUser = userService.listUsers(currentUser.getUsername());
+		for (User user : listUser){
+			user.setPassword(null);
+		}
+		return listUser;
+	}
+	
+	@RequestMapping(value = "/rest/user/{username}", method = RequestMethod.GET)
+	@ResponseBody
+	public User getUser(@PathVariable("username") String username){
+		
+		User user = userService.retrieveUser(username);
+		user.setPassword(null);
+		return user;
+	}
+	
+	@RequestMapping(value = "/rest/user", method = RequestMethod.POST)
+	@ResponseBody
+	public User create(@RequestBody User user,
+			HttpServletRequest request){
+		
+		return userService.createUser(user);
+	}
+	
+	@RequestMapping(value = "/rest/user/{username}", method = RequestMethod.PUT)
+	@ResponseBody
+	public User editUser(@RequestBody User user,
+			@PathVariable("username") String username,
+			HttpServletRequest request){
+		
+		User currentUser = userService.retrieveUser(username);
+		currentUser.setEmail(user.getEmail());
+		currentUser.setFirstName(user.getFirstName());
+		currentUser.setLastName(user.getLastName());
+		currentUser.setPassword(user.getPassword());
+		currentUser.setSecurityAnswer(user.getSecurityAnswer());
+		currentUser.setSecurityQuestion(user.getSecurityQuestion());
+		
+		User resultUser = userService.editUser(currentUser);
+		resultUser.setPassword(null);
+		return resultUser;
+	}
+	
+	@RequestMapping(value = "/rest/user/{username}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public boolean removeUser(@PathVariable("username") String username){
+		
+		User user = userService.retrieveUser(username);
+		
+		return userService.removeUser(user);
+	}
+}
