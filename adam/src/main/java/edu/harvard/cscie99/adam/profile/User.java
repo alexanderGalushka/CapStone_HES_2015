@@ -35,8 +35,8 @@ public class User {
 //	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 //	@JoinColumn(name="project_id")
 	
-	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<Project> projects;
+//	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private Set<Project> projects;
 	
 //	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 //	@JoinColumn(name="project_id")
@@ -63,12 +63,12 @@ public class User {
 	@Column(name = "security_answer")
 	private String securityAnswer;
 	
-	@ManyToMany
-	  @JoinTable(
-	      name="user_role",
-	      joinColumns={@JoinColumn(name="user_id", referencedColumnName="user_id")},
-	      inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="role_id")})
-	private List<Role> roles;
+//	@ManyToMany
+//	  @JoinTable(
+//	      name="user_role",
+//	      joinColumns={@JoinColumn(name="user_id", referencedColumnName="user_id")},
+//	      inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="role_id")})
+//	private List<Role> roles;
 	
 	public String getUsername() {
 		return username;
@@ -82,12 +82,6 @@ public class User {
 	}
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	public List<Role> getRoles() {
-		return roles;
-	}
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
 	}
 	public String getEmail() {
 		return email;
@@ -124,12 +118,6 @@ public class User {
 	}
 	public void setId(int id) {
 		this.id = id;
-	}
-	public Set<Project> getProjects() {
-		return projects;
-	}
-	public void setProjects(Set<Project> projects) {
-		this.projects = projects;
 	}
 
 }
