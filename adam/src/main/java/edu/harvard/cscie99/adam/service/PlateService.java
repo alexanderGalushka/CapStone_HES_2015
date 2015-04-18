@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import edu.harvard.cscie99.adam.model.Measurement;
 import edu.harvard.cscie99.adam.model.Plate;
+import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
 import edu.harvard.cscie99.adam.model.Well;
 import edu.harvard.cscie99.adam.model.WellLabel;
@@ -49,6 +50,10 @@ public class PlateService {
 			session.close();
 		}
 		
+//		for (Plate plate : uniquePlates){
+//			if (plate.getProject() != null)
+//				plate.getProject().setPlates(null);
+//		}
 		return new ArrayList<Plate>(uniquePlates);
 	}
 	
@@ -58,12 +63,17 @@ public class PlateService {
 		Plate plate = null;
 		try{
 			plate = (Plate) session.get(Plate.class, plateId);
-			loadPlate(plate);
+			if (plate != null){
+				loadPlate(plate);
+			}
 		}
 		finally {
 			session.close();
 		}
 		
+//		if (plate.getProject() != null)
+//			plate.getProject().setPlates(null);
+//		
 		return plate;
 	}
 	
@@ -129,16 +139,19 @@ public class PlateService {
 	public void loadPlate(Plate plate){
 //		plate.getDataSet().isEmpty();
 //		plate.getCollaborators().isEmpty();
-		plate.getWellLabels().isEmpty();
-		if (!plate.getWells().isEmpty()){
+		if (plate.getWellLabels() != null){
+			plate.getWellLabels().isEmpty();
+		}
+		if (plate.getWells() != null && !plate.getWells().isEmpty()){
 			for (Well well : plate.getWells()){
 				well.getWellLabels().isEmpty();
 				well.getResultSnapshots().isEmpty();
 			}
 		}
-		if (!plate.getResults().isEmpty()){
+		
+		if (plate.getResults() != null && !plate.getResults().isEmpty()){
 			for (ResultSnapshot result : plate.getResults()){
-				if (!result.getMeasurements().isEmpty()){
+				if (result.getMeasurements() != null && !result.getMeasurements().isEmpty()){
 					for (Measurement measure : result.getMeasurements()){
 						measure.getColumn();
 						measure.getMeasurementType();
