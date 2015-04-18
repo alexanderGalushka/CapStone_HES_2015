@@ -1,0 +1,179 @@
+<div ng-controller="ProjectsCtrl">
+
+        <div class="panel-group col-md-4" ng-model="activePanel" data-allow-multiple="true" bs-collapse>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a bs-collapse-toggle>
+                            Projects
+                        </a>
+                    </h4>
+                </div>
+                <div class="panel-collapse" bs-collapse-target>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">Show plates for project</div>
+                            <input class="form-control" ng-model="ActiveProject">
+                        </div>
+                    </div>
+                    <table  st-table="projectsDisplay" st-safe-src="projects" class="table table-striped">
+                        <thead>
+                        <th st-sort="title">Title&nbsp;</th>
+                        <th st-sort="date">Date</th>
+                        <tr>
+                            <th>
+                                <input st-search="title" placeholder="search for project" class="input-sm form-control" type="search"/>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr st-select-row="row" ng-repeat="project in projectsDisplay" ng-click="makeActive(project.title)">
+                            <td>{{project.title}}</td>
+                            <td>{{project.date}}</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a bs-collapse-toggle>
+                            Advanced Search
+                        </a>
+                    </h4>
+                </div>
+                <div class="panel-collapse" bs-collapse-target>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">Find compounds</div>
+                                <input class="form-control" ng-model="srchCompound">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">Find substrate</div>
+                                <input class="form-control" ng-model="srchSubstrate">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a bs-collapse-toggle>
+                            Compounds
+                        </a>
+                    </h4>
+                </div>
+                <div class="panel-collapse" bs-collapse-target>
+                    <div class="panel-body">
+                        <table  st-table="compoundsDisplay" st-safe-src="compounds" class="table table-striped">
+                            <thead>
+                            <th st-sort="name">Title&nbsp;</th>
+                            <th st-sort="date">Date</th>
+                            <tr>
+                                <th>
+                                    <input st-search="name" placeholder="search for compound" class="input-sm form-control" type="search"/>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr st-select-row="row" ng-repeat="compound in compoundsDisplay">
+                                <td>{{compound.name}}</td>
+                                <td>{{compound.date}}</td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a bs-collapse-toggle>
+                            Substrates
+                        </a>
+                    </h4>
+                </div>
+                <div class="panel-collapse" bs-collapse-target>
+                    <div class="panel-body">
+                        <table  st-table="substratesDisplay" st-safe-src="substrates" class="table table-striped">
+                            <thead>
+                            <th st-sort="name">Title&nbsp;</th>
+                            <th st-sort="date">Date</th>
+                            <tr>
+                                <th>
+                                    <input st-search="name" placeholder="search for substrates" class="input-sm form-control" type="search"/>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr st-select-row="row" ng-repeat="substrate in substratesDisplay">
+                                <td>{{substrate.name}}</td>
+                                <td>{{substrate.date}}</td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    <div class="col-md-8" >
+        <table  st-table="platesDisplay" st-safe-src="plates" class="table table-striped">
+            <thead>
+            <th st-sort="name">Plate name&nbsp;</th>
+            <th st-sort="date">Date</th>
+            <tr>
+                <th>
+                    <input st-search="name" placeholder="search for plates" class="input-sm form-control" type="search"/>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr st-select-row="row" ng-repeat="plate in platesDisplay | filter:{project:ActiveProject}">
+                <td>{{plate.name}}</td>
+                <td>{{plate.date}}</td>
+                <td>
+                    <a class="btn btn-sm" href="#/plateeditor" >
+                        <i class="glyphicon glyphicon-pushpin">
+                        </i>
+                    </a>
+                    <button type="button" class="btn btn-sm" data-template="components/modal/aside.tpl.demo.html"
+                            data-placement="left" data-animation="am-slide-left" bs-aside="aside" data-container="body"
+                            content= "x" title="Download">
+                        <i class="glyphicon glyphicon-upload">
+                        </i>
+                    </button>
+                    <button type="button" class="btn btn-sm" data-template="components/modal/aside.tpl.demo.html"
+                            data-placement="left" data-animation="am-slide-left" bs-aside="aside" data-container="body"
+                            content= "x" title="Edit plate">
+                        <i class="glyphicon glyphicon-edit">
+                        </i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-danger" data-animation="am-fade-and-slide-top" bs-modal="modal" data-template="components/modal/modal.tpl.demo.html"
+                            content= "x">
+                        <i class="glyphicon glyphicon-remove-circle">
+                        </i>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+
+
+</div>
