@@ -27,13 +27,10 @@ public class AuthInterceptor implements HandlerInterceptor  {
     			requiresAuthentication(request.getRequestURI())){
     	
 	    	if (null != session.getAttribute(AuthenticationService.C_USER_SESSION)){
-//	    		User user = (User) session.getAttribute("logged_user");
 	        	return true;
 	    		
 	    	} else {
 	    		response.sendRedirect(C_LOGIN_SCREEN);
-//	    		response.sendRe("application/json");
-//	    		response.sendError(1, "User needs to login");
 	    		return false;
 	    	}
     	}
