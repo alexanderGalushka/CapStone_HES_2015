@@ -68,7 +68,7 @@ public class AuthenticationController {
 		}
 		
 		//clear password for security
-		user.setPassword(null);
+//		user.setPassword(null);
 	
 		return user;
 
