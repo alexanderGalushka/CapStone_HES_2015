@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import edu.harvard.cscie99.adam.model.Plate;
 //import edu.harvard.cscie99.adam.model.Compound;
 import edu.harvard.cscie99.adam.model.Project;
+import edu.harvard.cscie99.adam.model.Tag;
 import edu.harvard.cscie99.adam.profile.User;
 
 /**
@@ -44,17 +45,17 @@ public class ProjectService {
 				}
 			}
 			
-//			if (project.getTags() != null){
-//				for (String tag : project.getTags()){
-//					session.saveOrUpdate(tag);
-//				}
-//			}
-//			
-//			if (project.getCollaborators() != null){
-//				for (String collab : project.getCollaborators()){
-//					session.saveOrUpdate(collab);
-//				}
-//			}
+			if (project.getTags() != null){
+				for (Tag tag : project.getTags()){
+					session.saveOrUpdate(tag);
+				}
+			}
+			
+			if (project.getCollaborators() != null){
+				for (User user : project.getCollaborators()){
+					session.saveOrUpdate(user);
+				}
+			}
 			
 			session.merge(project);
 			session.getTransaction().commit();
