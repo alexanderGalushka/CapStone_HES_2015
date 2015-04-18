@@ -149,6 +149,7 @@ public class PlateService {
 				result.getTime();
 			}
 		}
+		plate.getOwner();
 	}
 	
 //	public List<Plate> search(Map<String, Object> parameters){

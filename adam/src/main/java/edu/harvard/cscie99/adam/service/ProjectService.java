@@ -129,6 +129,7 @@ public class ProjectService {
 			for (Plate plate : project.getPlates()){
 				plateService.loadPlate(plate);	
 			}
+			project.getOwner();
 		}
 	}
 	
