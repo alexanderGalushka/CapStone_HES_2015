@@ -77,9 +77,11 @@ public class PlateController {
 		return plateService.editPlate(plate);
 	}
 	
-	@RequestMapping(value = "/rest/plate", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/rest/plate/{plate_id}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public boolean removePlate(@RequestBody Plate plate){
+	public boolean removePlate(@PathVariable("plate_id") int plateId){
+		
+		Plate plate = plateService.retrievePlate(plateId);
 		
 		return plateService.removePlate(plate);
 	}

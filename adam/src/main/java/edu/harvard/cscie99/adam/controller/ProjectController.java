@@ -96,10 +96,12 @@ public class ProjectController {
 		return projectService.updateProject(project);
 	}
 	
-	@RequestMapping(value = "/rest/project", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/rest/project/{project_id}", method = RequestMethod.DELETE)
 	@ResponseBody
 	public boolean deleteProject(
-			@RequestBody Project project) throws UnauthorizedOperationException{
+			@PathVariable("project_id") int projectId) throws UnauthorizedOperationException{
+		
+		Project project = projectService.retrieveProject(projectId);
 		
 		return projectService.deleteProject(project);
 	}
