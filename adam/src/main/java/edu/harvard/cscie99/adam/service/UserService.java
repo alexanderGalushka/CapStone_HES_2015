@@ -40,7 +40,7 @@ public class UserService {
 			
 			if (exception != null){
 				for (User user : userList){
-					if (!user.getUsername().equals(exception))
+					if (!exception.equals(user.getUsername()))
 						resultList.add(user);
 				}
 			}
@@ -60,7 +60,8 @@ public class UserService {
 		List<User> listUser = listUsers(null);
 		
 		for (User user : listUser){
-			if (user.getUsername().equals(username)){
+			if (user.getUsername() != null &&
+				user.getUsername().equals(username)){
 				return user;
 			}
 		}
