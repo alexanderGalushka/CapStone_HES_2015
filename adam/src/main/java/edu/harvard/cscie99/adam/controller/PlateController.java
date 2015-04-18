@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +23,7 @@ import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
 import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
+import edu.harvard.cscie99.adam.profile.User;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
 import edu.harvard.cscie99.adam.service.ParserService;
 import edu.harvard.cscie99.adam.service.PlateService;
@@ -65,7 +68,11 @@ public class PlateController {
 	
 	@RequestMapping(value = "/rest/plate", method = RequestMethod.POST)
 	@ResponseBody
-	public Plate createPlate(@RequestBody Plate plate){
+	public Plate createPlate(@RequestBody Plate plate,
+			HttpServletRequest request){
+		
+		User owner = authService.getCurrentUser(request);
+		plate.setOwner(owner);
 		
 		return plateService.createPlate(plate);
 	}
@@ -73,9 +80,13 @@ public class PlateController {
 	@RequestMapping(value = "/rest/plate/{plate_id}", method = RequestMethod.PUT)
 	@ResponseBody
 	public Plate editPlate(@RequestBody Plate plate,
-			@PathVariable("plate_id") int plateId){
+			@PathVariable("plate_id") int plateId,
+			HttpServletRequest request){
 		
 		plate.setId(plateId);
+		
+		User owner = authService.getCurrentUser(request);
+		plate.setOwner(owner);
 		
 		return plateService.editPlate(plate);
 	}

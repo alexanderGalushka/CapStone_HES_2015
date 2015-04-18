@@ -3,6 +3,8 @@ package edu.harvard.cscie99.adam.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +18,7 @@ import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
 import edu.harvard.cscie99.adam.model.Plate;
 //import edu.harvard.cscie99.adam.model.Compound;
 import edu.harvard.cscie99.adam.model.Project;
+import edu.harvard.cscie99.adam.profile.User;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
 import edu.harvard.cscie99.adam.service.PlateService;
 import edu.harvard.cscie99.adam.service.ProfileService;
@@ -49,9 +52,12 @@ public class ProjectController {
 	@RequestMapping(value = "/rest/project", method = RequestMethod.POST)
 	@ResponseBody
 	public Project createProject(
-			@RequestBody Project newProject) throws UnauthorizedOperationException{
+			@RequestBody Project newProject,
+			HttpServletRequest request) throws UnauthorizedOperationException{
+
+		User owner = authService.getCurrentUser(request);
+		newProject.setOwner(owner);
 		
-		System.out.println("algo");
 		return projectService.createProject(newProject);
 	}
 	
@@ -82,8 +88,6 @@ public class ProjectController {
 		
 		Project project = projectService.retrieveProject(projectId);
 		
-//		project.setDataSet(null);
-//		project.setCollaborators(null);
 		project.getPlates().isEmpty();
 		
 		return project;
@@ -92,9 +96,13 @@ public class ProjectController {
 	@RequestMapping(value = "/rest/project/{project_id}", method = RequestMethod.PUT)
 	public @ResponseBody Project updateProject(
 			@PathVariable("project_id") int projectId,
-			@RequestBody Project project) {
+			@RequestBody Project project,
+			HttpServletRequest request) {
 		
 		project.setId(projectId);
+		
+		User owner = authService.getCurrentUser(request);
+		project.setOwner(owner);
 		
 		return projectService.updateProject(project);
 	}
