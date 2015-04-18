@@ -57,7 +57,8 @@ public class CollaborationController {
 	public User getUser(@PathVariable("username") String username){
 		
 		User user = userService.retrieveUser(username);
-		user.setPassword(null);
+		if (user != null)
+			user.setPassword(null);
 		return user;
 	}
 	
