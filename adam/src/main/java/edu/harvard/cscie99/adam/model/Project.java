@@ -65,7 +65,7 @@ public class Project implements Serializable {
 //	@ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "user_id")
 	
-	@ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     private User owner;
 	
 //	@ManyToMany

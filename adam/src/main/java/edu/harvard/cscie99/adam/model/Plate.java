@@ -69,7 +69,7 @@ public class Plate implements Serializable{
 	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<ResultSnapshot> results;
 	
-	@ManyToOne(targetEntity = User.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     private User owner;
 	
 //	@ManyToMany 
