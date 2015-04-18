@@ -42,11 +42,20 @@ public class Plate implements Serializable{
     @Column(name = "plate_id")
 	private int id;
 	
-//	@ManyToOne(targetEntity = Project.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//	private Project project;
+//	@ManyToOne(targetEntity = Project.class, fetch = FetchType.LAZY)
+	private String projectId;
+
+	@Column(name = "name")
+	private String name;
+	
+	@Column(name = "protocol_id")
+	private String protocolId;
 	
 	@Column(name = "numberOfRows")
 	private Integer numberOfRows;
+	
+	@Column(name = "creation_date")
+	private String creationDate;
 	
 	@Column(name = "numberOfColumns")
 	private Integer numberOfColumns;
@@ -69,8 +78,9 @@ public class Plate implements Serializable{
 	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<ResultSnapshot> results;
 	
-	@ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    private User owner;
+//	@ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+	@Column(name = "owner")
+    private String owner;
 	
 //	@ManyToMany 
 //	@JoinTable(
@@ -115,10 +125,10 @@ public class Plate implements Serializable{
 	public void setWells(List<Well> wells) {
 		this.wells = wells;
 	}
-	public User getOwner() {
+	public String getOwner() {
 		return owner;
 	}
-	public void setOwner(User owner) {
+	public void setOwner(String owner) {
 		this.owner = owner;
 	}
 //	public List<User> getCollaborators() {
@@ -206,14 +216,38 @@ public class Plate implements Serializable{
 	public int hashCode(){
 		return 17;
 	}
-//
-//	public Project getProject() {
-//		return project;
-//	}
-//
-//	public void setProject(Project project) {
-//		this.project = project;
-//	}
+
+	public String getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getProtocolId() {
+		return protocolId;
+	}
+
+	public void setProtocolId(String protocolId) {
+		this.protocolId = protocolId;
+	}
+
+	public String getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(String creationDate) {
+		this.creationDate = creationDate;
+	}
 
 //	public Project getProject() {
 //		return project;
