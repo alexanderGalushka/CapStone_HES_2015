@@ -126,6 +126,25 @@ public class PlateService {
 		Session session = sessionFactory.openSession();
 		try{
 			session.beginTransaction();
+			
+			if (plate.getWellLabels() != null){
+				for (WellLabel wl : plate.getWellLabels()){
+					session.saveOrUpdate(wl);
+				}
+			}
+			
+			if (plate.getResults() != null){
+				for (ResultSnapshot result : plate.getResults()){
+					session.saveOrUpdate(result);
+				}
+			}
+			
+			if (plate.getWells() != null){
+				for (Well well : plate.getWells()){
+					session.saveOrUpdate(well);
+				}
+			}
+			
 			session.merge(plate);
 			session.getTransaction().commit();
 		}
@@ -137,8 +156,6 @@ public class PlateService {
 	}
 	
 	public void loadPlate(Plate plate){
-//		plate.getDataSet().isEmpty();
-//		plate.getCollaborators().isEmpty();
 		if (plate.getWellLabels() != null){
 			plate.getWellLabels().isEmpty();
 		}
@@ -164,23 +181,4 @@ public class PlateService {
 		}
 		plate.getOwner();
 	}
-	
-//	public List<Plate> search(Map<String, Object> parameters){
-//		//TODO
-//		//list plates from DB
-//		
-//		List<Plate> plates = new ArrayList<Plate>();
-//		
-//		for (int i =0; i<5; i++){
-//			Plate plate = new Plate();
-//			plate.setBarcode("1234");
-//			plate.setId(1);
-////			plate.setName("name");
-//			
-//			plates.add(plate);
-//		}
-//		
-//		return plates;
-//	}
-
 }
