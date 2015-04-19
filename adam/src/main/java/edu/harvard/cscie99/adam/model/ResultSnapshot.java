@@ -77,6 +77,18 @@ public class ResultSnapshot implements Serializable{
 //		this.plate = plate;
 //	}
 	
+	public List<Measurement> getMeasurementsFromWell(int row, int col){
+		
+		List<Measurement> measures = new ArrayList<Measurement>();
+		
+		for (Measurement m : getMeasurements()){
+			if (m.getRow() == row && m.getColumn() == col){
+				measures.add(m);
+			}
+		}
+		return measures;
+	}
+	
 	@Override
 	public boolean equals(Object obj){
 		
