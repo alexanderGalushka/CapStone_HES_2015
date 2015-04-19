@@ -93,7 +93,7 @@ public class ResultController {
 		return resultService.prepareResultsData(resultSnapshot);
 	}
 	
-	@RequestMapping(value="/resultsnapshot/{result_id}", method=RequestMethod.GET)
+	@RequestMapping(value="/rest/resultsnapshot/{result_id}", method=RequestMethod.GET)
 	public @ResponseBody ResultSnapshot getResults(
 			@PathVariable("result_id") int resultId) throws JsonProcessingException {
 		
@@ -102,7 +102,7 @@ public class ResultController {
 		return resultSnapshot;
 	}
 	
-	@RequestMapping(value="/resultsnapshot", method=RequestMethod.GET)
+	@RequestMapping(value="/rest/resultsnapshot", method=RequestMethod.GET)
 	public @ResponseBody List<ResultSnapshot> listResults() throws JsonProcessingException {
 		
 		List<ResultSnapshot> resultList = resultService.listResults();

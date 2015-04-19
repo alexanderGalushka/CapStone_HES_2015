@@ -46,15 +46,25 @@ public class ProjectController {
 	@Autowired
 	private ProfileService profileService;
 	
-	@RequestMapping(value = "/project", method = RequestMethod.POST)
+	@RequestMapping(value = "/rest/project", method = RequestMethod.POST)
 	@ResponseBody
 	public Project createProject(
 			@RequestBody Project newProject) throws UnauthorizedOperationException{
 		
+		System.out.println("algo");
 		return projectService.createProject(newProject);
 	}
 	
-	@RequestMapping(value = "/project", method = RequestMethod.GET)
+//	@RequestMapping(value = "/rest/project2", method = RequestMethod.POST)
+//	@ResponseBody
+//	public Project createProject2(
+//			@RequestBody Project newProject) throws UnauthorizedOperationException{
+//		
+//		System.out.println("algo");
+//		return projectService.createProject(newProject);
+//	}
+	
+	@RequestMapping(value = "/rest/project", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Project> listProjects() throws UnauthorizedOperationException{
 			
@@ -65,7 +75,7 @@ public class ProjectController {
 		return projects;
 	}
 	
-	@RequestMapping(value = "/project/{project_id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/rest/project/{project_id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Project getProject(
 			@PathVariable("project_id") int projectId) throws UnauthorizedOperationException{
@@ -79,14 +89,14 @@ public class ProjectController {
 		return project;
 	}
 	
-	@RequestMapping(value = "/project", method = RequestMethod.PUT)
+	@RequestMapping(value = "/rest/project", method = RequestMethod.PUT)
 	public @ResponseBody Project updateProject(
 			@RequestBody Project project) {
 		
 		return projectService.updateProject(project);
 	}
 	
-	@RequestMapping(value = "/project", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/rest/project", method = RequestMethod.DELETE)
 	@ResponseBody
 	public boolean deleteProject(
 			@RequestBody Project project) throws UnauthorizedOperationException{
