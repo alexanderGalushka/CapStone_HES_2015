@@ -143,16 +143,17 @@ public class ProjectService {
 		
 		// access to the User through the session...
 		
-		Object userObject = AuthenticationService.getInstance().getSession().getAttribute("user");
+//		Object userObject = AuthenticationService.getInstance().getSession().getAttribute("user");
 		
-		if (userObject != null)
-		{
-			User user  = (User) userObject;
-			
-			myProjects = user.getProjects();
-		}
-		
-		return myProjects;
+//		if (userObject != null)
+//		{
+//			User user  = (User) userObject;
+//			
+//			myProjects = user.getProjects();
+//		}
+//		
+//		return myProjects;
+		return null;
 	}
 	
 	public Set<Project> listOthersProjects()

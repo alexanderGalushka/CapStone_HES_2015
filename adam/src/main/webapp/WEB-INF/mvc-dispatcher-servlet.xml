@@ -13,10 +13,10 @@
 	<mvc:annotation-driven />
 	<mvc:resources mapping="/**" location="/" />
 	
-	<!-- <mvc:interceptors>
-	  <bean class="edu.harvard.cscie99.adam.interceptor.DBSessionInterceptor"/>
+	<mvc:interceptors>
+	  <!-- <bean class="edu.harvard.cscie99.adam.interceptor.DBSessionInterceptor"/> -->
 	  <bean class="edu.harvard.cscie99.adam.interceptor.AuthInterceptor"/>
-	</mvc:interceptors> -->
+	</mvc:interceptors>
 
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">

@@ -8,6 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.harvard.cscie99.adam.error.LoginFailedException;
 import edu.harvard.cscie99.adam.error.SessionTimeouException;
+import edu.harvard.cscie99.adam.model.DataSet;
 import edu.harvard.cscie99.adam.profile.Permission;
 import edu.harvard.cscie99.adam.profile.User;
 
@@ -29,144 +34,106 @@ public class AuthenticationService
 {
 	private HttpSession session;
 	
+	@Autowired
+    private SessionFactory sessionFactory;
+	
 	private static AuthenticationService _obj;
 	
+	public static final String C_USER_SESSION = "user";
 	
 	public HttpSession getSession() {
 		return session;
 	}
 	
-	private AuthenticationService()
+//	private AuthenticationService()
+//	{
+//		session = null;
+//	}
+	
+	
+//    /**
+//     * A special static method to access the single AuthServiceImpl instance
+//     * @return _obj - type: AuthServiceImpl
+//     * Singleton pattern
+//     */
+//    public static AuthenticationService getInstance()
+//    {
+//    	//Checking if the instance is null, then it will create new one and return it
+//        if (_obj == null)  
+//        //otherwise it will return previous one.
+//        {
+//            _obj = new AuthenticationService();
+//        }
+//        return _obj;
+//    }
+	
+//	
+//	public boolean checkUserAccess(String userName, Integer projectId, String service) throws SessionTimeouException
+//	{
+//		boolean result = false;
+//		// it could be performance burden, but assures that the session is up
+//		Object userObject = session.getAttribute(C_USER_SESSION);
+//		
+//		if (userObject != null)
+//		{
+//			User user  = (User) userObject;
+//			// validate if the userName is not injected!
+//			if (user.getUsername().equals(userName))
+//			{
+//				// is Role is intended to be a permission like for simplification purpose?
+////				if(checkPermission(user.getPermissions(), service))
+////				{
+////					result = true;
+////				}
+//			}
+//			else
+//			{
+//				// TODO
+//			}	
+//		}
+//		else
+//		{
+//			//do we want to invalidate the session and logout the user here?
+//			logout();
+//			throw new SessionTimeouException("timeout exception");
+//		}
+//		
+//		return result;
+//	}
+	
+//    private boolean checkPermission(List<Permission> permissions, String service)
+//    {
+//    	boolean result = false;
+//    	for (Permission perm : permissions)
+//    	{
+//    		if(perm.getService().equals(service))
+//    		{
+//    			result = true;
+//    			break;
+//    		}          
+//    	}
+//    	return result;
+//    }
+	
+	
+	public User validateCredentials(String username, String password)
 	{
-		session = null;
-	}
-	
-	
-    /**
-     * A special static method to access the single AuthServiceImpl instance
-     * @return _obj - type: AuthServiceImpl
-     * Singleton pattern
-     */
-    public static AuthenticationService getInstance()
-    {
-    	//Checking if the instance is null, then it will create new one and return it
-        if (_obj == null)  
-        //otherwise it will return previous one.
-        {
-            _obj = new AuthenticationService();
-        }
-        return _obj;
-    }
-	
-	
-	public boolean checkUserAccess(String userName, Integer projectId, String service) throws SessionTimeouException
-	{
-		boolean result = false;
-		// it could be performance burden, but assures that the session is up
-		Object userObject = session.getAttribute("user");
+		Session session = sessionFactory.openSession();
 		
-		if (userObject != null)
+		Query query = session.createQuery("from User where username = '" + username + "' and password = '" + password + "'");
+		
+		List<User> userList = query.list();
+		
+		if (userList != null && userList.size() > 0){
+			return userList.get(0);
+		} else
 		{
-			User user  = (User) userObject;
-			// validate if the userName is not injected!
-			if (user.getUsername().equals(userName))
-			{
-				// is Role is intended to be a permission like for simplification purpose?
-//				if(checkPermission(user.getPermissions(), service))
-//				{
-//					result = true;
-//				}
-			}
-			else
-			{
-				// TODO
-			}	
+			return null;
 		}
-		else
-		{
-			//do we want to invalidate the session and logout the user here?
-			logout();
-			throw new SessionTimeouException("timeout exception");
-		}
-		
-		return result;
-	}
-	
-    private boolean checkPermission(List<Permission> permissions, String service)
-    {
-    	boolean result = false;
-    	for (Permission perm : permissions)
-    	{
-    		if(perm.getService().equals(service))
-    		{
-    			result = true;
-    			break;
-    		}          
-    	}
-    	return result;
-    }
-	
-	/**
-	 * this method logs out the user by invalidating session,
-	 * this method considered to be the end point of user's session
-	 */
-	public void logout()
-	{
-        // keep it simple
-		session.invalidate(); //invalidate session
-	}
-	
-	private User validateCredentials(String username, String password)
-	{
-		
-		User user = null;
-		// storing hash, not the password itself
-		String hashedPswd = hashPassword(password);
-		
-		// make a call to DB to check credentials
-		// stuff the user with all the entitlements and other user data from DB he/she has and return the one back
-		user = new User();
-		
-		return user;
 	}
 	
 	
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public @ResponseBody User login( @RequestParam("username") String username,
-									 @RequestParam("password") String password,
-									 HttpServletRequest request, 
-									 HttpServletResponse response) throws LoginFailedException
-	{
-		session = request.getSession();// it will go and look after the web.xml properties and check for the time out setting.
-
-	    //if User is already logged and session not expired
-		
-		// not sure what getAttribute would return if the attribute is not set - need to check!
-		
-		Object userObject = session.getAttribute("user");
-		User user = null;
-		if(userObject == null)
-		{
-			//authenticationService will lookup database and match user and password
-			user = validateCredentials(username, password);
-	       
-			if (user != null)
-			{
-				session.setAttribute("user", user);
-			}
-			else
-			{
-				throw new LoginFailedException("bad credentials");
-			}			
-		}
-		else
-		{
-			user = (User) userObject;
-		}
 	
-		return user;
-
-	}
 	
 	// it's a helper function which can potentially be a part of our Utils class
 	private String hashPassword( String passwordToHash )
