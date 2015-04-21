@@ -1,14 +1,16 @@
 package edu.harvard.cscie99.adam.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 
 import edu.harvard.cscie99.adam.model.Plate;
 //import edu.harvard.cscie99.adam.model.Compound;
@@ -36,9 +38,23 @@ public class ProjectService {
 		try{
 			session.beginTransaction();
 			
-			for (Plate plate : project.getPlates()){
-				session.saveOrUpdate(plate);
+			if (project.getPlates() != null){
+				for (Plate plate : project.getPlates()){
+					session.saveOrUpdate(plate);
+				}
 			}
+			
+//			if (project.getTags() != null){
+//				for (String tag : project.getTags()){
+//					session.saveOrUpdate(tag);
+//				}
+//			}
+//			
+//			if (project.getCollaborators() != null){
+//				for (String collab : project.getCollaborators()){
+//					session.saveOrUpdate(collab);
+//				}
+//			}
 			
 			session.merge(project);
 			session.getTransaction().commit();
@@ -91,7 +107,9 @@ public class ProjectService {
 	
 	public Project createProject(Project newProject){
 		
-		newProject.setCreationDate(new Date());
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+		
+		newProject.setCreationDate(dateFormat.format(new Date()));
 		Session session = sessionFactory.openSession();
 		
 		try{
@@ -129,8 +147,10 @@ public class ProjectService {
 			for (Plate plate : project.getPlates()){
 				plateService.loadPlate(plate);	
 			}
-			project.getOwner();
 		}
+		project.getTags().isEmpty();
+		project.getCollaborators().isEmpty();
+		project.getOwner();
 	}
 	
 	public Set<Project> listMyProjects()

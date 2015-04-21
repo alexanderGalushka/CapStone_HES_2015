@@ -4,7 +4,11 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -71,8 +75,11 @@ public class PlateController {
 	public Plate createPlate(@RequestBody Plate plate,
 			HttpServletRequest request){
 		
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+		
 		User owner = authService.getCurrentUser(request);
-		plate.setOwner(owner);
+		plate.setOwner(owner.getUsername());
+		plate.setCreationDate(dateFormat.format(new Date()));
 		
 		return plateService.createPlate(plate);
 	}
@@ -83,12 +90,17 @@ public class PlateController {
 			@PathVariable("plate_id") int plateId,
 			HttpServletRequest request){
 		
-		plate.setId(plateId);
+		Plate currentPlate = plateService.retrievePlate(plateId);
+		currentPlate.setBarcode(plate.getBarcode());
+		currentPlate.setLabel(plate.getLabel());
+		currentPlate.setNumberOfColumns(plate.getNumberOfColumns());
+		currentPlate.setNumberOfRows(plate.getNumberOfRows());
+		currentPlate.setTags(plate.getTags());
+		currentPlate.setWellLabels(plate.getWellLabels());
+		currentPlate.setProtocolId(plate.getProtocolId());
+		currentPlate.setWells(plate.getWells());
 		
-		User owner = authService.getCurrentUser(request);
-		plate.setOwner(owner);
-		
-		return plateService.editPlate(plate);
+		return plateService.editPlate(currentPlate);
 	}
 	
 	@RequestMapping(value = "/rest/plate/{plate_id}", method = RequestMethod.DELETE)

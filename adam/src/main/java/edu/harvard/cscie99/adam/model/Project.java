@@ -6,7 +6,9 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -59,14 +61,15 @@ public class Project implements Serializable {
 	private String type;
 	
 	@Column(name = "creation_date")
-	private Date creationDate;
+	private String creationDate;
 	
 //	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //	@ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "user_id")
 	
-	@ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    private User owner;
+//	@ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+	@Column(name = "owner")
+	private String owner;
 	
 //	@ManyToMany
 //	@LazyCollection(LazyCollectionOption.FALSE)
@@ -74,10 +77,15 @@ public class Project implements Serializable {
 //	      name="project_collab",
 //	      joinColumns={@JoinColumn(name="project_id", referencedColumnName="project_id")},
 //	      inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="user_id")})
-//	private List<User> collaborators;
+	@ElementCollection
+	@CollectionTable(name="Project_Collaborators", joinColumns=@JoinColumn(name="project_id"))
+	@Column(name="collaborators")
+	private List<String> collaborators;
 	
+	@ElementCollection
+	@CollectionTable(name="Project_Tags", joinColumns=@JoinColumn(name="project_id"))
 	@Column(name="tags")
-	private String tags;
+	private List<String> tags;
 	
 //	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //	private List<Comment> comments;
@@ -85,8 +93,8 @@ public class Project implements Serializable {
 	@Column(name = "public")
 	private boolean isPublic;
 	
-	@Column(name = "protocol_id")
-	private String protocolId;
+//	@Column(name = "protocol_id")
+//	private String protocolId;
 	
 	@Column(name = "label")
 	private String label;
@@ -110,22 +118,22 @@ public class Project implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Date getCreationDate() {
+	public String getCreationDate() {
 		return creationDate;
 	}
-	public void setCreationDate(Date creationDate) {
+	public void setCreationDate(String creationDate) {
 		this.creationDate = creationDate;
 	}
-	public User getOwner() {
+	public String getOwner() {
 		return owner;
 	}
-	public void setOwner(User owner) {
+	public void setOwner(String owner) {
 		this.owner = owner;
 	}
-	public String getTags() {
+	public List<String> getTags() {
 		return tags;
 	}
-	public void setTags(String tags) {
+	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}
 	public boolean isPublic() {
@@ -160,13 +168,13 @@ public class Project implements Serializable {
 		this.type = type;
 	}
 
-	public String getProtocolId() {
-		return protocolId;
-	}
-
-	public void setProtocolId(String protocolId) {
-		this.protocolId = protocolId;
-	}
+//	public String getProtocolId() {
+//		return protocolId;
+//	}
+//
+//	public void setProtocolId(String protocolId) {
+//		this.protocolId = protocolId;
+//	}
 
 	public String getLabel() {
 		return label;
@@ -204,5 +212,13 @@ public class Project implements Serializable {
 	@Override
 	public int hashCode(){
 		return 31;
+	}
+
+	public List<String> getCollaborators() {
+		return collaborators;
+	}
+
+	public void setCollaborators(List<String> collaborators) {
+		this.collaborators = collaborators;
 	}
 }
