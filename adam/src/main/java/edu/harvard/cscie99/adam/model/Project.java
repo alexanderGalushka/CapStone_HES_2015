@@ -71,21 +71,27 @@ public class Project implements Serializable {
 	@Column(name = "owner")
 	private String owner;
 	
-//	@ManyToMany
-//	@LazyCollection(LazyCollectionOption.FALSE)
-//	  @JoinTable(
-//	      name="project_collab",
-//	      joinColumns={@JoinColumn(name="project_id", referencedColumnName="project_id")},
-//	      inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="user_id")})
-	@ElementCollection
-	@CollectionTable(name="Project_Collaborators", joinColumns=@JoinColumn(name="project_id"))
-	@Column(name="collaborators")
-	private List<String> collaborators;
+	@ManyToMany
+	@LazyCollection(LazyCollectionOption.FALSE)
+	  @JoinTable(
+	      name="project_collab",
+	      joinColumns={@JoinColumn(name="project_id", referencedColumnName="project_id")},
+	      inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="user_id")})
+//	@ElementCollection
+//	@CollectionTable(name="Project_Collaborators", joinColumns=@JoinColumn(name="project_id"))
+//	@Column(name="collaborators")
+	private List<User> collaborators;
 	
-	@ElementCollection
-	@CollectionTable(name="Project_Tags", joinColumns=@JoinColumn(name="project_id"))
-	@Column(name="tags")
-	private List<String> tags;
+//	@ElementCollection
+//	@CollectionTable(name="Project_Tags", joinColumns=@JoinColumn(name="project_id"))
+//	@Column(name="tags")
+	@ManyToMany
+	@LazyCollection(LazyCollectionOption.FALSE)
+	  @JoinTable(
+	      name="project_tags",
+	      joinColumns={@JoinColumn(name="project_id", referencedColumnName="project_id")},
+	      inverseJoinColumns={@JoinColumn(name="tag_id", referencedColumnName="tag_id")})
+	private List<Tag> tags;
 	
 //	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //	private List<Comment> comments;
@@ -130,10 +136,10 @@ public class Project implements Serializable {
 	public void setOwner(String owner) {
 		this.owner = owner;
 	}
-	public List<String> getTags() {
+	public List<Tag> getTags() {
 		return tags;
 	}
-	public void setTags(List<String> tags) {
+	public void setTags(List<Tag> tags) {
 		this.tags = tags;
 	}
 	public boolean isPublic() {
@@ -214,11 +220,11 @@ public class Project implements Serializable {
 		return 31;
 	}
 
-	public List<String> getCollaborators() {
+	public List<User> getCollaborators() {
 		return collaborators;
 	}
 
-	public void setCollaborators(List<String> collaborators) {
+	public void setCollaborators(List<User> collaborators) {
 		this.collaborators = collaborators;
 	}
 }

@@ -66,6 +66,7 @@ public class AuthInterceptor implements HandlerInterceptor  {
 			servicesMappings.add("project");
 			servicesMappings.add("plate");
 			servicesMappings.add("getResults");
+			servicesMappings.add("rest/user");
 			servicesMappings.add("#");
 		}
 		
