@@ -1,0 +1,46 @@
+<div class="aside" tabindex="-1" role="dialog">
+    <div class="aside-dialog">
+        <div class="aside-content">
+            <div class="aside-header" ng-show="title">
+                <button type="button" class="close" ng-click="$hide()">&times;</button>
+                <h4 class="aside-title" ng-bind-html="title"></h4>
+            </div>
+            <div class="aside-body" ng-show="content">
+
+
+                <table>
+                    <tr><td>Project name &nbsp;</td> <td><input type="text" ng-model="project.title"></td></tr>
+                    <tr><td>&nbsp;</td></tr>
+                    <tr><td>Description </td> <td><input type="text" ng-model="project.description"></td></tr>
+                    <tr><td>&nbsp;</td></tr>
+                    <tr><td>Owner </td><td><input type="text" ng-model="project.owner"></td></tr>
+                    <tr><td>&nbsp;</td></tr>
+                    <tr><td>Date </td><td><input type="text" ng-model="project.date"></td></tr>
+                </table>
+
+                <table  st-table="project.tags" class="table table-striped">
+                    <thead>
+                    <th st-sort="getters.title">Tag</th>
+
+                    <tr><th>
+                        <input type="text" ng-model="newtag">
+                        <button type="button" ng-click="addTag(project.tags,newtag)" class="btn btn-sm btn-success">
+                            <i class="glyphicon glyphicon-plus">
+                            </i> Add tag
+                        </button>
+                    </th></tr>
+                    </thead>
+                    <tbody>
+                    <tr st-select-row="row" ng-repeat="tag in project.tags">
+                        <td>{{tag.name}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="aside-footer">
+                <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="$hide()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
