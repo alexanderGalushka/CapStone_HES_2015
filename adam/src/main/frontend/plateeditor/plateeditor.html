@@ -1,0 +1,193 @@
+<div ng-controller="PlateeditorCtrl">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" ng-model="aside.checked"> Check me to enable left side
+        </label>
+    </div>
+
+
+    <div class="panel-group col-md-4" ng-model="panels.activePanel" data-allow-multiple="true" bs-collapse ng-show="aside.checked">
+        <div ng-controller="PlatesCtrl">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a bs-collapse-toggle>
+                            Plates
+                        </a>
+                    </h4>
+                </div>
+                <div class="panel-collapse" bs-collapse-target>
+
+                    <table  st-table="platesDisplay" st-safe-src="plates" class="table table-striped">
+                        <thead>
+                        <th st-sort="name">Plate name</th>
+                        <th>Date</th>
+                        <tr>
+                            <th>
+                                <input st-search="" placeholder="global search for plate" class="input-sm form-control" type="search"/>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr st-select-row="row" ng-repeat="plate in platesDisplay" ng-click="makeActivePlate(project.title)">
+                            <td>{{plate.name}}</td>
+                            <td>{{plate.date}}</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a bs-collapse-toggle>
+                        Filters
+                    </a>
+                </h4>
+            </div>
+            <div class="panel-collapse" bs-collapse-target>
+                <div class="panel-body">
+
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a bs-collapse-toggle>
+                        Wells
+                    </a>
+                </h4>
+            </div>
+            <div class="panel-collapse" bs-collapse-target>
+                <div class="panel-body">
+                    <table  st-table="rows[0]" class="table table-striped">
+                        <thead>
+                        <th st-sort="label">Label&nbsp;</th>
+                        <th st-sort="date">Date</th>
+                        <tr>
+                            <th>
+                                <input st-search="label" placeholder="search for label" class="input-sm form-control" type="search"/>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr st-select-row="row" ng-repeat="well in row[0]">
+                            <td>{{well.label}}</td>
+                            <td>{{well.date}}</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a bs-collapse-toggle>
+                        Compounds
+                    </a>
+                </h4>
+            </div>
+            <div class="panel-collapse" bs-collapse-target>
+                <div class="panel-body">
+                    <table  st-table="compoundsDisplay" st-safe-src="compounds" class="table table-striped">
+                        <thead>
+                        <th st-sort="name">Title&nbsp;</th>
+                        <th st-sort="date">Date</th>
+                        <tr>
+                            <th>
+                                <input st-search="name" placeholder="search for compound" class="input-sm form-control" type="search"/>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr st-select-row="row" ng-repeat="compound in compoundsDisplay">
+                            <td>{{compound.name}}</td>
+                            <td>{{compound.date}}</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a bs-collapse-toggle>
+                        Substrates
+                    </a>
+                </h4>
+            </div>
+            <div class="panel-collapse" bs-collapse-target>
+                <div class="panel-body">
+                    <table  st-table="substratesDisplay" st-safe-src="substrates" class="table table-striped">
+                        <thead>
+                        <th st-sort="name">Title&nbsp;</th>
+                        <th st-sort="date">Date</th>
+                        <tr>
+                            <th>
+                                <input st-search="name" placeholder="search for substrates" class="input-sm form-control" type="search"/>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr st-select-row="row" ng-repeat="substrate in substratesDisplay">
+                            <td>{{substrate.name}}</td>
+                            <td>{{substrate.date}}</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a bs-collapse-toggle>
+                        Configure
+                    </a>
+                </h4>
+            </div>
+            <div class="panel-collapse" bs-collapse-target>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-addon">Well size</div>
+                            <input class="form-control" ng-model="boxsz">
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-addon">Tooltip delay</div>
+                            <input class="form-control" ng-model="tooltipdel">
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="panel-group col-md-8"><label style="white-space: nowrap;border:solid 2px black">
+        <div ng-attr-style="white-space: nowrap;height:{{boxsz}}px" ng-repeat="wells in rows" ><!--
+--><label ng-repeat="well in wells" style="white-space: nowrap;padding:0px;margin:0px;border:0px width:0px;height:0px"><!--
+    --><single-well well="well" boxsize="{{boxsz}}"  tooltipdelay="{{tooltipdel}}" style="white-space: nowrap;padding:0px;margin:0px;border:0px width:0px;height:0px"></single-well><!--
+--></label><!--
+--></div>
+    </label>
+    </div>
+
+
+</div>
