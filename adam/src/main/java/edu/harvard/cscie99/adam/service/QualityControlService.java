@@ -99,134 +99,158 @@ public class QualityControlService
             Boolean getMeasuemntTypesFlag = false; // use this flag for the first iteration of results just to get all measurement types for plate
             
             Set<String> measurementTypes = new HashSet<>();
-            Stack<String> measurementTypesStack = new Stack<>(); // to be used for measurements grouping
-			
-            for (ResultSnapshot result : plate.getResults())
+            Set<Date> timeStamps = new HashSet<>();
+            List<String> measurementTypesStack = new ArrayList<>(); // to be used for measurements grouping
+            
+            List<ResultSnapshot> listOfResSnashots = plate.getResults();
+            
+            
+            for (ResultSnapshot result : listOfResSnashots)
+            {
+            	timeStamps.add(result.getTime());
+            }
+
+            
+			for (Date timeStampToFilter: timeStamps) // have to be outer loop
 			{
-				
-				Date timestamp = result.getTime();
+
 				List<QCdata> qcDataList = new ArrayList<>();
 				
-				if (false == getMeasuemntTypesFlag)
-				{
-					for (Measurement measure : result.getMeasurements())
-					{
-						measurementTypes.add(measure.getMeasurementType());
-					}
-					getMeasuemntTypesFlag = true;
-
-					measurementTypesStack.addAll(measurementTypes);
-				}
-				
-				while (!measurementTypesStack.isEmpty())
-				{
-			
-					String measTypeToFilter = measurementTypesStack.pop();
+				for (String measTypeToFilter: measurementTypesStack) // have to be outer loop
+				{ 
 	
 					List<Double> allRawValues = initializeArray(plateSize);
 					// don't need to persists the order for the group of arrays below
 					List<Double> bagOfPosValues = new ArrayList<>();
 					List<Double> bagOfNegValues = new ArrayList<>();
 					List<Double> bagOfsampleValues = new ArrayList<>();
+			
 					
-					for (Measurement measure : result.getMeasurements())
+					for (ResultSnapshot result : listOfResSnashots)
 					{
-						//HINT: there is a method in plate called getWell(X, Y).
-						//You can use this to associate the Well data (labels, controls) to the readout values
-						if (measTypeToFilter.equals(measure.getMeasurementType()))
+										
+						
+						
+						if (false == getMeasuemntTypesFlag)
+						{
+							for (Measurement measure : result.getMeasurements())
+							{
+								measurementTypes.add(measure.getMeasurementType());
+							}
+							getMeasuemntTypesFlag = true;
+
+							measurementTypesStack.addAll(measurementTypes);
+						}
+						
+						Date timeStamp = result.getTime();
+						if (timeStampToFilter.equals(timeStamp))
 						{	
-							Integer column = measure.getColumn();
-							Integer row = measure.getRow();
-							
-							Well someWell = plate.getWell(row,column);
-
-							Double value = measure.getValue();
-							if(someWell.getIfValid()) //discriminate the invalid wells								
+							for (Measurement measure : result.getMeasurements())
 							{
-								// shuffle the data in 3 buckets
-								if (someWell.getControlType() == Well.ControlType.POS)
-								{
-									bagOfPosValues.add(value);
-								}			
-								else if (someWell.getControlType() == Well.ControlType.NEG)
-								{
-									bagOfNegValues.add(value);
-								}
-								else if (someWell.getControlType() == Well.ControlType.EMPTY)
-								{
-									bagOfsampleValues.add(value);
-								}
-								else if (someWell.getControlType() == null)
-								{
-									//no data
-									// TODO
-								}
+								//HINT: there is a method in plate called getWell(X, Y).
+								//You can use this to associate the Well data (labels, controls) to the readout values
+								if (measTypeToFilter.equals(measure.getMeasurementType()))
+								{	
+									Integer column = measure.getColumn();
+									Integer row = measure.getRow();
+									
+									Well someWell = plate.getWell(row,column);
+		
+									Double value = measure.getValue();
+									if(someWell.getIfValid()) //discriminate the invalid wells								
+									{
+										// shuffle the data in 3 buckets
+										if (someWell.getControlType() == Well.ControlType.POS)
+										{
+											bagOfPosValues.add(value);
+										}			
+										else if (someWell.getControlType() == Well.ControlType.NEG)
+										{
+											bagOfNegValues.add(value);
+										}
+										else if (someWell.getControlType() == Well.ControlType.EMPTY)
+										{
+											bagOfsampleValues.add(value);
+										}
+										else if (someWell.getControlType() == null)
+										{
+											//no data
+											// TODO
+										}
+									}
+									
+									else
+									{
+										value = INVALID;
+									}
+																
+									allRawValues.add((row+1)*(column+1) - 1 , value); // row and the column are 0 based, that's why "+1"
+								 }	
 							}
+						}
+						//create the low level data object, further add it to the list of this type of objects
+						QCdata qcData = new QCdata();
+						qcData.setMeasurementType(measTypeToFilter);
+						
+						if (bagOfPosValues.isEmpty() && bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
+						{
+							// no Z and Z' to calc
+							// return raw values
+							qcData.setValues(allRawValues);
 							
-							else
-							{
-								value = INVALID;
-							}
-														
-							allRawValues.add((row+1)*(column+1) - 1 , value); // row and the column are 0 based, that's why "+1"
-						 }	
-					}
-					//create the low level data object, further add it to the list of this type of objects
-					QCdata qcData = new QCdata();
-					qcData.setMeasurementType(measTypeToFilter);
-					
-					if (bagOfPosValues.isEmpty() && bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
-					{
-						// no Z and Z' to calc
-						// return raw values
-						qcData.setValues(allRawValues);
+						}
+						else if(bagOfPosValues.isEmpty() && !bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
+						{
+							// no Z and Z' to calc
+							// return normalized values
+							
+							double[] negControlsVector1 = ArrayUtils.toPrimitive(bagOfNegValues.toArray(new Double[bagOfNegValues.size()]));
+							double meanNeg1 = calculateMeanVector(negControlsVector1);
+							qcData.setValues(calculateNormalized(allRawValues,meanNeg1));
+							
+						}
+						else if(!bagOfPosValues.isEmpty() && !bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
+						{
+							//this is the most common case
+							// calc Z and Z' 
+							// return %Effect values
+	
+							// TODO crate a "toPrimitiveDouble" function
+							double[] posControlsVector1 = convertToPrimitiveDouble(bagOfPosValues);
+							double[] negControlsVector1 = convertToPrimitiveDouble(bagOfNegValues);
+							double[] samplesVector1 = convertToPrimitiveDouble(bagOfsampleValues);
+							
+							double stdDevPos1 = calculateStdDevVector(posControlsVector1); 
+							double stdDevNeg1 = calculateStdDevVector(negControlsVector1);
+							double stdDevSample1 = calculateStdDevVector(samplesVector1);
+							
+							double meanPos1 = calculateMeanVector(posControlsVector1); 
+							double meanNeg1 = calculateMeanVector(negControlsVector1); 
+							double meanSample1 = calculateMeanVector(samplesVector1);
+							
+							double zPrimeFactor1 = calculalteZprimeFactor(stdDevPos1, stdDevNeg1, meanPos1, meanNeg1);
+							double zFactor1 = calculateZFactor (stdDevSample1, stdDevPos1, meanSample1, meanPos1);
+							
+							qcData.setzFactor(zFactor1);
+							qcData.setzPrimeFactor(zPrimeFactor1);
+							qcData.setValues(calculatePercentEffect(allRawValues, meanPos1, meanNeg1));		
+						}
+						qcDataList.add(qcData);	
 						
-					}
-					else if(bagOfPosValues.isEmpty() && !bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
-					{
-						// no Z and Z' to calc
-						// return normalized values
 						
-						double[] negControlsVector1 = ArrayUtils.toPrimitive(bagOfNegValues.toArray(new Double[bagOfNegValues.size()]));
-						double meanNeg1 = calculateMeanVector(negControlsVector1);
-						qcData.setValues(calculateNormalized(allRawValues,meanNeg1));
 						
-					}
-					else if(!bagOfPosValues.isEmpty() && !bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
-					{
-						//this is the most common case
-						// calc Z and Z' 
-						// return %Effect values
 
-						// TODO crate a "toPrimitiveDouble" function
-						double[] posControlsVector1 = convertToPrimitiveDouble(bagOfPosValues);
-						double[] negControlsVector1 = convertToPrimitiveDouble(bagOfNegValues);
-						double[] samplesVector1 = convertToPrimitiveDouble(bagOfsampleValues);
-						
-						double stdDevPos1 = calculateStdDevVector(posControlsVector1); 
-						double stdDevNeg1 = calculateStdDevVector(negControlsVector1);
-						double stdDevSample1 = calculateStdDevVector(samplesVector1);
-						
-						double meanPos1 = calculateMeanVector(posControlsVector1); 
-						double meanNeg1 = calculateMeanVector(negControlsVector1); 
-						double meanSample1 = calculateMeanVector(samplesVector1);
-						
-						double zPrimeFactor1 = calculalteZprimeFactor(stdDevPos1, stdDevNeg1, meanPos1, meanNeg1);
-						double zFactor1 = calculateZFactor (stdDevSample1, stdDevPos1, meanSample1, meanPos1);
-						
-						qcData.setzFactor(zFactor1);
-						qcData.setzPrimeFactor(zPrimeFactor1);
-						qcData.setValues(calculatePercentEffect(allRawValues, meanPos1, meanNeg1));		
 					}
-					qcDataList.add(qcData);	
+				
 				}
 				QCdataTimeWrapper qcDataTimeWrapper = new QCdataTimeWrapper();
-				qcDataTimeWrapper.setTimeStamp(timestamp);
+				qcDataTimeWrapper.setTimeStamp(timeStampToFilter);
 				qcDataTimeWrapper.setQcData(qcDataList); 
 				qcDataTimeWrapper.setNumberOfColumns(numCol);
 				qcDataTimeWrapper.setNumberOfRows(numRow);
 				listOfQCdataTimeWrappers.add(qcDataTimeWrapper);
-			}
+		    }
+
             resultMap.put(plate.getId(), listOfQCdataTimeWrappers);
 		}
 		
