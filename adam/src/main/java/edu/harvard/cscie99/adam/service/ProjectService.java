@@ -115,6 +115,19 @@ public class ProjectService {
 		
 		try{
 			session.beginTransaction();
+			
+			if (newProject.getCollaborators() != null){
+				for (User user : newProject.getCollaborators()){
+					session.saveOrUpdate(user);
+				}
+			}
+			
+			if (newProject.getTags() != null){
+				for (Tag tag : newProject.getTags()){
+					session.saveOrUpdate(tag);
+				}
+			}
+			
 			session.save(newProject);
 			session.getTransaction().commit();
 		}
