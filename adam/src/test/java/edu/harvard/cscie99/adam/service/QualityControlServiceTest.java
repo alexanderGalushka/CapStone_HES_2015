@@ -156,11 +156,11 @@
 //					well.setIfValid(false);
 //				}
 //				
-//				if(i%3 == 0)
+//				if(i%4 == 0)
 //				{
 //					well.setControlType(Well.ControlType.NEG);
 //				}
-//				else if(i%3 == 1)
+//				else if(i%4 == 1)
 //				{
 //					well.setControlType(Well.ControlType.POS);
 //				}
