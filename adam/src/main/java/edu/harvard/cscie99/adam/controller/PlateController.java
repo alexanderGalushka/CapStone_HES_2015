@@ -93,6 +93,7 @@ public class PlateController {
 		Plate currentPlate = plateService.retrievePlate(plateId);
 		currentPlate.setBarcode(plate.getBarcode());
 		currentPlate.setLabel(plate.getLabel());
+		currentPlate.setName(plate.getName());
 		currentPlate.setNumberOfColumns(plate.getNumberOfColumns());
 		currentPlate.setNumberOfRows(plate.getNumberOfRows());
 		currentPlate.setTags(plate.getTags());

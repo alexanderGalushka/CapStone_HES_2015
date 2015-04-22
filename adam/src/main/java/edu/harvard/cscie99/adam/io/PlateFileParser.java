@@ -52,7 +52,7 @@ public class PlateFileParser {
         		String labelName = fields[3].trim();
         		String labelValue = fields[4].trim();
         		String compound = fields[5].trim();
-        		double quantity = Double.parseDouble(fields[6].trim());
+        		String quantity = fields[6].trim();
         		String unit = null;
         		
         		if (fields.length >= 8){
@@ -94,6 +94,7 @@ public class PlateFileParser {
         		        		
         	}
         	catch (Exception ex){
+        		line = lines.readLine();
         		continue;
         	}
             
