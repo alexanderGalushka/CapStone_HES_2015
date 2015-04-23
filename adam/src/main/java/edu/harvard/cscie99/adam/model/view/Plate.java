@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import edu.harvard.cscie99.adam.model.Tag;
+import edu.harvard.cscie99.adam.model.WellLabel;
 /**
  * 
  * @author Gerson
@@ -40,7 +41,7 @@ public class Plate implements Serializable{
 	
 	private String label;
 	
-	private List<String> wellLabels;
+	private List<WellLabel> wellLabels;
 	
 	private List<HashMap<String, String>> wells;
 	
@@ -48,7 +49,7 @@ public class Plate implements Serializable{
 	
 	public Plate(){
 		wells = new ArrayList<HashMap<String, String>>();
-		wellLabels = new ArrayList<String>();
+		wellLabels = new ArrayList<WellLabel>();
 		tags = new ArrayList<Tag>();
 	}
 
@@ -132,11 +133,11 @@ public class Plate implements Serializable{
 		this.label = label;
 	}
 
-	public List<String> getWellLabels() {
+	public List<WellLabel> getWellLabels() {
 		return wellLabels;
 	}
 
-	public void setWellLabels(List<String> wellLabels) {
+	public void setWellLabels(List<WellLabel> wellLabels) {
 		this.wellLabels = wellLabels;
 	}
 
