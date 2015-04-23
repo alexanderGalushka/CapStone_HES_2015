@@ -96,7 +96,7 @@ public class ResultController {
 		return resultSnapshot;
 	}
 	
-	@RequestMapping(value="/resultsnapshot/{result_id}/prepare", method=RequestMethod.POST)
+	@RequestMapping(value="/rest/resultsnapshot/{result_id}/prepare", method=RequestMethod.POST)
 	public @ResponseBody boolean prepareResultsData(
 			@PathVariable("result_id") int resultId) throws JsonProcessingException {
 		
