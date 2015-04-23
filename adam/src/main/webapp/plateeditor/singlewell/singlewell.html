@@ -1,0 +1,27 @@
+<label data-placement="bottom-left" ng-attr-data-delay="{{tooltipdelay}}" data-type="info" data-animation="am-fade-and-scale"
+       bs-tooltip  data-title="{{well | filterHover:filterarg}}" style="width: {{boxsize}}px;height: {{boxsize}}px;" ng-show="dropgroup.checked"><!--
+    --><label data-title="{{well.plate}}" data-content="You can edit well" data-template="components/popover/popover.well.edit.html"
+              data-animation="am-flip-x" data-auto-close="1" bs-popover ng-show="dropgroup.checked"
+              style="{{well | filterColor:filterarg}};
+              {{well | filterBorder3:filterarg}}display:inline-block;text-align:center;width: {{boxsize}}px;height: {{boxsize}}px;">{{well | filterControl:filterarg}}</label></label>
+
+<label data-placement="bottom-left" ng-attr-data-delay="{{tooltipdelay}}" data-type="info" data-animation="am-fade-and-scale"
+       bs-tooltip  data-title="{{well | filterHover:filterarg}}" style="width: {{boxsize}}px;height: {{boxsize}}px" ng-show="!dropgroup.checked" ><!--
+    --><label style="{{well | filterColor:filterarg}};{{well | filterBorder3:filterarg}}display:inline-block;text-align:center;width: {{boxsize}}px;height: {{boxsize}}px; cursor: cell"
+              ng-click="singlewellVm.updateWell(well, filterarg, rows)">{{well | filterControl:filterarg}}</label></label>
+
+<!--comment<label data-placement="bottom-left" ng-attr-data-delay="{{tooltipdelay}}" data-type="info" data-animation="am-fade-and-scale"
+       bs-tooltip  data-title="{{well | filterHover:filterarg}}" style="width: {{boxsize}}px;height: {{boxsize}}px" ng-show="dropgroup.checked"><!--
+    --><!--comment<label data-title="{{well.plate}}" data-content="You can edit well" data-template="components/popover/popover.well.edit.html"
+              data-animation="am-flip-x" data-auto-close="1" bs-popover
+              style="background-color:{{well | filterColor:filterarg}};{{well | filterBorder3:filterarg}}display:inline-block;text-align:center;width: {{boxsize}}px;height: {{boxsize}}px;"></label></label>
+
+<label data-placement="bottom-left" ng-attr-data-delay="{{tooltipdelay}}" data-type="info" data-animation="am-fade-and-scale"
+       bs-tooltip  data-title="{{well | filterHover:filterarg}}" style="width: {{boxsize}}px;height: {{boxsize}}px" ng-show="!dropgroup.checked"><!--
+    --><!--comment<label style="background-color:{{well.color}};{{well | filterBorder3:filterarg}}display:inline-block;text-align:center;width: {{boxsize}}px;height: {{boxsize}}px; cursor: cell" ng-click="updateWell(well, filterarg)"></label></label>
+
+<!--
+<label data-placement="bottom-left" data-type="info" data-animation="am-fade-and-scale" bs-tooltip data-title="{{well.color}}" style="width: {{boxsize}}px;height: {{boxsize}}px"><!--
+    --><!--<label data-placement="top-right" data-title="{{well.label}}" data-content="{{well.label}}" data-trigger="click" bs-popover
+              style="background-color:{{well.color}};color:black;border:1px solid;display:inline-block;text-align:center;width: {{boxsize}}px;height: {{boxsize}}px"></label></label>
+-->
