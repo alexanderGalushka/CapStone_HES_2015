@@ -119,6 +119,10 @@ public class AuthenticationService
 			return userList.get(0);
 		} else
 		{
+			//User user = new User();
+			//user.setUsername("alex");
+			//user.setPassword("alex");
+			//return user;
 			return null;
 		}
 	}
