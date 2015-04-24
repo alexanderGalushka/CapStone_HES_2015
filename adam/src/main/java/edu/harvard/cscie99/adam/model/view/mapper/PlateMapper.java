@@ -36,14 +36,7 @@ public class PlateMapper {
 			}
 			_plate.setWells(wells);
 			
-			ArrayList<WellLabel> wellLabels = new ArrayList<WellLabel>();
-			for (String wellName : plate.getWellLabels()){
-				WellLabel wellLabel = new WellLabel();
-				
-				wellLabel.setName(wellName);
-				wellLabels.add(wellLabel);
-			}
-			_plate.setWellLabels(wellLabels);
+			_plate.setWellLabels(plate.getWellLabels());
 		}
 		
 		return _plate;
@@ -74,11 +67,13 @@ public class PlateMapper {
 			}
 			_plate.setWells(_wells);
 			
-			ArrayList<String> wellLabels = new ArrayList<String>();
-			for (WellLabel wl : plate.getWellLabels()){
-				wellLabels.add(wl.getName());
-			}
-			_plate.setWellLabels(wellLabels);
+//			ArrayList<WellLabel> wellLabels = new ArrayList<WellLabel>();
+//			for (WellLabel wl : plate.getWellLabels()){
+//				WellLabel newWl = new WellLabel();
+//				newWl.setName(wl.getName());
+//				newWl.setValue(wl.getValue());
+//			}
+			_plate.setWellLabels(plate.getWellLabels());
 		}
 		
 		return _plate;
