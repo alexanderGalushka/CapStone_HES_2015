@@ -11,8 +11,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import edu.harvard.cscie99.adam.profile.User;
 
@@ -63,8 +69,13 @@ public class Plate implements Serializable{
 	@Column(name = "barcode")
 	private String barcode;
 
-	@Column(name = "tags")
-	private String tags;
+	@ManyToMany
+	@LazyCollection(LazyCollectionOption.FALSE)
+	  @JoinTable(
+	      name="project_tags",
+	      joinColumns={@JoinColumn(name="plate_id", referencedColumnName="plate_id")},
+	      inverseJoinColumns={@JoinColumn(name="tag_id", referencedColumnName="tag_id")})
+	private List<Tag> tags;
 	
 	@Column(name = "label")
 	private String label;
@@ -95,28 +106,16 @@ public class Plate implements Serializable{
 		wellLabels = new ArrayList<WellLabel>();
 	}
 	
-//	public int getId() {
-//		return id;
-//	}
-//	public void setId(int id) {
-//		this.id = id;
-//	}
 	public String getBarcode() {
 		return barcode;
 	}
 	public void setBarcode(String barcode) {
 		this.barcode = barcode;
 	}
-//	public String getDescription() {
-//		return description;
-//	}
-//	public void setDescription(String description) {
-//		this.description = description;
-//	}
-	public String getTags() {
+	public List<Tag> getTags() {
 		return tags;
 	}
-	public void setTags(String tags) {
+	public void setTags(List<Tag> tags) {
 		this.tags = tags;
 	}
 	public List<Well> getWells() {
@@ -131,13 +130,6 @@ public class Plate implements Serializable{
 	public void setOwner(String owner) {
 		this.owner = owner;
 	}
-//	public List<User> getCollaborators() {
-//		return collaborators;
-//	}
-//	public void setCollaborators(List<User> collaborators) {
-//		this.collaborators = collaborators;
-//	}
-	
 	public int getId() {
 		return id;
 	}

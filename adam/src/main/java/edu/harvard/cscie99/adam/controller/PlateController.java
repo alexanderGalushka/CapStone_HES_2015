@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -25,8 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import edu.harvard.cscie99.adam.error.ParserException;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
 import edu.harvard.cscie99.adam.model.Plate;
-import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
+import edu.harvard.cscie99.adam.model.view.mapper.PlateMapper;
 import edu.harvard.cscie99.adam.profile.User;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
 import edu.harvard.cscie99.adam.service.ParserService;
@@ -57,23 +58,34 @@ public class PlateController {
 	// Plate CRUD - START
 	@RequestMapping(value = "/rest/plate", method = RequestMethod.GET)
 	@ResponseBody
-	public List<Plate> listPlates(){
+	public List<edu.harvard.cscie99.adam.model.view.Plate> listPlates(){
 		
-		return plateService.listPlates();
+		List<Plate> plates = plateService.listPlates();
+		
+		ArrayList<edu.harvard.cscie99.adam.model.view.Plate> viewPlates = new ArrayList<>();
+		
+		for (Plate _plate : plates){
+			viewPlates.add(PlateMapper.getViewPlate(_plate));
+		}
+		return viewPlates;
 	}
 	
 	@RequestMapping(value = "/rest/plate/{plate_id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Plate getPlate(
+	public edu.harvard.cscie99.adam.model.view.Plate getPlate(
 			@PathVariable("plate_id") int plateId){
 		
-		return plateService.retrievePlate(plateId);
+		Plate plate = plateService.retrievePlate(plateId);
+		
+		return PlateMapper.getViewPlate(plate);
 	}
 	
 	@RequestMapping(value = "/rest/plate", method = RequestMethod.POST)
 	@ResponseBody
-	public Plate createPlate(@RequestBody Plate plate,
+	public edu.harvard.cscie99.adam.model.view.Plate createPlate(@RequestBody edu.harvard.cscie99.adam.model.view.Plate viewPlate,
 			HttpServletRequest request){
+		
+		Plate plate = PlateMapper.getPersistencePlate(viewPlate);
 		
 		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
 		
@@ -81,18 +93,21 @@ public class PlateController {
 		plate.setOwner(owner.getUsername());
 		plate.setCreationDate(dateFormat.format(new Date()));
 		
-		return plateService.createPlate(plate);
+		return PlateMapper.getViewPlate(plateService.createPlate(plate));
 	}
 	
 	@RequestMapping(value = "/rest/plate/{plate_id}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Plate editPlate(@RequestBody Plate plate,
+	public edu.harvard.cscie99.adam.model.view.Plate editPlate(@RequestBody edu.harvard.cscie99.adam.model.view.Plate viewPlate,
 			@PathVariable("plate_id") int plateId,
 			HttpServletRequest request){
+		
+		Plate plate = PlateMapper.getPersistencePlate(viewPlate);
 		
 		Plate currentPlate = plateService.retrievePlate(plateId);
 		currentPlate.setBarcode(plate.getBarcode());
 		currentPlate.setLabel(plate.getLabel());
+		currentPlate.setName(plate.getName());
 		currentPlate.setNumberOfColumns(plate.getNumberOfColumns());
 		currentPlate.setNumberOfRows(plate.getNumberOfRows());
 		currentPlate.setTags(plate.getTags());
@@ -100,7 +115,7 @@ public class PlateController {
 		currentPlate.setProtocolId(plate.getProtocolId());
 		currentPlate.setWells(plate.getWells());
 		
-		return plateService.editPlate(currentPlate);
+		return PlateMapper.getViewPlate(plateService.editPlate(currentPlate));
 	}
 	
 	@RequestMapping(value = "/rest/plate/{plate_id}", method = RequestMethod.DELETE)
@@ -111,7 +126,6 @@ public class PlateController {
 		
 		return plateService.removePlate(plate);
 	}
-	// Plate - END
 	
 	//Upload plate
 	@RequestMapping(value="/upload_plate", method=RequestMethod.POST)
@@ -155,7 +169,7 @@ public class PlateController {
 		return plateService.createPlate(plate);
 	}
 	
-	@RequestMapping(value = "/plate/{plateId}/add_result/{resultId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/rest/plate/{plateId}/add_result/{resultId}", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean addResultToPlate(
 			@PathVariable("plateId") int plateId,
@@ -170,7 +184,7 @@ public class PlateController {
 		return true;
 	}
 	
-	@RequestMapping(value = "/plate/{plateId}/remove_result/{resultId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/rest/plate/{plateId}/remove_result/{resultId}", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean removeResultFromPlate(
 			@PathVariable("plateId") int plateId,

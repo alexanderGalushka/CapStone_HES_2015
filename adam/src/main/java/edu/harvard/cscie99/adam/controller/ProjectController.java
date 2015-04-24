@@ -125,23 +125,7 @@ public class ProjectController {
 		return projectService.deleteProject(project);
 	}
 	
-	@RequestMapping(value = "/project/{projectId}/add_tag/{tag}", method = RequestMethod.POST)
-	@ResponseBody
-	public boolean tagProject(
-			@PathVariable("projectId") int projectId,
-			@PathVariable("tag") String tag) throws UnauthorizedOperationException{
-		
-		
-			
-		Project project = projectService.retrieveProject(projectId);
-//			project.getTags().add(tag);
-		projectService.updateProject(project);
-		
-		return true;
-		
-	}
-	
-	@RequestMapping(value = "/project/{projectId}/add_plate/{plateId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/rest/project/{projectId}/add_plate/{plateId}", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean addPlateToProject(
 			@PathVariable("projectId") int projectId,
@@ -158,7 +142,7 @@ public class ProjectController {
 		
 	}
 	
-	@RequestMapping(value = "/project/{projectId}/remove_plate/{plateId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/rest/project/{projectId}/remove_plate/{plateId}", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean removePlateFromProject(
 			@PathVariable("projectId") int projectId,
@@ -175,7 +159,7 @@ public class ProjectController {
 		
 	}
 	
-	@RequestMapping(value = "/project/{projectId}/list_plates", method = RequestMethod.GET)
+	@RequestMapping(value = "/rest/project/{projectId}/list_plates", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Plate> listPlatesFromProject(
 			@PathVariable("projectId") int projectId) throws UnauthorizedOperationException{
@@ -203,14 +187,5 @@ public class ProjectController {
 //		return true;
 //		
 //	}
-	
-	@RequestMapping(value = "/tags/list", method = RequestMethod.GET)
-	@ResponseBody
-	public List<String> listRecentTags(@RequestParam(value="number", required=false) int numberOfTags) throws UnauthorizedOperationException{
-			
-		List<String> tags = tagService.listRecentTags(numberOfTags);
-			
-		return tags;
-	}
 	
 }

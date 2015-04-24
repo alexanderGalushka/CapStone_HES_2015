@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -77,8 +76,7 @@ public class QualityControlService
 	
 	public Map<Integer, List<QCdataTimeWrapper>> actualDataQualification (Project project)
 	{
-		List<QCdataTimeWrapper> listOfQCdataTimeWrappers = new ArrayList<>();
-		
+				
 		Map<Integer, List<QCdataTimeWrapper>> resultMap = new HashMap<>();
 		
 		for (Plate plate : project.getPlates()) //projPlate
@@ -93,30 +91,34 @@ public class QualityControlService
             List<Well> allWells = plate.getWells();
             
             Integer plateSize = allWells.size();
-		
-			//At this point, we have all the wells from the plate, and the result snapshots associated to plate
-			
-            Boolean getMeasuemntTypesFlag = false; // use this flag for the first iteration of results just to get all measurement types for plate
-            
+
             Set<String> measurementTypes = new HashSet<>();
             Set<Date> timeStamps = new HashSet<>();
-            List<String> measurementTypesStack = new ArrayList<>(); // to be used for measurements grouping
             
             List<ResultSnapshot> listOfResSnashots = plate.getResults();
             
-            
+            // collect all possible timestamps to iterate through
             for (ResultSnapshot result : listOfResSnashots)
             {
             	timeStamps.add(result.getTime());
             }
 
+            // collect all possible measurement types to iterate through
+            if (!listOfResSnashots.isEmpty())
+            {
+				for (Measurement measure : listOfResSnashots.get(0).getMeasurements())
+				{
+					measurementTypes.add(measure.getMeasurementType());
+				}
+            }
+
+            List<QCdataTimeWrapper> listOfQCdataTimeWrappers = new ArrayList<>();
             
 			for (Date timeStampToFilter: timeStamps) // have to be outer loop
 			{
-
 				List<QCdata> qcDataList = new ArrayList<>();
 				
-				for (String measTypeToFilter: measurementTypesStack) // have to be outer loop
+				for (String measTypeToFilter: measurementTypes) // have to be outer loop
 				{ 
 	
 					List<Double> allRawValues = initializeArray(plateSize);
@@ -124,31 +126,19 @@ public class QualityControlService
 					List<Double> bagOfPosValues = new ArrayList<>();
 					List<Double> bagOfNegValues = new ArrayList<>();
 					List<Double> bagOfsampleValues = new ArrayList<>();
-			
 					
-					for (ResultSnapshot result : listOfResSnashots)
-					{
-										
-						
-						
-						if (false == getMeasuemntTypesFlag)
-						{
-							for (Measurement measure : result.getMeasurements())
-							{
-								measurementTypes.add(measure.getMeasurementType());
-							}
-							getMeasuemntTypesFlag = true;
+					QCdata qcData = new QCdata();
+					qcData.setMeasurementType(measTypeToFilter);
 
-							measurementTypesStack.addAll(measurementTypes);
-						}
-						
+					for (ResultSnapshot result : listOfResSnashots)
+					{				
 						Date timeStamp = result.getTime();
 						if (timeStampToFilter.equals(timeStamp))
 						{	
-							for (Measurement measure : result.getMeasurements())
+							List<Measurement> listOfMeasurements = result.getMeasurements();
+							for (Measurement measure : listOfMeasurements)
 							{
-								//HINT: there is a method in plate called getWell(X, Y).
-								//You can use this to associate the Well data (labels, controls) to the readout values
+								// filter out the measurement currently not in process
 								if (measTypeToFilter.equals(measure.getMeasurementType()))
 								{	
 									Integer column = measure.getColumn();
@@ -168,14 +158,9 @@ public class QualityControlService
 										{
 											bagOfNegValues.add(value);
 										}
-										else if (someWell.getControlType() == Well.ControlType.EMPTY)
+										else 
 										{
 											bagOfsampleValues.add(value);
-										}
-										else if (someWell.getControlType() == null)
-										{
-											//no data
-											// TODO
 										}
 									}
 									
@@ -184,63 +169,64 @@ public class QualityControlService
 										value = INVALID;
 									}
 																
-									allRawValues.add((row+1)*(column+1) - 1 , value); // row and the column are 0 based, that's why "+1"
-								 }	
+									allRawValues.set((row+1)*(column+1) - 1 , value); // row and the column are 0 based, that's why "+1"
+								}
+								
+								//create the low level data object, further add it to the list of this type of objects								
 							}
 						}
-						//create the low level data object, further add it to the list of this type of objects
-						QCdata qcData = new QCdata();
-						qcData.setMeasurementType(measTypeToFilter);
-						
-						if (bagOfPosValues.isEmpty() && bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
-						{
-							// no Z and Z' to calc
-							// return raw values
-							qcData.setValues(allRawValues);
-							
-						}
-						else if(bagOfPosValues.isEmpty() && !bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
-						{
-							// no Z and Z' to calc
-							// return normalized values
-							
-							double[] negControlsVector1 = ArrayUtils.toPrimitive(bagOfNegValues.toArray(new Double[bagOfNegValues.size()]));
-							double meanNeg1 = calculateMeanVector(negControlsVector1);
-							qcData.setValues(calculateNormalized(allRawValues,meanNeg1));
-							
-						}
-						else if(!bagOfPosValues.isEmpty() && !bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
-						{
-							//this is the most common case
-							// calc Z and Z' 
-							// return %Effect values
-	
-							// TODO crate a "toPrimitiveDouble" function
-							double[] posControlsVector1 = convertToPrimitiveDouble(bagOfPosValues);
-							double[] negControlsVector1 = convertToPrimitiveDouble(bagOfNegValues);
-							double[] samplesVector1 = convertToPrimitiveDouble(bagOfsampleValues);
-							
-							double stdDevPos1 = calculateStdDevVector(posControlsVector1); 
-							double stdDevNeg1 = calculateStdDevVector(negControlsVector1);
-							double stdDevSample1 = calculateStdDevVector(samplesVector1);
-							
-							double meanPos1 = calculateMeanVector(posControlsVector1); 
-							double meanNeg1 = calculateMeanVector(negControlsVector1); 
-							double meanSample1 = calculateMeanVector(samplesVector1);
-							
-							double zPrimeFactor1 = calculalteZprimeFactor(stdDevPos1, stdDevNeg1, meanPos1, meanNeg1);
-							double zFactor1 = calculateZFactor (stdDevSample1, stdDevPos1, meanSample1, meanPos1);
-							
-							qcData.setzFactor(zFactor1);
-							qcData.setzPrimeFactor(zPrimeFactor1);
-							qcData.setValues(calculatePercentEffect(allRawValues, meanPos1, meanNeg1));		
-						}
-						qcDataList.add(qcData);	
-						
-						
-						
-
 					}
+					
+					
+					if (bagOfPosValues.isEmpty() && bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
+					{
+						// no Z and Z' to calc
+						// return raw values
+						
+						qcData.setValues(allRawValues);
+						
+					}
+					else if(bagOfPosValues.isEmpty() && !bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
+					{
+						// no Z and Z' to calc
+						// return normalized values
+						
+						double[] negControlsVector1 = ArrayUtils.toPrimitive(bagOfNegValues.toArray(new Double[bagOfNegValues.size()]));
+						double meanNeg1 = calculateMeanVector(negControlsVector1);
+						qcData.setValues(calculateNormalized(allRawValues,meanNeg1));
+						
+					}
+					else if(!bagOfPosValues.isEmpty() && !bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
+					{
+						//this is the most common case
+						// calc Z and Z' 
+						// return %Effect values
+
+						double[] posControlsVector1 = convertToPrimitiveDouble(bagOfPosValues);
+						double[] negControlsVector1 = convertToPrimitiveDouble(bagOfNegValues);
+						double[] samplesVector1 = convertToPrimitiveDouble(bagOfsampleValues);
+						
+						double stdDevPos1 = calculateStdDevVector(posControlsVector1); 
+						double stdDevNeg1 = calculateStdDevVector(negControlsVector1);
+						double stdDevSample1 = calculateStdDevVector(samplesVector1);
+						
+						double meanPos1 = calculateMeanVector(posControlsVector1); 
+						double meanNeg1 = calculateMeanVector(negControlsVector1); 
+						double meanSample1 = calculateMeanVector(samplesVector1);
+						
+						double zPrimeFactor1 = calculalteZprimeFactor(stdDevPos1, stdDevNeg1, meanPos1, meanNeg1);
+						double zFactor1 = calculateZFactor (stdDevSample1, stdDevPos1, meanSample1, meanPos1);
+						
+						qcData.setzFactor(zFactor1);
+						qcData.setzPrimeFactor(zPrimeFactor1);
+						qcData.setValues(calculatePercentEffect(allRawValues, meanPos1, meanNeg1));		
+					}
+					else
+					{
+						System.out.print("Really?");
+						
+					}
+					qcDataList.add(qcData);	
 				
 				}
 				QCdataTimeWrapper qcDataTimeWrapper = new QCdataTimeWrapper();
@@ -254,8 +240,7 @@ public class QualityControlService
             resultMap.put(plate.getId(), listOfQCdataTimeWrappers);
 		}
 		
-		return resultMap;
-		
+		return resultMap;	
 	}
 	
 	private double[] convertToPrimitiveDouble( List<Double> arayToConvert )
@@ -294,7 +279,7 @@ public class QualityControlService
 	
 	private double calculateZFactor (double stdDevSample, double stdDevPos, double meanSample, double meanPos)
 	{
-		return (1  - (3*(stdDevPos + stdDevPos)/Math.abs(meanPos - meanSample)));
+		return (1  - (3*(stdDevPos + stdDevSample)/Math.abs(meanPos - meanSample)));
 	}
 	
 	

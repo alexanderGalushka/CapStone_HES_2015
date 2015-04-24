@@ -3,8 +3,6 @@ package edu.harvard.cscie99.adam.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,9 +11,10 @@ import org.springframework.stereotype.Component;
 
 import edu.harvard.cscie99.adam.model.Measurement;
 import edu.harvard.cscie99.adam.model.Plate;
-import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
+import edu.harvard.cscie99.adam.model.Tag;
 import edu.harvard.cscie99.adam.model.Well;
+import edu.harvard.cscie99.adam.model.Well.ControlType;
 import edu.harvard.cscie99.adam.model.WellLabel;
 
 /**
@@ -78,6 +77,34 @@ public class PlateService {
 	}
 	
 	public Plate createPlate(Plate plate){
+		
+		//Feature: auto create wells with labels
+		if (plate.getWells() == null || plate.getWells().size() == 0){
+			
+			List<Well> wellList = new ArrayList<Well>();
+			for (int row = 0; row < plate.getNumberOfRows(); row++){
+				for (int col = 0; col < plate.getNumberOfColumns(); col++){
+					
+					Well well = new Well();
+					well.setCol(col);
+					well.setRow(row);
+					well.setControlType(ControlType.EMPTY);
+					
+					if (plate.getWellLabels() != null){
+						ArrayList<WellLabel> wlList = new ArrayList<>();
+						for (WellLabel wl : plate.getWellLabels()){
+							
+							WellLabel wlv = new WellLabel();
+							wlv.setName(wl.getName());
+							wlList.add(wlv);
+						}
+						well.setWellLabels(wlList);
+					}
+					wellList.add(well);
+				}
+			}
+			plate.setWells(wellList);
+		}
 
 		Session session = sessionFactory.openSession();
 		try{
@@ -126,6 +153,51 @@ public class PlateService {
 		Session session = sessionFactory.openSession();
 		try{
 			session.beginTransaction();
+			
+			if (plate.getWellLabels() != null){
+				for (WellLabel wl : plate.getWellLabels()){
+					session.saveOrUpdate(wl);
+				}
+			}
+			
+			if (plate.getResults() != null){
+				for (ResultSnapshot result : plate.getResults()){
+					session.saveOrUpdate(result);
+				}
+			}
+			
+			if (plate.getWells() != null){
+				for (Well well : plate.getWells()){
+					
+					if (well.getWellLabels() != null){
+						for (WellLabel wl : well.getWellLabels()){
+							session.saveOrUpdate(wl);
+						}
+					}
+					
+					if (well.getResultSnapshots() != null){
+						for (ResultSnapshot result : well.getResultSnapshots()){
+							
+							if (result.getMeasurements() != null){
+								for (Measurement measure : result.getMeasurements()){
+									session.saveOrUpdate(measure);
+								}
+							}
+							
+							session.saveOrUpdate(result);
+						}
+					}
+					
+					session.saveOrUpdate(well);
+				}
+			}
+			
+			if (plate.getTags() != null){
+				for (Tag tag : plate.getTags()){
+					session.saveOrUpdate(tag);
+				}
+			}
+			
 			session.merge(plate);
 			session.getTransaction().commit();
 		}
@@ -137,8 +209,6 @@ public class PlateService {
 	}
 	
 	public void loadPlate(Plate plate){
-//		plate.getDataSet().isEmpty();
-//		plate.getCollaborators().isEmpty();
 		if (plate.getWellLabels() != null){
 			plate.getWellLabels().isEmpty();
 		}
@@ -164,23 +234,4 @@ public class PlateService {
 		}
 		plate.getOwner();
 	}
-	
-//	public List<Plate> search(Map<String, Object> parameters){
-//		//TODO
-//		//list plates from DB
-//		
-//		List<Plate> plates = new ArrayList<Plate>();
-//		
-//		for (int i =0; i<5; i++){
-//			Plate plate = new Plate();
-//			plate.setBarcode("1234");
-//			plate.setId(1);
-////			plate.setName("name");
-//			
-//			plates.add(plate);
-//		}
-//		
-//		return plates;
-//	}
-
 }
