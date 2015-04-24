@@ -1,0 +1,63 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a bs-collapse-toggle>
+                Plot labels
+
+                <button type="button" class="btn btn-xs pull-right " ng-model="asideind" bs-checkbox>
+                    <i class="glyphicon glyphicon-remove">
+                    </i>
+                </button>
+            </a>
+        </h4>
+    </div>
+    <div class="panel-collapse" bs-collapse-target>
+        <div class="panel-body">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon">Select label to plot&nbsp;</div>
+                    <button type="button" class="btn btn-default" ng-model="selectedLabel" data-html="1" bs-options="label.name for label in labelsdisplay" bs-select
+                            ng-change="plotlbVm.setUniqLabelValues(rows,selectedLabel.name,dropwellgroup,filterplateeditor)"><span class="caret"></span>
+                    </button>
+                    <button type="button" class="btn btn-sm" ng-click="plotlbVm.setUniqLabelValues(rows,selectedLabel.name,dropwellgroup,filterplateeditor)">
+                        <i class="glyphicon glyphicon-refresh">
+                        </i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <table  st-table="plotlbVm.uniqueLabelValuesDisplay" st-safe-src="plotlbVm.uniqueLabelValues" class="table table-striped">
+                    <thead>
+                    <th st-sort="name">Name</th>
+                    <th st-sort="color">Color</th>
+                    <tr>
+                        <th>
+                            <input st-search="" placeholder="search" class="input-sm form-control" type="search"/>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="label in plotlbVm.uniqueLabelValuesDisplay"  st-select-row="label">
+                        <td>{{label.name}}</td>
+                        <td>
+                            <button type="button" class="btn btn-sm" ng-click="plotlbVm.setModeCopyLabelValue(label, dropwellgroup, filterplateeditor)">
+                                <i class="glyphicon glyphicon-upload">
+                                </i>
+                            </button>
+                        </td>
+                        <td>
+                            <input class="form-control" ng-model="label.color" type="color" ng-change="plotlbVm.updateUniqLabelValues(label.name,label.color, filterplateeditor)"></td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="2" class="text-center">
+                            <div st-pagination="" st-items-by-page="18"></div>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
