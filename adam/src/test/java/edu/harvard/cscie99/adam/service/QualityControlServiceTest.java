@@ -147,15 +147,15 @@ public class QualityControlServiceTest {
 				
 				if(i%4 == 0)
 				{
-					well.setControlType(Well.ControlType.NEG);
+//					well.setControlType(Well.ControlType.NEG);
 				}
 				else if(i%4 == 1)
 				{
-					well.setControlType(Well.ControlType.POS);
+//					well.setControlType(Well.ControlType.POS);
 				}
 				else
 				{
-					well.setControlType(Well.ControlType.EMPTY);
+//					well.setControlType(Well.ControlType.EMPTY);
 				}
 				
 				List<Measurement> listMeasures = new ArrayList<>();

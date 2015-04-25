@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import edu.harvard.cscie99.adam.model.Well;
-import edu.harvard.cscie99.adam.model.Well.ControlType;
+//import edu.harvard.cscie99.adam.model.Well.ControlType;
 import edu.harvard.cscie99.adam.model.WellLabel;
 
 public class WellMapper {
@@ -18,18 +18,18 @@ public class WellMapper {
 		}
 		
 		if (well.containsKey("controlType")){
+			_well.setControlType(well.get("controlType"));
 			
-			String controlTypeStr = well.get("controlType");
+//			if (ControlType.COMP.toString().equals(controlTypeStr)){
+//				_well.setControlType(ControlType.COMP);
+//			} else if (ControlType.EMPTY.toString().equals(controlTypeStr)){
+//				_well.setControlType(ControlType.EMPTY);
+//			} else if (ControlType.NEG.toString().equals(controlTypeStr)){
+//				_well.setControlType(ControlType.NEG);
+//			} else {
+//				_well.setControlType(ControlType.POS);
+//			}
 			
-			if (ControlType.COMP.toString().equals(controlTypeStr)){
-				_well.setControlType(ControlType.COMP);
-			} else if (ControlType.EMPTY.toString().equals(controlTypeStr)){
-				_well.setControlType(ControlType.EMPTY);
-			} else if (ControlType.NEG.toString().equals(controlTypeStr)){
-				_well.setControlType(ControlType.NEG);
-			} else {
-				_well.setControlType(ControlType.POS);
-			}
 		}
 		
 		if (well.containsKey("col")){
@@ -62,7 +62,7 @@ public class WellMapper {
 		HashMap<String, String> _well = new HashMap<>();
 		
 		_well.put("col", ""+well.getCol());
-		_well.put("controlType", well.getControlType().toString());
+		_well.put("controlType", well.getControlType());
 		_well.put("id", ""+well.getId());
 		_well.put("row", ""+well.getRow());
 		

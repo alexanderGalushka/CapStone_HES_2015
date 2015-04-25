@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,10 +31,6 @@ public class Well implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public enum ControlType {
-		POS, NEG, COMP, EMPTY
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "well_id")
@@ -52,7 +47,7 @@ public class Well implements Serializable {
 	// private String labels;
 
 	@Column(name = "control_type")
-	private ControlType controlType;
+	private String controlType;
 
 	@Column(name = "if_valid")
 	private boolean ifValid = true;
@@ -97,11 +92,11 @@ public class Well implements Serializable {
 	// public void setColor(Integer color) {
 	// this.color = color;
 	// }
-	public ControlType getControlType() {
+	public String getControlType() {
 		return controlType;
 	}
 
-	public void setControlType(ControlType controlType) {
+	public void setControlType(String controlType) {
 		this.controlType = controlType;
 	}
 

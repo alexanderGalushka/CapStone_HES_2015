@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 
 
+
+import edu.harvard.cscie99.adam.model.ControlType;
 //import edu.harvard.cscie99.adam.model.Compound;
 import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.Well;
@@ -30,6 +32,7 @@ public class PlateFileParser {
 		
 		HashMap<String, Well> wellsMap = new HashMap<String, Well>();
 		HashSet<String> plateLabelNames = new HashSet<String>();
+		HashSet<String> plateControlTypes = new HashSet<String>();
 		
         while (line != null) {
         	String[] fields = line.split(",");
@@ -67,19 +70,10 @@ public class PlateFileParser {
         			well = new Well();
         			wellsMap.put(row+"-"+col, well);
         			
-        			if (Well.ControlType.NEG.toString().equals(wellType) ){
-            			well.setControlType(Well.ControlType.NEG);
-            		}
-            		else if (Well.ControlType.POS.toString().equals(wellType)){
-            			well.setControlType(Well.ControlType.POS);
-            		}
-            		else if (Well.ControlType.COMP.toString().equals(wellType)){
-            			well.setControlType(Well.ControlType.COMP);
-            		}
-            		else if (Well.ControlType.EMPTY.toString().equals(wellType)){
-            			well.setControlType(Well.ControlType.EMPTY);
-            		}
+//        			ControlType ct = new ControlType();
+//        			ct.setName(wellType);
             		
+        			well.setControlType(wellType);
             		well.setRow(row);
             		well.setCol(col);
         		}
@@ -91,6 +85,7 @@ public class PlateFileParser {
         		well.getWellLabels().add(label);
 //        		plate.getWells().add(well);
         		plateLabelNames.add(labelName);
+        		plateControlTypes.add(wellType);
         		        		
         	}
         	catch (Exception ex){
@@ -113,6 +108,17 @@ public class PlateFileParser {
         	label.setName(labelName);
         	
         	plate.getWellLabels().add(label);
+        }
+        
+        //add Control Types to plate
+        for (String controlType : plateControlTypes){
+        	ControlType ct = new ControlType();
+        	ct.setName(controlType);
+        	
+        	if (controlType != null && controlType.length() >= 1){
+        		ct.setDisplayChar(controlType.substring(0, 1));
+        	}
+        	plate.getControlTypes().add(ct);
         }
 	    
 		return plate;

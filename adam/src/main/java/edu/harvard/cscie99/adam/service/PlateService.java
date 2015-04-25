@@ -9,12 +9,13 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import edu.harvard.cscie99.adam.model.ControlType;
 import edu.harvard.cscie99.adam.model.Measurement;
 import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
 import edu.harvard.cscie99.adam.model.Tag;
 import edu.harvard.cscie99.adam.model.Well;
-import edu.harvard.cscie99.adam.model.Well.ControlType;
+//import edu.harvard.cscie99.adam.model.Well.ControlType;
 import edu.harvard.cscie99.adam.model.WellLabel;
 
 /**
@@ -88,7 +89,7 @@ public class PlateService {
 					Well well = new Well();
 					well.setCol(col);
 					well.setRow(row);
-					well.setControlType(ControlType.EMPTY);
+					well.setControlType("");
 					
 					if (plate.getWellLabels() != null){
 						ArrayList<WellLabel> wlList = new ArrayList<>();
@@ -109,6 +110,10 @@ public class PlateService {
 		Session session = sessionFactory.openSession();
 		try{
 			session.beginTransaction();
+			
+			for (ControlType ct : plate.getControlTypes()){
+				session.saveOrUpdate(ct);
+			}
 			
 			for (Well well : plate.getWells()){
 				for (WellLabel wellLabel : well.getWellLabels()){
@@ -148,9 +153,45 @@ public class PlateService {
 		return true;
 	}
 	
-	public Plate editPlate(Plate plate){
+	public Plate updatePlate(Plate plate){
 
 		Session session = sessionFactory.openSession();
+		
+		HashSet<String> plateWellLabels = new HashSet<String>();
+		for (WellLabel wl : plate.getWellLabels()){
+			plateWellLabels.add(wl.getName());
+		}
+		
+		for (Well well : plate.getWells()){
+			
+			List<WellLabel> toRemove = new ArrayList<WellLabel>();
+			
+			for (WellLabel wl : well.getWellLabels()){
+				if (!plateWellLabels.contains(wl.getName())){
+					toRemove.add(wl);
+				}
+			}
+			
+			well.getWellLabels().removeAll(toRemove);
+			
+			for (String plateWellLabel : plateWellLabels){
+				
+				boolean contain = false;
+				
+				for (WellLabel wl : well.getWellLabels()){
+					if (wl.getName().equals(plateWellLabel)){
+						contain = true;
+					}
+				}
+				if (!contain){
+					WellLabel new_wl = new WellLabel();
+					new_wl.setName(plateWellLabel);
+					well.getWellLabels().add(new_wl);
+				}
+			}
+		}
+		
+		
 		try{
 			session.beginTransaction();
 			
@@ -163,6 +204,12 @@ public class PlateService {
 			if (plate.getResults() != null){
 				for (ResultSnapshot result : plate.getResults()){
 					session.saveOrUpdate(result);
+				}
+			}
+			
+			if (plate.getControlTypes() != null){
+				for (ControlType ct : plate.getControlTypes()){
+					session.saveOrUpdate(ct);
 				}
 			}
 			
@@ -218,6 +265,10 @@ public class PlateService {
 				well.getResultSnapshots().isEmpty();
 			}
 		}
+		if (plate.getControlTypes() != null){
+			plate.getControlTypes().isEmpty();
+		}
+		
 		
 		if (plate.getResults() != null && !plate.getResults().isEmpty()){
 			for (ResultSnapshot result : plate.getResults()){

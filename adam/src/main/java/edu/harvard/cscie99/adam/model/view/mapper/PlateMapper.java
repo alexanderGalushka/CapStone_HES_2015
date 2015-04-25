@@ -26,6 +26,7 @@ public class PlateMapper {
 			_plate.setProjectId(plate.getProjectId());
 			_plate.setProtocolId(plate.getProtocolId());
 			_plate.setTags(plate.getTags());
+			_plate.setControlTypes(plate.getControlTypes());
 			
 			List<Well> wells = new ArrayList<Well>();
 			
@@ -58,6 +59,7 @@ public class PlateMapper {
 			_plate.setProjectId(plate.getProjectId());
 			_plate.setProtocolId(plate.getProtocolId());
 			_plate.setTags(plate.getTags());
+			_plate.setControlTypes(plate.getControlTypes());
 			
 			List<HashMap<String, String>> _wells = new ArrayList<>();
 			
@@ -67,12 +69,6 @@ public class PlateMapper {
 			}
 			_plate.setWells(_wells);
 			
-//			ArrayList<WellLabel> wellLabels = new ArrayList<WellLabel>();
-//			for (WellLabel wl : plate.getWellLabels()){
-//				WellLabel newWl = new WellLabel();
-//				newWl.setName(wl.getName());
-//				newWl.setValue(wl.getValue());
-//			}
 			_plate.setWellLabels(plate.getWellLabels());
 		}
 		
