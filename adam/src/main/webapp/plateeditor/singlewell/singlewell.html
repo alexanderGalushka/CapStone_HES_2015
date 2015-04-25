@@ -1,6 +1,6 @@
 <label data-placement="bottom-left" ng-attr-data-delay="{{tooltipdelay}}" data-type="info" data-animation="am-fade-and-scale"
        bs-tooltip  data-title="{{well | filterHover:filterarg}}" style="width: {{boxsize}}px;height: {{boxsize}}px;" ng-show="dropgroup.checked"><!--
-    --><label data-title="{{well.plate}}" data-content="You can edit well" data-template="components/popover/popover.well.edit.html"
+    --><label data-title="{{well.plate}}" data-content="You can edit well" data-template="plateeditor/singlewell/popover.well.edit.html"
               data-animation="am-flip-x" data-auto-close="1" bs-popover ng-show="dropgroup.checked"
               style="{{well | filterColor:filterarg}};
               {{well | filterBorder3:filterarg}}display:inline-block;text-align:center;width: {{boxsize}}px;height: {{boxsize}}px;">{{well | filterControl:filterarg}}</label></label>
