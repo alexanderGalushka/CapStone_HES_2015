@@ -8,7 +8,7 @@
 <label data-placement="bottom-left" ng-attr-data-delay="{{tooltipdelay}}" data-type="info" data-animation="am-fade-and-scale"
        bs-tooltip  data-title="{{well | filterHover:labels}}" style="width: {{boxsize}}px;height: {{boxsize}}px" ng-show="!dropgroup.checked" ><!--
     --><label style="{{well | filterColor:filterarg}};{{well | filterBorder3:filterarg}}display:inline-block;text-align:center;width: {{boxsize}}px;height: {{boxsize}}px; cursor: cell"
-              ng-click="singlewellVm.updateWell(well, filterarg, rows)">{{well | filterControl:filterarg}}</label></label>
+              ng-click="singlewellVm.updateWell(well, filterarg, rows, plate)">{{well | filterControl:filterarg}}</label></label>
 
 <!--comment<label data-placement="bottom-left" ng-attr-data-delay="{{tooltipdelay}}" data-type="info" data-animation="am-fade-and-scale"
        bs-tooltip  data-title="{{well | filterHover:filterarg}}" style="width: {{boxsize}}px;height: {{boxsize}}px" ng-show="dropgroup.checked"><!--
