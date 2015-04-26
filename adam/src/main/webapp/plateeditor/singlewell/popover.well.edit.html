@@ -14,7 +14,7 @@
 
         <div class="input-group" >
           <div class="input-group-addon">Control type</div>
-          <select class="form-control" ng-model="well.controlType" ng-options="ct.name for ct in controltypes"></select>
+          <select class="form-control" ng-model="well.controlType" ng-repeat="ct.name in controltypes"></select>
         </div>
       </div>
 
