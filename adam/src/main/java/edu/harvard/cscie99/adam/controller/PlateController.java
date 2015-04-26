@@ -114,8 +114,9 @@ public class PlateController {
 		currentPlate.setWellLabels(plate.getWellLabels());
 		currentPlate.setProtocolId(plate.getProtocolId());
 		currentPlate.setWells(plate.getWells());
+		currentPlate.setControlTypes(plate.getControlTypes());
 		
-		return PlateMapper.getViewPlate(plateService.editPlate(currentPlate));
+		return PlateMapper.getViewPlate(plateService.updatePlate(currentPlate));
 	}
 	
 	@RequestMapping(value = "/rest/plate/{plate_id}", method = RequestMethod.DELETE)
@@ -179,7 +180,7 @@ public class PlateController {
 		ResultSnapshot result = resultService.retrieveResult(resultId);
 		plate.getResults().add(result);
 		
-		plateService.editPlate(plate);
+		plateService.updatePlate(plate);
 		
 		return true;
 	}
@@ -194,7 +195,7 @@ public class PlateController {
 		ResultSnapshot result = resultService.retrieveResult(resultId);
 		plate.getResults().remove(result);
 		
-		plateService.editPlate(plate);
+		plateService.updatePlate(plate);
 		
 		return true;
 		

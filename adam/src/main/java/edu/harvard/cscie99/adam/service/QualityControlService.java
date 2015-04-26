@@ -150,11 +150,11 @@ public class QualityControlService
 									if(someWell.getIfValid()) //discriminate the invalid wells								
 									{
 										// shuffle the data in 3 buckets
-										if (someWell.getControlType() == Well.ControlType.POS)
+										if ("positive".equalsIgnoreCase(someWell.getControlType()))
 										{
 											bagOfPosValues.add(value);
-										}			
-										else if (someWell.getControlType() == Well.ControlType.NEG)
+										}
+										else if ("negative".equalsIgnoreCase(someWell.getControlType()))
 										{
 											bagOfNegValues.add(value);
 										}

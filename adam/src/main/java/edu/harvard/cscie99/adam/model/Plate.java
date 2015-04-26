@@ -89,6 +89,9 @@ public class Plate implements Serializable{
 	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<ResultSnapshot> results;
 	
+	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	private List<ControlType> controlTypes;
+	
 //	@ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
 	@Column(name = "owner")
     private String owner;
@@ -104,6 +107,7 @@ public class Plate implements Serializable{
 		wells = new ArrayList<Well>();
 		results = new ArrayList<ResultSnapshot>();
 		wellLabels = new ArrayList<WellLabel>();
+		controlTypes = new ArrayList<ControlType>();
 	}
 	
 	public String getBarcode() {
@@ -239,6 +243,14 @@ public class Plate implements Serializable{
 
 	public void setCreationDate(String creationDate) {
 		this.creationDate = creationDate;
+	}
+
+	public List<ControlType> getControlTypes() {
+		return controlTypes;
+	}
+
+	public void setControlTypes(List<ControlType> controlTypes) {
+		this.controlTypes = controlTypes;
 	}
 
 //	public Project getProject() {
