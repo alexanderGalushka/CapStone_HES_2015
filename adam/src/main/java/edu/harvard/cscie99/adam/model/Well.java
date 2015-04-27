@@ -24,7 +24,7 @@ import org.hibernate.annotations.LazyCollectionOption;
  *
  */
 @Entity
-public class Well implements Serializable {
+public class Well implements Serializable, Comparable<Well> {
 
 	/**
 	 * Initial version
@@ -151,6 +151,30 @@ public class Well implements Serializable {
 
 	public void setCol(int col) {
 		this.col = col;
+	}
+
+	@Override
+	public int compareTo(Well other) {
+		if (other != null){
+			if (getRow() == other.getRow() && getCol() == other.getCol()){
+				return 0;
+			}
+			else if (getRow() < other.getRow()){
+				return -1;
+			}
+			else if (getRow() > other.getRow()){
+				return 1;
+			}
+			else {
+				if (getCol() < other.getCol()){
+					return -1;
+				}
+				else{
+					return 1;
+				}
+			}
+		}
+		return -1;
 	}
 
 }
