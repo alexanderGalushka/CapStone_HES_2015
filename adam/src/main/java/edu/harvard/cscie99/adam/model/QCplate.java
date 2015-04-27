@@ -20,7 +20,7 @@ public class QCplate
  
 	private List<MeasurementType> measurementTypes;
 	
-	private List<QCmeasurement> qcMeasurement;
+	private List<QCmeasurement> measurements;
     
 	private List<TimeStamp> timeStamps;
 
@@ -96,12 +96,12 @@ public class QCplate
 		this.measurementTypes = measurementTypes;
 	}
 
-	public List<QCmeasurement> getQcMeasurement() {
-		return qcMeasurement;
+	public List<QCmeasurement> getMeasurements() {
+		return measurements;
 	}
 
-	public void setQcMeasurement(List<QCmeasurement> qcMeasurement) {
-		this.qcMeasurement = qcMeasurement;
+	public void setMeasurements(List<QCmeasurement> measurements) {
+		this.measurements = measurements;
 	}
 
 	public List<TimeStamp> getTimeStamps() {

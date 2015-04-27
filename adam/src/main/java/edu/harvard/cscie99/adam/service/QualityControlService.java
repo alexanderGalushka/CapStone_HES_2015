@@ -339,13 +339,14 @@ public class QualityControlService
         qcPlate.setMeasurementTypes(measurementQcTypes);
 
         List<QCmeasurement> qcMeasurements = new ArrayList<>();
-        QCmeasurement qcMeasurement = new QCmeasurement();
+        
         
 		for (Date timeStampToFilter: timeStamps) // have to be outer loop
 		{
 			
 			for (String measTypeToFilter: measurementTypes) // have to be outer loop
 			{ 
+				QCmeasurement qcMeasurement = new QCmeasurement();
 				qcMeasurement.setTimeStamp(timeStampToFilter);
 				qcMeasurement.setMeasurementType(measTypeToFilter);
 				
@@ -406,6 +407,8 @@ public class QualityControlService
 									value = INVALID;
 								}
 								
+								qcWell.setCol(column);
+								qcWell.setRow(row);
 								qcWellsTempMap.put(row.toString()+column.toString(), qcWell);
 								
 								allRawValues.set((row*numCol + column) , value); // that's for 0 based matrix (plate)
@@ -470,7 +473,7 @@ public class QualityControlService
 			}
 	    }
 
-		qcPlate.setQcMeasurement(qcMeasurements);
+		qcPlate.setMeasurements(qcMeasurements);
 		return qcPlate;	
 	}
 	
