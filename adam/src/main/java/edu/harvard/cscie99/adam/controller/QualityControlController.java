@@ -52,7 +52,7 @@ public class QualityControlController
 	@RequestMapping(value = "/rest/qc/project/{project_id}", method = RequestMethod.GET)
 	@ResponseBody
 	public List<QCplate> getNormalizedDataPerProject(
-			@PathVariable("plate_id") int project_id) throws  UnauthorizedOperationException{
+			@PathVariable("project_id") int project_id) throws  UnauthorizedOperationException{
 		
 		return qualityControlService.qualifyDataPerProject(project_id);
 	}

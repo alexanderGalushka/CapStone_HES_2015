@@ -483,7 +483,7 @@ public class QualityControlService
 			{
 				QCwell qcWell = qcWellsTempMap.get(r.toString()+c.toString());
 				
-				qcWell.setValue(valuesForQC.get(r*numCol + numCol));
+				qcWell.setValue(valuesForQC.get(r*numCol + c));
 				qcWellsList.add(qcWell);
 			}
 		}
