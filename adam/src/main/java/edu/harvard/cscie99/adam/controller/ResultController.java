@@ -69,8 +69,8 @@ public class ResultController {
 	@Autowired
 	private QueryService queryService;
 	
-//	public static final String C_RESULT_FILE_PATH = "/home/adam_files/results/";
-	public static final String C_RESULT_FILE_PATH = "c:/adam_files/results/";
+	public static final String C_RESULT_FILE_PATH = "/home/adam_files/results/";
+//	public static final String C_RESULT_FILE_PATH = "c:/adam_files/results/";
 	
 	private HashMap<Integer, String> letterMapping = new HashMap<>();
 	

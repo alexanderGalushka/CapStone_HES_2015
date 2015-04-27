@@ -52,8 +52,8 @@ public class PlateController {
 	@Autowired
 	private AuthenticationService authService;
 	
-//	public static final String C_PLATE_FILE_PATH = "/home/adam_files/plates/";
-	public static final String C_PLATE_FILE_PATH = "c:/adam_files/plates/";
+	public static final String C_PLATE_FILE_PATH = "/home/adam_files/plates/";
+//	public static final String C_PLATE_FILE_PATH = "c:/adam_files/plates/";
 	
 	// Plate CRUD - START
 	@RequestMapping(value = "/rest/plate", method = RequestMethod.GET)
