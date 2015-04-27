@@ -1,11 +1,11 @@
 package edu.harvard.cscie99.adam.model.view.mapper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 import edu.harvard.cscie99.adam.model.Well;
-import edu.harvard.cscie99.adam.model.WellLabel;
 import edu.harvard.cscie99.adam.model.view.Plate;
 
 public class PlateMapper {
@@ -46,6 +46,8 @@ public class PlateMapper {
 	public static Plate getViewPlate ( edu.harvard.cscie99.adam.model.Plate plate){
 		
 		Plate _plate = new Plate();
+		
+		Collections.sort(plate.getWells());
 		
 		if (plate != null){
 			_plate.setId(plate.getId());
