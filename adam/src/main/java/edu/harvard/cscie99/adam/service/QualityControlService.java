@@ -16,16 +16,11 @@ import org.apache.commons.math3.stat.StatUtils;
 import org.apache.commons.math3.util.FastMath;
 
 import edu.harvard.cscie99.adam.model.Measurement;
-import edu.harvard.cscie99.adam.model.MeasurementType;
 import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.model.QCdata;
 import edu.harvard.cscie99.adam.model.QCdataTimeWrapper;
-import edu.harvard.cscie99.adam.model.QCmeasurement;
-import edu.harvard.cscie99.adam.model.QCplate;
-import edu.harvard.cscie99.adam.model.QCwell;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
-import edu.harvard.cscie99.adam.model.TimeStamp;
 import edu.harvard.cscie99.adam.model.Well;
 
 
@@ -81,7 +76,7 @@ public class QualityControlService
 	
 	public Map<Integer, List<QCdataTimeWrapper>> actualDataQualification (Project project)
 	{
-		
+				
 		Map<Integer, List<QCdataTimeWrapper>> resultMap = new HashMap<>();
 		
 		for (Plate plate : project.getPlates()) //projPlate
@@ -174,7 +169,7 @@ public class QualityControlService
 										value = INVALID;
 									}
 																
-									allRawValues.set((row*numCol + column) , value); // that's for 0 based matrix (plate)
+									allRawValues.set((row+1)*(column+1) - 1 , value); // row and the column are 0 based, that's why "+1"
 								}
 								
 								//create the low level data object, further add it to the list of this type of objects								
@@ -247,249 +242,6 @@ public class QualityControlService
 		
 		return resultMap;	
 	}
-	
-	
-	
-	public QCplate qualifyDataPerPlate(int plateId)
-	{
-		Plate plate = plateService.retrievePlate(plateId);
-		return actualDataQualificationPerPlate(plate);
-	}
-	
-	public List<QCplate> qualifyDataPerProject (int projectId)
-	{
-		Project project = projectService.retrieveProject(projectId);
-		
-		List<QCplate> qcPlateList = new ArrayList<>();
-		
-		for (Plate plate : project.getPlates() )
-		{
-			qcPlateList.add(actualDataQualificationPerPlate (plate));
-		}
-		
-		return qcPlateList;
-	}
-	
-	public QCplate actualDataQualificationPerPlate (Plate plate)
-	{
-
-		QCplate qcPlate = new QCplate();
-		
-		// set QC plate data
-		qcPlate.setProjectId(plate.getProjectId());
-		qcPlate.setPlateId(plate.getId());
-		qcPlate.setResultId(null);  //what is it?
-		qcPlate.setName(plate.getName());
-		qcPlate.setDate(null); // why do we need it? we don't have it in Plate object now!!!
-		qcPlate.setControlTypes(plate.getControlTypes());
-		
-		//Get the Plate's data using plateService
-		//Plate plate = plateService.retrievePlate(projPlate.getId());
-		
-		Integer numRow = plate.getNumberOfRows();
-		Integer numCol = plate.getNumberOfColumns();
-		
-		// set QC plate data
-		qcPlate.setNumberOfRows(numRow);
-		qcPlate.setNumberOfColumns(numCol);
-		
-        List<Well> allWells = plate.getWells();
-        
-        Integer plateSize = allWells.size();
-
-        Set<String> measurementTypes = new HashSet<>();
-        Set<Date> timeStamps = new HashSet<>();
-        
-        List<ResultSnapshot> listOfResSnashots = plate.getResults();
-        
-        // collect all possible timestamps to iterate through
-        for (ResultSnapshot result : listOfResSnashots)
-        {
-        	timeStamps.add(result.getTime());
-        }
-        
-        List<TimeStamp> qcTimeStamps = new ArrayList<>();
-        for (Date timeStamp : timeStamps)
-        {
-        	TimeStamp qcTimeStamp = new TimeStamp();
-        	qcTimeStamp.setValue(timeStamp);
-        	qcTimeStamps.add(qcTimeStamp);
-        }
-        
-        // set QC plate data
-        qcPlate.setTimeStamps(qcTimeStamps);
-
-        // collect all possible measurement types to iterate through
-        if (!listOfResSnashots.isEmpty())
-        {
-			for (Measurement measure : listOfResSnashots.get(0).getMeasurements())
-			{
-				measurementTypes.add(measure.getMeasurementType());
-			}
-        }
-        
-        List<MeasurementType> measurementQcTypes = new ArrayList<>();
-        for (String measure : measurementTypes)
-        {
-        	MeasurementType qcMeasurementType = new MeasurementType();
-        	qcMeasurementType.setName(measure);
-        	measurementQcTypes.add(qcMeasurementType);
-        }
-        // set QC plate data
-        qcPlate.setMeasurementTypes(measurementQcTypes);
-
-        List<QCmeasurement> qcMeasurements = new ArrayList<>();
-        QCmeasurement qcMeasurement = new QCmeasurement();
-        
-		for (Date timeStampToFilter: timeStamps) // have to be outer loop
-		{
-			
-			for (String measTypeToFilter: measurementTypes) // have to be outer loop
-			{ 
-				qcMeasurement.setTimeStamp(timeStampToFilter);
-				qcMeasurement.setMeasurementType(measTypeToFilter);
-				
-				Map<String, QCwell> qcWellsTempMap = new HashMap<>();
-				
-				List<Double> allRawValues = initializeArray(plateSize);
-				// don't need to persists the order for the group of arrays below
-				List<Double> bagOfPosValues = new ArrayList<>();
-				List<Double> bagOfNegValues = new ArrayList<>();
-				List<Double> bagOfsampleValues = new ArrayList<>();
-				
-				QCdata qcData = new QCdata();
-				qcData.setMeasurementType(measTypeToFilter);
-
-				for (ResultSnapshot result : listOfResSnashots)
-				{				
-					Date timeStamp = result.getTime();
-					if (timeStampToFilter.equals(timeStamp))
-					{	
-						List<Measurement> listOfMeasurements = result.getMeasurements();
-						for (Measurement measure : listOfMeasurements)
-						{
-							// filter out the measurement currently not in process
-							if (measTypeToFilter.equals(measure.getMeasurementType()))
-							{	
-								Integer column = measure.getColumn();
-								Integer row = measure.getRow();
-								
-								Well someWell = plate.getWell(row,column);
-	                            QCwell qcWell = new QCwell();
-	                            
-								Double value = measure.getValue();
-								if(someWell.getIfValid()) //discriminate the invalid wells								
-								{
-									// shuffle the data in 3 buckets
-									if ("positive".equalsIgnoreCase(someWell.getControlType()))
-									{
-										bagOfPosValues.add(value);
-										qcWell.setControlType("positive");
-									}
-									else if ("negative".equalsIgnoreCase(someWell.getControlType()))
-									{
-										bagOfNegValues.add(value);
-										qcWell.setControlType("negative");
-									}
-									else 
-									{
-										bagOfsampleValues.add(value);
-										qcWell.setControlType(someWell.getControlType());
-									}
-									
-									qcWell.setIfValid(true);
-								}
-								
-								else
-								{
-									qcWell.setIfValid(false);
-									value = INVALID;
-								}
-								
-								qcWellsTempMap.put(row.toString()+column.toString(), qcWell);
-								
-								allRawValues.set((row*numCol + column) , value); // that's for 0 based matrix (plate)
-							}
-							
-							//create the low level data object, further add it to the list of this type of objects								
-						}
-					}
-				}
-				
-				
-				if (bagOfPosValues.isEmpty() && bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
-				{
-					// no Z and Z' to calc
-					// return raw values
-					qcMeasurement.setWells(populateQCwells (qcWellsTempMap, allRawValues, numRow, numCol));
-					
-				}
-				else if(bagOfPosValues.isEmpty() && !bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
-				{
-					// no Z and Z' to calc
-					// return normalized values
-					
-					double[] negControlsVector1 = ArrayUtils.toPrimitive(bagOfNegValues.toArray(new Double[bagOfNegValues.size()]));
-					double meanNeg1 = calculateMeanVector(negControlsVector1);
-					List<Double> valuesForQC = calculateNormalized(allRawValues,meanNeg1);
-					qcMeasurement.setWells(populateQCwells (qcWellsTempMap, valuesForQC, numRow, numCol));
-					
-				}
-				else if(!bagOfPosValues.isEmpty() && !bagOfNegValues.isEmpty() && !bagOfsampleValues.isEmpty())
-				{
-					//this is the most common case
-					// calc Z and Z' 
-					// return %Effect values
-
-					double[] posControlsVector1 = convertToPrimitiveDouble(bagOfPosValues);
-					double[] negControlsVector1 = convertToPrimitiveDouble(bagOfNegValues);
-					double[] samplesVector1 = convertToPrimitiveDouble(bagOfsampleValues);
-					
-					double stdDevPos1 = calculateStdDevVector(posControlsVector1); 
-					double stdDevNeg1 = calculateStdDevVector(negControlsVector1);
-					double stdDevSample1 = calculateStdDevVector(samplesVector1);
-					
-					double meanPos1 = calculateMeanVector(posControlsVector1); 
-					double meanNeg1 = calculateMeanVector(negControlsVector1); 
-					double meanSample1 = calculateMeanVector(samplesVector1);
-					
-					double zPrimeFactor1 = calculalteZprimeFactor(stdDevPos1, stdDevNeg1, meanPos1, meanNeg1);
-					double zFactor1 = calculateZFactor (stdDevSample1, stdDevPos1, meanSample1, meanPos1);
-					
-					List<Double> valuesForQC = calculatePercentEffect(allRawValues, meanPos1, meanNeg1);
-					qcMeasurement.setWells(populateQCwells (qcWellsTempMap, valuesForQC, numRow, numCol));
-					qcMeasurement.setzFactor(zFactor1);
-					qcMeasurement.setzPrimeFactor(zPrimeFactor1);
-				}
-				else
-				{		
-					// TODO
-				}
-
-				qcMeasurements.add(qcMeasurement);
-			}
-	    }
-
-		qcPlate.setQcMeasurement(qcMeasurements);
-		return qcPlate;	
-	}
-	
-	private List<QCwell> populateQCwells (Map<String, QCwell> qcWellsTempMap, List<Double> valuesForQC, Integer numRow, Integer numCol)
-	{
-		List<QCwell> qcWellsList = new ArrayList<>();
-		for (Integer r = 0; r< numRow; r++)
-		{
-			for (Integer c = 0; c< numCol; c++)
-			{
-				QCwell qcWell = qcWellsTempMap.get(r.toString()+c.toString());
-				
-				qcWell.setValue(valuesForQC.get(r*numCol + numCol));
-				qcWellsList.add(qcWell);
-			}
-		}
-		return qcWellsList;
-	}
-	
 	
 	private double[] convertToPrimitiveDouble( List<Double> arayToConvert )
 	{
