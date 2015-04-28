@@ -98,7 +98,7 @@ public class PlateController {
 	
 	@RequestMapping(value = "/rest/plate/{plate_id}", method = RequestMethod.PUT)
 	@ResponseBody
-	public edu.harvard.cscie99.adam.model.view.Plate editPlate(@RequestBody edu.harvard.cscie99.adam.model.view.Plate viewPlate,
+	public edu.harvard.cscie99.adam.model.view.Plate updatePlate(@RequestBody edu.harvard.cscie99.adam.model.view.Plate viewPlate,
 			@PathVariable("plate_id") int plateId,
 			HttpServletRequest request){
 		
