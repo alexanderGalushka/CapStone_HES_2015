@@ -7,10 +7,16 @@
 <body>
 
 <form method="GET" action="do_login">
-User: <br>
-<input type="text" name="username"/> </br>
-Password: <br>
-<input type="password" name="password"/> </br>
+    <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">User</span>
+        <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1" name="username">
+    </div>
+
+    <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">Password</span>
+        <input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon1" name="password">
+    </div>
+
 <input type="submit" value="Login"/>
 </form>
 
