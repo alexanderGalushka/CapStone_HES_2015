@@ -112,10 +112,10 @@ public class PlateFileParser {
         		lineCount++;
         		
         		if (plateDimensionRow < row){
-        			plateDimensionRow = row;
+        			plateDimensionRow = row + 1;
         		}
         		if (plateDimensionCol < col){
-        			plateDimensionCol = col;
+        			plateDimensionCol = col + 1;
         		}
         		        		
         	}
