@@ -111,19 +111,25 @@ public class AuthenticationService
 	{
 		Session session = sessionFactory.openSession();
 		
-		Query query = session.createQuery("from User where username = '" + username + "' and password = '" + password + "'");
+		try{
 		
-		List<User> userList = query.list();
-		
-		if (userList != null && userList.size() > 0){
-			return userList.get(0);
-		} else
-		{
-			//User user = new User();
-			//user.setUsername("alex");
-			//user.setPassword("alex");
-			//return user;
-			return null;
+			Query query = session.createQuery("from User where username = '" + username + "' and password = '" + password + "'");
+			
+			List<User> userList = query.list();
+			
+			if (userList != null && userList.size() > 0){
+				return userList.get(0);
+			} else
+			{
+				//User user = new User();
+				//user.setUsername("alex");
+				//user.setPassword("alex");
+				//return user;
+				return null;
+			}
+		}
+		finally{
+			session.close();
 		}
 	}
 	
@@ -131,7 +137,7 @@ public class AuthenticationService
 	
 	
 	// it's a helper function which can potentially be a part of our Utils class
-	private String hashPassword( String passwordToHash )
+	public String hashPassword( String passwordToHash )
 	{
 		//****************************************//
 		// Below code snippet has been borrowed from
