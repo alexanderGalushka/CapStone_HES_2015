@@ -19,17 +19,6 @@ public class WellMapper {
 		
 		if (well.containsKey("controlType")){
 			_well.setControlType(well.get("controlType"));
-			
-//			if (ControlType.COMP.toString().equals(controlTypeStr)){
-//				_well.setControlType(ControlType.COMP);
-//			} else if (ControlType.EMPTY.toString().equals(controlTypeStr)){
-//				_well.setControlType(ControlType.EMPTY);
-//			} else if (ControlType.NEG.toString().equals(controlTypeStr)){
-//				_well.setControlType(ControlType.NEG);
-//			} else {
-//				_well.setControlType(ControlType.POS);
-//			}
-			
 		}
 		
 		if (well.containsKey("col")){
@@ -67,11 +56,19 @@ public class WellMapper {
 		_well.put("row", ""+well.getRow());
 		
 		for (WellLabel wl : well.getWellLabels()){
-			_well.put(wl.getName(), wl.getValue());
+			_well.put(replaceSpaces(wl.getName()), wl.getValue());
 		}
 		
 		return _well;
 
+	}
+	
+	private static String replaceSpaces (String input){
+		
+		if (input != null && input.length() > 0){
+			return input.replace(" ", "_");
+		}
+		return null;
 	}
 
 }

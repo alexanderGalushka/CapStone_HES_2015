@@ -3,16 +3,39 @@ package edu.harvard.cscie99.adam.model;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * QCMeasurement class
+ * 
+ * Represents the QC data of a list of wells (well measurement type/value and Z-factors)
+ * 
+ * @author Alex
+ *
+ */
 public class QCmeasurement 
 {
+	/**
+	 * Measurement type
+	 */
 	private String measurementType;
 	
+	/**
+	 * Timestamp 
+	 */
 	private Date timeStamp;
 	
+	/**
+	 * Z-factor value
+	 */
 	private Double zFactor;
 	
+	/**
+	 * Z-prime factor value
+	 */
 	private Double zPrimeFactor;
 	
+	/**
+	 * List of QCWells
+	 */
 	private List<QCwell> wells;
 
 	public String getMeasurementType() {

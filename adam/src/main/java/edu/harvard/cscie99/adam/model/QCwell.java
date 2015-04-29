@@ -1,16 +1,38 @@
 package edu.harvard.cscie99.adam.model;
 
-
+/**
+ * QCwell class
+ * 
+ * Analogous to Well object, encapsulate well information with data quality control metricts (eg, valid/invalid indicator)
+ * 
+ * @author Alex
+ *
+ */
 public class QCwell 
 {
+	/**
+	 * Well row position
+	 */
 	private int row;
 
+	/**
+	 * Well col position
+	 */
 	private int col;
 
+	/**
+	 * Well control type
+	 */
 	private String controlType;
 	
+	/**
+	 * Indicates valid/invalid wells
+	 */
 	private boolean ifValid = true;
 	
+	/**
+	 * Well value
+	 */
 	private double value;
 
 	public int getRow() {

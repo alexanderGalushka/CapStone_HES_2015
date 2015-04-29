@@ -2,15 +2,37 @@ package edu.harvard.cscie99.adam.model;
 
 import java.util.List;
 
+/**
+ * 
+ * QCdata class
+ * 
+ * Represents the QC virtual plate: the aggregation of
+ * Plate information (wells, control types) and QC generated statistics
+ * (Z-factor, z-Prime) 
+ * 
+ * @author Alex
+ *
+ */
 public class QCdata 
 {
-
+	/**
+	 * Measurement type 
+	 */
 	private String measurementType;
 	
+	/**
+	 * List of data points
+	 */
 	private List<Double> values;
 	
+	/**
+	 * Z Factor value
+	 */
 	private Double zFactor;
 	
+	/**
+	 * Z Prime Factor value
+	 */
 	private Double zPrimeFactor;
 
 	public String getMeasurementType() {

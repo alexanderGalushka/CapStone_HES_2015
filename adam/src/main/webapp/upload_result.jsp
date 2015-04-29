@@ -12,7 +12,7 @@
 <form method="POST" enctype="multipart/form-data" action="upload_result">
 
 File to upload: <input name="file" type="file"><br/>
-Name: <input name="name" type="text"><br/><br/>
+Plate Id: <input name="plate_id" type="text"><br/><br/>
 <input type="submit" value="Upload"> Press here to upload
 
 </form>

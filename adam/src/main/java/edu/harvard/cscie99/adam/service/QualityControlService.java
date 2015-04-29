@@ -14,7 +14,12 @@ import org.springframework.stereotype.Component;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.stat.StatUtils;
 import org.apache.commons.math3.util.FastMath;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
+import edu.harvard.cscie99.adam.error.BadWellValidatorException;
+import edu.harvard.cscie99.adam.error.DbReadException;
+import edu.harvard.cscie99.adam.error.DbWriteException;
 import edu.harvard.cscie99.adam.model.Measurement;
 import edu.harvard.cscie99.adam.model.MeasurementType;
 import edu.harvard.cscie99.adam.model.Plate;
@@ -27,6 +32,7 @@ import edu.harvard.cscie99.adam.model.QCwell;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
 import edu.harvard.cscie99.adam.model.TimeStamp;
 import edu.harvard.cscie99.adam.model.Well;
+import edu.harvard.cscie99.adam.model.WellValidationContainer;
 
 
 /**
@@ -62,7 +68,98 @@ public class QualityControlService
 	@Autowired
 	private QueryService queryService;
 	
+	@Autowired
+    private SessionFactory sessionFactory;
+	
 	private final static Double INVALID = 777d;	
+	
+	public void validateSingleWell (WellValidationContainer wellValidator) throws BadWellValidatorException,
+																				  DbWriteException,
+																				  DbReadException
+	{
+		if (wellValidator.getRowNum() == null || wellValidator.getColNum() == null)
+		{
+
+			throw new BadWellValidatorException("Row or Column number is null");
+		}		
+		Well wellToValidate = null;
+		try
+		{
+			Plate plate = plateService.retrievePlate(wellValidator.getPlateId());
+			wellToValidate = plate.getWell(wellValidator.getRowNum(), wellValidator.getColNum());
+			wellToValidate.setIfValid(wellValidator.getIfValid());
+		}
+		catch (Exception e)
+		{
+			throw new DbReadException("Couldn't retrieve the plate data");
+		}
+		finally
+		{
+			Session session = null;
+			try
+			{
+				session = sessionFactory.openSession();
+				session.beginTransaction();
+				session.saveOrUpdate(wellToValidate);
+				session.getTransaction().commit();
+			}
+			catch (Exception e)
+			{
+				throw new DbWriteException("Couldn't update the single well");
+			}
+			finally
+			{
+				session.close();
+			}
+		}
+	}
+	
+	public void validateGroupOfWell (List<WellValidationContainer> groupOfWellsValidator) throws BadWellValidatorException,
+																								 DbReadException,
+																								 DbWriteException
+	{
+        Plate plate = null;
+		try
+		{
+			plate = plateService.retrievePlate(groupOfWellsValidator.get(0).getPlateId());
+		}
+		catch(Exception e)
+		{
+			throw new DbReadException("Couldn't retrieve the plate data");
+		}
+		finally
+		{
+			Session session = null;
+			try
+			{
+				session = sessionFactory.openSession();
+				session.beginTransaction();
+				
+				for (WellValidationContainer wellValidator : groupOfWellsValidator)
+				{
+					if (wellValidator.getRowNum() == null || wellValidator.getColNum() == null)
+					{
+	
+						throw new BadWellValidatorException("Row or Column number is null");
+					}
+					Well wellToValidate = plate.getWell(wellValidator.getRowNum(), wellValidator.getColNum());
+					wellToValidate.setIfValid(wellValidator.getIfValid());
+					session.saveOrUpdate(wellToValidate);
+				}
+				
+				session.getTransaction().commit();
+			}
+			catch (Exception e)
+			{
+				throw new DbWriteException("Couldn't update the single well");
+			}
+			finally
+			{
+				session.close();
+			}
+		}
+
+	}
 	
 	/**
 	 * Quality Control ultimate method to aggregate data by time and measurement types for each plate ID,
@@ -248,8 +345,6 @@ public class QualityControlService
 		return resultMap;	
 	}
 	
-	
-	
 	public QCplate qualifyDataPerPlate(int plateId)
 	{
 		Plate plate = plateService.retrievePlate(plateId);
@@ -410,8 +505,15 @@ public class QualityControlService
 								qcWell.setCol(column);
 								qcWell.setRow(row);
 								qcWellsTempMap.put(row.toString()+column.toString(), qcWell);
+								try
+								{
+									allRawValues.set((row*numCol + column) , value); // that's for 0 based matrix (plate)
+								}
+								catch (Exception e)
+								{
+									System.out.print(e.getMessage());
+								}
 								
-								allRawValues.set((row*numCol + column) , value); // that's for 0 based matrix (plate)
 							}
 							
 							//create the low level data object, further add it to the list of this type of objects								
