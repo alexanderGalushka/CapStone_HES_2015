@@ -36,7 +36,7 @@ public class WellMapper {
 			_well.setCol(Integer.parseInt(well.get("col")));
 		}
 		if (well.containsKey("row")){
-			_well.setCol(Integer.parseInt(well.get("row")));
+			_well.setRow(Integer.parseInt(well.get("row")));
 		}
 		
 		ArrayList<WellLabel> wlList = new ArrayList<WellLabel>();
