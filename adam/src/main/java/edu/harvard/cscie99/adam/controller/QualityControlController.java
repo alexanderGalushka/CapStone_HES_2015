@@ -5,14 +5,17 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
 import edu.harvard.cscie99.adam.model.QCdataTimeWrapper;
 import edu.harvard.cscie99.adam.model.QCplate;
+import edu.harvard.cscie99.adam.model.WellValidationContainer;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
 import edu.harvard.cscie99.adam.service.ParserService;
 import edu.harvard.cscie99.adam.service.QualityControlService;
@@ -32,15 +35,6 @@ public class QualityControlController
 	private AuthenticationService authService;
 	
 	
-	@RequestMapping(value = "/rest/project/{project_id}/qualify_data", method = RequestMethod.GET)
-	@ResponseBody
-	public Map<Integer, List<QCdataTimeWrapper>> getNormalizedData(
-			@PathVariable("project_id") int projectId) throws  UnauthorizedOperationException{
-		
-		return qualityControlService.qualifyData(projectId);
-	}
-
-	
 	@RequestMapping(value = "/rest/qc/plate/{plate_id}", method = RequestMethod.GET)
 	@ResponseBody
 	public QCplate getNormalizedDataPerPlate(
@@ -56,4 +50,46 @@ public class QualityControlController
 		
 		return qualityControlService.qualifyDataPerProject(project_id);
 	}
+	
+	@RequestMapping(value = "/rest/qc/single_well_validation", method = RequestMethod.POST)
+	@ResponseBody
+	public List<QCplate> validateSingleWell(@RequestBody WellValidationContainer wellValidator) 
+			                                       throws  UnauthorizedOperationException{
+		List<QCplate> result = null;
+		try
+		{
+			qualityControlService.validateSingleWell(wellValidator);
+		}
+        catch (Exception e)
+		{
+        	//TODO 
+		}
+		finally
+		{
+			result = qualityControlService.qualifyDataPerProject(wellValidator.getProjectId());
+		}
+		
+		return result;
+	}
+	
+	@RequestMapping(value = "/rest/qc/group_well_validation", method = RequestMethod.POST)
+	@ResponseBody
+	public List<QCplate> validateGroupOfWells(@RequestBody List<WellValidationContainer> listOfWellValidators)
+																throws  UnauthorizedOperationException{
+		List<QCplate> result = null;
+		try
+		{
+			qualityControlService.validateGroupOfWell(listOfWellValidators);;
+		}	
+        catch (Exception e)
+		{
+        	//TODO 
+		}
+		finally
+		{
+			result = qualityControlService.qualifyDataPerProject(listOfWellValidators.get(0).getProjectId());
+		}
+		return result;
+	}
+	
 }
