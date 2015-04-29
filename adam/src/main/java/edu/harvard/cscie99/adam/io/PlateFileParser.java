@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 
 
+
+import edu.harvard.cscie99.adam.error.InvalidPlateFileException;
 import edu.harvard.cscie99.adam.model.ControlType;
 //import edu.harvard.cscie99.adam.model.Compound;
 import edu.harvard.cscie99.adam.model.Plate;
@@ -18,21 +20,39 @@ import edu.harvard.cscie99.adam.model.Well;
 import edu.harvard.cscie99.adam.model.WellLabel;
 
 /**
+ * PlateFileParser class
+ * 
+ * Responsible to parse the input file stream into Plate objects.
  * 
  * @creator Gerson
  */
 @Component
 public class PlateFileParser {
 	
-	public Plate parse(BufferedReader lines) throws IOException{
+	/**
+	 * Parse method
+	 * 
+	 * Iterates over CSV file lines, creating Plate components: Plate, WellLabels, Wells and Control Types (eg. POSITIVE, NEGATIVE)
+	 * 
+	 * @param lines - Upload CSV file BufferedReader object
+	 * @return plate - Plate object
+	 * @throws IOException
+	 * @throws InvalidPlateFileException
+	 */
+	public Plate parse(BufferedReader lines) throws IOException, InvalidPlateFileException{
 		
 		String line = lines.readLine();
 		
 		Plate plate = new Plate();
 		
+		//Well caching object
 		HashMap<String, Well> wellsMap = new HashMap<String, Well>();
 		HashSet<String> plateLabelNames = new HashSet<String>();
 		HashSet<String> plateControlTypes = new HashSet<String>();
+		
+		int lineCount = 0;
+		int plateDimensionRow = 0;
+		int plateDimensionCol = 0;
 		
         while (line != null) {
         	String[] fields = line.split(",");
@@ -49,8 +69,15 @@ public class PlateFileParser {
         	
         	try{
         		
-        		int row = Integer.parseInt(fields[0].trim());
-        		int col = Integer.parseInt(fields[1].trim());
+        		int row = 0;
+        		int col = 0;
+        		try{
+	        		row = Integer.parseInt(fields[0].trim());
+	        		col = Integer.parseInt(fields[1].trim());
+        		} catch (Exception e){
+        			throw new InvalidPlateFileException (String.format("Invalid well coordinates at line %d. Row: %s Column %s", lineCount, fields[0], fields[1]), fields[0], fields[1]);
+        		}
+        		
         		String wellType = fields[2].trim();
         		String labelName = fields[3].trim();
         		String labelValue = fields[4].trim();
@@ -69,9 +96,6 @@ public class PlateFileParser {
         		}else{
         			well = new Well();
         			wellsMap.put(row+"-"+col, well);
-        			
-//        			ControlType ct = new ControlType();
-//        			ct.setName(wellType);
             		
         			well.setControlType(wellType);
             		well.setRow(row);
@@ -83,9 +107,16 @@ public class PlateFileParser {
         		label.setValue(labelValue);
         		
         		well.getWellLabels().add(label);
-//        		plate.getWells().add(well);
         		plateLabelNames.add(labelName);
         		plateControlTypes.add(wellType);
+        		lineCount++;
+        		
+        		if (plateDimensionRow < row){
+        			plateDimensionRow = row;
+        		}
+        		if (plateDimensionCol < col){
+        			plateDimensionCol = col;
+        		}
         		        		
         	}
         	catch (Exception ex){
@@ -119,6 +150,11 @@ public class PlateFileParser {
         		ct.setDisplayChar(controlType.substring(0, 1));
         	}
         	plate.getControlTypes().add(ct);
+        }
+        
+        if (plateDimensionCol != 0 && plateDimensionRow != 0){
+        	plate.setNumberOfRows(plateDimensionRow);
+        	plate.setNumberOfColumns(plateDimensionCol);
         }
 	    
 		return plate;

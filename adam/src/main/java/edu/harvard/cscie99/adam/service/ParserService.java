@@ -8,6 +8,7 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import edu.harvard.cscie99.adam.error.InvalidPlateFileException;
 import edu.harvard.cscie99.adam.error.ParserException;
 import edu.harvard.cscie99.adam.io.PlateFileParser;
 import edu.harvard.cscie99.adam.io.ResultFileParser;
@@ -28,7 +29,7 @@ public class ParserService {
 	@Autowired
 	private ResultFileParser resultParser;
 	
-	public Plate parsePlateFromFile(String filename) throws ParserException{
+	public Plate parsePlateFromFile(String filename) throws ParserException, InvalidPlateFileException{
 		
 		Plate plate = null;
 		
