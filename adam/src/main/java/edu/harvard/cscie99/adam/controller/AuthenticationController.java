@@ -70,6 +70,7 @@ public class AuthenticationController {
 		//clear password for security
 //		user.setPassword(null);
 	
+		user.setPassword(authService.hashPassword(user.getPassword()));
 		return user;
 
 	}
