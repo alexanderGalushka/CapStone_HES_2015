@@ -1,9 +1,5 @@
 package edu.harvard.cscie99.adam.controller;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,13 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import edu.harvard.cscie99.adam.error.InvalidPlateFileException;
-import edu.harvard.cscie99.adam.error.ParserException;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
 import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
@@ -35,28 +27,56 @@ import edu.harvard.cscie99.adam.service.ParserService;
 import edu.harvard.cscie99.adam.service.PlateService;
 import edu.harvard.cscie99.adam.service.ResultService;
 
+/**
+ * PlateController object
+ * 
+ * Controller that handles request from the frontend to perform 
+ * plate related operations (create, remove, update, delete, list)
+ * Methods use RESTful calls
+ * 
+ * @author Gerson
+ *
+ */
 @RestController
 @RequestMapping(value = "/")
 public class PlateController {
 	
-	//TODO implement
-
+	/**
+	 * PlateService object
+	 * Uses Spring IoC to instantiate PlateService in runtime
+	 */
 	@Autowired
 	private PlateService plateService;
 
+	/**
+	 * ResultService object
+	 * Uses Spring IoC to instantiate ResultService in runtime
+	 */
 	@Autowired
 	private ResultService resultService;
 
+	/**
+	 * ParserService object
+	 * Uses Spring IoC to instantiate ParserService in runtime
+	 */
 	@Autowired
 	private ParserService parserService;
 	
+	/**
+	 * ParserService object
+	 * Uses Spring IoC to instantiate AuthenticationService in runtime
+	 */
 	@Autowired
 	private AuthenticationService authService;
 	
-	public static final String C_PLATE_FILE_PATH = "/home/adam_files/plates/";
-//	public static final String C_PLATE_FILE_PATH = "c:/adam_files/plates/";
-	
-	// Plate CRUD - START
+	/**
+	 * List Plates method
+	 * 
+	 * Lists all valid plates previously inserted (via Plate Editor or importing CSV files)
+	 * in the application.
+	 * 
+	 * @return list of Plate objects
+	 */
 	@RequestMapping(value = "/rest/plate", method = RequestMethod.GET)
 	@ResponseBody
 	public List<edu.harvard.cscie99.adam.model.view.Plate> listPlates(){
@@ -71,6 +91,14 @@ public class PlateController {
 		return viewPlates;
 	}
 	
+	/**
+	 * getPlate method
+	 * 
+	 * Retrieve all details from a unique Plate, using the plate Id (key)
+	 * 
+	 * @param plateId - key of Plate object in DB
+	 * @return Plate object in JSON format
+	 */
 	@RequestMapping(value = "/rest/plate/{plate_id}", method = RequestMethod.GET)
 	@ResponseBody
 	public edu.harvard.cscie99.adam.model.view.Plate getPlate(
@@ -81,6 +109,17 @@ public class PlateController {
 		return PlateMapper.getViewPlate(plate);
 	}
 	
+	/**
+	 * createPlate method
+	 * 
+	 * Creates a new Plate and persists in the DB.
+	 * The method will map the input Plate view object into Plate persistence object using PlateMapper,
+	 * persist the object in DB, and returns the generated plate, mapping back to the Plate view
+	 * (friendly version of Plate used by the frontend)
+	 * 
+	 * @param viewPlate - Plate (view) object with all plate attributes
+	 * @return Plate object in JSON format
+	 */
 	@RequestMapping(value = "/rest/plate", method = RequestMethod.POST)
 	@ResponseBody
 	public edu.harvard.cscie99.adam.model.view.Plate createPlate(@RequestBody edu.harvard.cscie99.adam.model.view.Plate viewPlate,
@@ -97,6 +136,18 @@ public class PlateController {
 		return PlateMapper.getViewPlate(plateService.createPlate(plate));
 	}
 	
+	/**
+	 * updatePlate method
+	 * 
+	 * Updates an existing Plate in the DB.
+	 * The method will map the input Plate view object into Plate persistence object using PlateMapper,
+	 * persist the object in DB, and returns the generated plate, mapping back to the Plate view
+	 * (friendly version of Plate used by the frontend)
+	 * 
+	 * @param viewPlate - Plate (view) object with all plate attributes
+	 * @param plateId - plate Key in DB
+	 * @return Plate object in JSON format
+	 */
 	@RequestMapping(value = "/rest/plate/{plate_id}", method = RequestMethod.PUT)
 	@ResponseBody
 	public edu.harvard.cscie99.adam.model.view.Plate updatePlate(@RequestBody edu.harvard.cscie99.adam.model.view.Plate viewPlate,
@@ -120,6 +171,18 @@ public class PlateController {
 		return PlateMapper.getViewPlate(plateService.updatePlate(currentPlate));
 	}
 	
+	/**
+	 * removePlate method
+	 * 
+	 * Removes the Plate from Adam's system.
+	 * 
+	 * This method will logically remove the plate by setting the "valid" attribute to false,
+	 * keeping the original information in DB for later reuse. But from the user's perspective,
+	 * the plate will no longer appear in the system.
+	 * 
+	 * @param plateId - plate Key in DB
+	 * @return boolean - indication of success or failure
+	 */
 	@RequestMapping(value = "/rest/plate/{plate_id}", method = RequestMethod.DELETE)
 	@ResponseBody
 	public boolean removePlate(@PathVariable("plate_id") int plateId){
@@ -129,48 +192,17 @@ public class PlateController {
 		return plateService.removePlate(plate);
 	}
 	
-	//Upload plate
-	@RequestMapping(value="/upload_plate", method=RequestMethod.POST)
-	public @ResponseBody Plate handlePlateUpload(
-			@RequestParam("name") String name,
-			@RequestParam("file") MultipartFile file) throws IOException, ParserException, InvalidPlateFileException{
-		
-		Plate plate = null;
-		
-		if (file != null && !file.isEmpty()){
-		
-			byte[] bytes = file.getBytes();
-			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(C_PLATE_FILE_PATH + name)));
-			stream.write(bytes);
-			stream.close();
-		
-			plate = parserService.parsePlateFromFile(C_PLATE_FILE_PATH + name);
-		}
-		
-		return plateService.createPlate(plate);
-	}
-	
-	//Upload plate
-	@RequestMapping(value="/upload_plate_with_result", method=RequestMethod.POST)
-	public @ResponseBody Plate handlePlateAndResultUpload(
-			@RequestParam("name") String name,
-			@RequestParam("file") MultipartFile file) throws IOException, ParserException, InvalidPlateFileException{
-		
-		Plate plate = null;
-		
-		if (file != null && !file.isEmpty()){
-		
-			byte[] bytes = file.getBytes();
-			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(C_PLATE_FILE_PATH + name)));
-			stream.write(bytes);
-			stream.close();
-		
-			plate = parserService.parsePlateFromFile(C_PLATE_FILE_PATH + name);
-		}
-		
-		return plateService.createPlate(plate);
-	}
-	
+	/**
+	 * addResultToPlate method
+	 * 
+	 * Associates an ResultSnapshot object (refer to the documentation) to a Plate.
+	 * 
+	 * RESTFul method. Will return a boolean indicating the success of the operation
+	 * 
+	 * @param plateId - plate Key in DB
+	 * @param resultId - result Key in DB
+	 * @return boolean - indication of success or failure
+	 */
 	@RequestMapping(value = "/rest/plate/{plateId}/add_result/{resultId}", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean addResultToPlate(
@@ -186,6 +218,17 @@ public class PlateController {
 		return true;
 	}
 	
+	/**
+	 * removeResultFromPlate method
+	 * 
+	 * Removes the association between the ResultSnapshot object (refer to the documentation) and the Plate.
+	 * 
+	 * RESTFul method. Will return a boolean indicating the success of the operation
+	 * 
+	 * @param plateId - plate Key in DB
+	 * @param resultId - result Key in DB
+	 * @return boolean - indication of success or failure
+	 */
 	@RequestMapping(value = "/rest/plate/{plateId}/remove_result/{resultId}", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean removeResultFromPlate(
