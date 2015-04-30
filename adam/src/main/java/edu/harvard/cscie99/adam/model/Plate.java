@@ -24,6 +24,11 @@ import edu.harvard.cscie99.adam.profile.User;
 
 /**
  * 
+ * Plate model class
+ * 
+ * This class represents a Plate in the system, either imported by CSV file 
+ * or edited on Plate Editor screen. This object is persisted in DB.
+ * 
  * @author Gerson
  *
  */
@@ -43,32 +48,59 @@ public class Plate implements Serializable{
 	 */
 	public enum PlateType {PLAIN, SEMI, FULL}
 
+	/**
+	 * id field
+	 * Represent the auto-generated Id in DB Plate table
+	 */
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "plate_id")
 	private int id;
 	
-//	@ManyToOne(targetEntity = Project.class, fetch = FetchType.LAZY)
+	/**
+	 * Project associated to Plate
+	 */
 	private String projectId;
 
+	/**
+	 * Plate name
+	 */
 	@Column(name = "name")
 	private String name;
 	
+	/**
+	 * Protocol
+	 */
 	@Column(name = "protocol_id")
 	private String protocolId;
 	
+	/**
+	 * Number of rows in plate
+	 */
 	@Column(name = "numberOfRows")
 	private Integer numberOfRows;
 	
+	/**
+	 * Date of plate creation
+	 */
 	@Column(name = "creation_date")
 	private String creationDate;
 	
+	/**
+	 * Number of columns in plate
+	 */
 	@Column(name = "numberOfColumns")
 	private Integer numberOfColumns;
 	
+	/**
+	 * Plate's barcode
+	 */
 	@Column(name = "barcode")
 	private String barcode;
 
+	/**
+	 * Tags associated to Plate
+	 */
 	@ManyToMany
 	@LazyCollection(LazyCollectionOption.FALSE)
 	  @JoinTable(
@@ -77,32 +109,46 @@ public class Plate implements Serializable{
 	      inverseJoinColumns={@JoinColumn(name="tag_id", referencedColumnName="tag_id")})
 	private List<Tag> tags;
 	
+	/**
+	 * Plate's label
+	 */
 	@Column(name = "label")
 	private String label;
 	
+	/**
+	 * List of labels associated to every wells on plate
+	 */
 	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	private List<WellLabel> wellLabels;
 	
+	/**
+	 * List of Wells
+	 */
 	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<Well> wells;
 	
+	/**
+	 * List of results 
+	 */
 	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<ResultSnapshot> results;
 	
+	/**
+	 * List of control types from Wells in the plate (eg. NEGATIVE, POSITIVE)
+	 */
 	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<ControlType> controlTypes;
 	
-//	@ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+	/**
+	 * Plate owner
+	 */
 	@Column(name = "owner")
     private String owner;
 	
-//	@ManyToMany 
-//	@JoinTable(
-//			name="plate_collab",
-//			joinColumns={@JoinColumn(name="plate_id", referencedColumnName="plate_id")},
-//			inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="user_id")})
-//	private List<User> collaborators;
-	
+	/**
+	 * Constructor
+	 * Initialize lists
+	 */
 	public Plate(){
 		wells = new ArrayList<Well>();
 		results = new ArrayList<ResultSnapshot>();
