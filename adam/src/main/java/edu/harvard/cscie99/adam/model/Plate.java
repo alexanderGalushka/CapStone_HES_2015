@@ -96,7 +96,7 @@ public class Plate implements Serializable{
 	private String barcode;
 
 	@Column(name = "ifValid")
-	private boolean ifValid;
+	private boolean ifValid = true;
 	
 	/**
 	 * Tags associated to Plate
