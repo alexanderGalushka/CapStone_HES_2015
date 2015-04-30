@@ -3,14 +3,36 @@ package edu.harvard.cscie99.adam.model;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * QCdataTimeWrapper class
+ * 
+ * Represent the list of QC data attached to time information
+ * for pharmacokinetics (list of data point results moving throught time)
+ * 
+ * @author Alex
+ *
+ */
 public class QCdataTimeWrapper 
 {
     
+	/**
+	 * Timestamp associated to list of QC data
+	 */
 	private Date timeStamp;
+	
+	/**
+	 * List of QC data
+	 */
 	private List<QCdata> qcDataList;
 	
-	//need provide the data layout
+	/**
+	 * Number of Rows in plate
+	 */
 	private Integer numberOfRows;
+	
+	/**
+	 * Number of Wells in plate
+	 */
 	private Integer numberOfColumns;
 	
 	

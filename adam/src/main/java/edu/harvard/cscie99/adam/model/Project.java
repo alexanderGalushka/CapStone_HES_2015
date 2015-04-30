@@ -2,13 +2,10 @@ package edu.harvard.cscie99.adam.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.LazyCollection;
@@ -26,6 +22,11 @@ import org.hibernate.annotations.LazyCollectionOption;
 import edu.harvard.cscie99.adam.profile.User;
 
 /**
+ * Project class
+ * 
+ * Represents one project in Adam system.
+ * The project is also an experiment, and support multiple plates.
+ * It also has an owner and collaborators that can interact (add plates, edit results) with the project.
  * 
  * @author Gerson
  *
@@ -39,52 +40,61 @@ public class Project implements Serializable {
 	 * Initial version
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
+	/**
+	 * Auto-generated project key
+	 */
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "project_id")
 	private Integer id;
 	
+	/**
+	 * Project name
+	 */
 	@Column(name = "name")
 	private String name;
 	
+	/**
+	 * Project's description
+	 */
 	@Column(name = "description")
 	private String description;
 	
-//	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//	private List<Compound> compounds;
-
-//	@OneToMany(mappedBy = "substrate", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//	private List<Substrate> substrates;
-	
+	/**
+	 * Project type (eg. Biological, Pharmaceutical)
+	 */
 	@Column(name = "project_type")
 	private String type;
 	
+	/**
+	 * Project creation date
+	 */
 	@Column(name = "creation_date")
 	private String creationDate;
 	
-//	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//	@ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-	
-//	@ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+	/**
+	 * Project owner: user that initially created the project
+	 */
 	@Column(name = "owner")
 	private String owner;
 	
+	/**
+	 * Collaborators
+	 * 
+	 * List of users that collaborate to Project in any form.
+	 */
 	@ManyToMany
 	@LazyCollection(LazyCollectionOption.FALSE)
 	  @JoinTable(
 	      name="project_collab",
 	      joinColumns={@JoinColumn(name="project_id", referencedColumnName="project_id")},
 	      inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="user_id")})
-//	@ElementCollection
-//	@CollectionTable(name="Project_Collaborators", joinColumns=@JoinColumn(name="project_id"))
-//	@Column(name="collaborators")
 	private List<User> collaborators;
-	
-//	@ElementCollection
-//	@CollectionTable(name="Project_Tags", joinColumns=@JoinColumn(name="project_id"))
-//	@Column(name="tags")
+
+	/**
+	 * List of project tags (eg: "cancer cure")
+	 */
 	@ManyToMany
 	@LazyCollection(LazyCollectionOption.FALSE)
 	  @JoinTable(
@@ -93,23 +103,33 @@ public class Project implements Serializable {
 	      inverseJoinColumns={@JoinColumn(name="tag_id", referencedColumnName="tag_id")})
 	private List<Tag> tags;
 	
-//	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//	private List<Comment> comments;
-	
+	/**
+	 * isPublic: indicates if the project is in public domain
+	 */
 	@Column(name = "public")
 	private boolean isPublic;
 	
-//	@Column(name = "protocol_id")
-//	private String protocolId;
-	
+	/**
+	 * Project's label: metadata associated to project
+	 */
 	@Column(name = "label")
 	private String label;
 	
+	/**
+	 * Collection of plates
+	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Plate> plates;
 	
+	/**
+	 * Constructor
+	 * 
+	 * Initializing lists
+	 */
 	public Project(){
 		plates = new ArrayList<Plate>();
+		tags = new ArrayList<Tag>();
+		collaborators = new ArrayList<User>();
 	}
 	
 	public Integer getId() {
@@ -158,14 +178,6 @@ public class Project implements Serializable {
 		this.description = description;
 	}
 
-//	public List<Compound> getCompounds() {
-//		return compounds;
-//	}
-//
-//	public void setCompounds(List<Compound> compounds) {
-//		this.compounds = compounds;
-//	}
-
 	public String getType() {
 		return type;
 	}
@@ -173,14 +185,6 @@ public class Project implements Serializable {
 	public void setType(String type) {
 		this.type = type;
 	}
-
-//	public String getProtocolId() {
-//		return protocolId;
-//	}
-//
-//	public void setProtocolId(String protocolId) {
-//		this.protocolId = protocolId;
-//	}
 
 	public String getLabel() {
 		return label;
@@ -198,6 +202,19 @@ public class Project implements Serializable {
 		this.plates = plates;
 	}
 	
+
+	public List<User> getCollaborators() {
+		return collaborators;
+	}
+
+	public void setCollaborators(List<User> collaborators) {
+		this.collaborators = collaborators;
+	}
+
+	/**
+	 * Custom implementation of equals method.
+	 * Allow proper handling of projects sets by their logic key (id field)
+	 */
 	@Override
 	public boolean equals(Object obj){
 		
@@ -215,16 +232,12 @@ public class Project implements Serializable {
 		return true;
 	}
 	
+	/**
+	 * Custom implementation of hashcode
+	 */
 	@Override
 	public int hashCode(){
 		return 31;
 	}
 
-	public List<User> getCollaborators() {
-		return collaborators;
-	}
-
-	public void setCollaborators(List<User> collaborators) {
-		this.collaborators = collaborators;
-	}
 }

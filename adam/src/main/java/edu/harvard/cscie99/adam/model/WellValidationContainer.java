@@ -1,11 +1,39 @@
 package edu.harvard.cscie99.adam.model;
 
+/**
+ * WellValidationContainer object
+ * 
+ * Model class used to transit information from frontend to QC services,
+ * regarding validation of Wells (heat map screen)
+ * 
+ * @author Alex
+ *
+ */
 public class WellValidationContainer
 {
+	/**
+	 * Project Id 
+	 */
 	private Integer projectId;
+	
+	/**
+	 * Plate Id
+	 */
 	private Integer plateId;
+	
+	/**
+	 * Row number position
+	 */
 	private Integer rowNum;
+	
+	/**
+	 * Col number position
+	 */
 	private Integer colNum;
+	
+	/**
+	 * Indicator of valid/invalid well
+	 */
 	private boolean ifValid;
 	
 	public Integer getPlateId() {

@@ -1,21 +1,33 @@
 package edu.harvard.cscie99.adam.model;
 
-
-
 /**
+ * Decay class
+ * 
+ * Represent the rate of decay in experiments
  * 
  * @author Alexander G.
- *
  */
 
 public class Decay extends Curve
 {
+	/**
+	 * Rate of decay (ex: 50%)
+	 */
 	private double decayRate;
 	
+	/**
+	 * Plateau 
+	 */
 	private double plateau;
 	
+	/**
+	 * Time to 50% decay
+	 */
 	private double halfTime;
 	
+	/**
+	 * Constant value of graph type
+	 */
 	private String graphType = "decay";
 	
 	public double getDecayRate() {

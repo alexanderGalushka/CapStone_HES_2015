@@ -19,6 +19,9 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 /**
+ * Well class
+ * 
+ * Represents a single well in the plate
  * 
  * @author Gerson
  *
@@ -31,43 +34,54 @@ public class Well implements Serializable, Comparable<Well> {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Auto-generated DB Key
+	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "well_id")
 	private Integer id;
 
+	/**
+	 * Well's row coordinate
+	 */
 	@Column(name = "row")
 	private int row;
 
+	/**
+	 * Well's column coordinate
+	 */
 	@Column(name = "col")
 	private int col;
-
-	// add each label to this string separated by space character
-	// @Column(name = "labels")
-	// private String labels;
-
+	
+	/**
+	 * Well's control type (eg: NEGATIVE, POSITIVE)
+	 */
 	@Column(name = "control_type")
 	private String controlType;
 
+	/**
+	 * Well's validity indicator 
+	 */
 	@Column(name = "if_valid")
 	private boolean ifValid = true;
 
-	// @Column(name = "substrate")
-	// private Substrate substare;
-
+	/**
+	 * List of well labels associated to Wells.
+	 * For each well label in the plate, well wil have a WellLabel object with name and value
+	 */
 	@ManyToMany
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinTable(name = "well_label_values", joinColumns = { @JoinColumn(name = "well_id", referencedColumnName = "well_id") }, inverseJoinColumns = { @JoinColumn(name = "well_label_id", referencedColumnName = "well_label_id") })
 	private List<WellLabel> wellLabels;
 
-	// @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	// private List<Compound> compounds;
-
+	/**
+	 * Results associated to Well
+	 */
 	@OneToMany(fetch = FetchType.LAZY)
 	private List<ResultSnapshot> resultSnapshots;
 
 	public Well() {
-		// compounds = new ArrayList<Compound>();
 		wellLabels = new ArrayList<WellLabel>();
 		resultSnapshots = new ArrayList<ResultSnapshot>();
 	}
@@ -80,18 +94,6 @@ public class Well implements Serializable, Comparable<Well> {
 		this.id = id;
 	}
 
-	// public String getLabels() {
-	// return labels;
-	// }
-	// public void setLabels(String labels) {
-	// this.labels = labels;
-	// }
-	// public Integer getColor() {
-	// return color;
-	// }
-	// public void setColor(Integer color) {
-	// this.color = color;
-	// }
 	public String getControlType() {
 		return controlType;
 	}
@@ -115,20 +117,7 @@ public class Well implements Serializable, Comparable<Well> {
 	public void setIfValid(boolean ifValid) {
 		this.ifValid = ifValid;
 	}
-
-	// public Substrate getSubstare() {
-	// return substare;
-	// }
-	// public void setSubstare(Substrate substare) {
-	// this.substare = substare;
-	// }
-	// public List<Compound> getCompounds() {
-	// return compounds;
-	// }
-	// public void setCompounds(List<Compound> compounds) {
-	// this.compounds = compounds;
-	// }
-
+	
 	public List<WellLabel> getWellLabels() {
 		return wellLabels;
 	}
@@ -153,6 +142,9 @@ public class Well implements Serializable, Comparable<Well> {
 		this.col = col;
 	}
 
+	/**
+	 * Allow well sorting per (1) row and (2) column
+	 */
 	@Override
 	public int compareTo(Well other) {
 		if (other != null){

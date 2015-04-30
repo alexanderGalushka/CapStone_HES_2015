@@ -16,8 +16,12 @@ import javax.persistence.OneToMany;
 
 
 /**
+ * ResultSnapshot class.
  * 
- * @author Alexander G.
+ * Represents one instance of results loaded from Plate Reader instrument,
+ * in a certain period of time.
+ * 
+ * @author Gerson
  *
  */
 @Entity
@@ -28,22 +32,30 @@ public class ResultSnapshot implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * Auto-generated Key
+	 */
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "result_snapshot_id")
 	private int id;
 	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name="plate_id")
-//    private Plate plate;
-	
-	// accounted for pharmacokinetics
+	/**
+	 * Timestamp: date and time the reading took place.
+	 * This accounts for pharmacokinetic data
+	 */
 	@Column(name = "time")
 	private Date time;
-			
+	
+	/**
+	 * List of measurements
+	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Measurement> measurements;
 	
+	/**
+	 * Constructor
+	 */
 	public ResultSnapshot(){
 		this.measurements = new ArrayList<Measurement>();
 	}
@@ -69,14 +81,14 @@ public class ResultSnapshot implements Serializable{
 		this.time = time;
 	}
 
-//	public Plate getPlate() {
-//		return plate;
-//	}
-//
-//	public void setPlate(Plate plate) {
-//		this.plate = plate;
-//	}
-	
+	/**
+	 * getMeasurementsFromWell: auxiliary method that returns list of Measurements
+	 * for a particular row and column
+	 *  
+	 * @param row
+	 * @param col
+	 * @return list of measurements
+	 */
 	public List<Measurement> getMeasurementsFromWell(int row, int col){
 		
 		List<Measurement> measures = new ArrayList<Measurement>();
@@ -89,6 +101,9 @@ public class ResultSnapshot implements Serializable{
 		return measures;
 	}
 	
+	/**
+	 * Overriding custom equals to enforce proper ResutlSnapshot set handling
+	 */
 	@Override
 	public boolean equals(Object obj){
 		
@@ -106,6 +121,9 @@ public class ResultSnapshot implements Serializable{
 		return true;
 	}
 	
+	/**
+	 * Custom implementation of hashcode
+	 */
 	@Override
 	public int hashCode(){
 		return 31;
