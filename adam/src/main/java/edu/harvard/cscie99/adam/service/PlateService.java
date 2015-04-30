@@ -26,7 +26,6 @@ import edu.harvard.cscie99.adam.model.WellLabel;
 @Component
 public class PlateService {
 	
-
 	@Autowired
     private SessionFactory sessionFactory;
 	
@@ -39,7 +38,10 @@ public class PlateService {
 			
 			uniquePlates = new HashSet<Plate>();
 			for (Plate plate : plateList){
-				uniquePlates.add(plate);
+				if(true == plate.getIfValid())
+				{
+					uniquePlates.add(plate);
+				}
 			}
 			
 			for (Plate plate : uniquePlates){
@@ -63,7 +65,7 @@ public class PlateService {
 		Plate plate = null;
 		try{
 			plate = (Plate) session.get(Plate.class, plateId);
-			if (plate != null){
+			if (plate != null && true == plate.getIfValid()){
 				loadPlate(plate);
 			}
 		}
@@ -105,6 +107,7 @@ public class PlateService {
 				}
 			}
 			plate.setWells(wellList);
+			plate.setIfValid(true);
 		}
 
 		Session session = sessionFactory.openSession();
