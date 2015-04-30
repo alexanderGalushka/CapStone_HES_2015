@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import edu.harvard.cscie99.adam.error.InvalidPlateFileException;
 import edu.harvard.cscie99.adam.error.ParserException;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
 import edu.harvard.cscie99.adam.model.Plate;
@@ -132,7 +133,7 @@ public class PlateController {
 	@RequestMapping(value="/upload_plate", method=RequestMethod.POST)
 	public @ResponseBody Plate handlePlateUpload(
 			@RequestParam("name") String name,
-			@RequestParam("file") MultipartFile file) throws IOException, ParserException{
+			@RequestParam("file") MultipartFile file) throws IOException, ParserException, InvalidPlateFileException{
 		
 		Plate plate = null;
 		
@@ -153,7 +154,7 @@ public class PlateController {
 	@RequestMapping(value="/upload_plate_with_result", method=RequestMethod.POST)
 	public @ResponseBody Plate handlePlateAndResultUpload(
 			@RequestParam("name") String name,
-			@RequestParam("file") MultipartFile file) throws IOException, ParserException{
+			@RequestParam("file") MultipartFile file) throws IOException, ParserException, InvalidPlateFileException{
 		
 		Plate plate = null;
 		

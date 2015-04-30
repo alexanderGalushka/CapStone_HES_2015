@@ -45,7 +45,7 @@ public class PlateFileParser {
 		
 		Plate plate = new Plate();
 		
-		//
+		//Well caching object
 		HashMap<String, Well> wellsMap = new HashMap<String, Well>();
 		HashSet<String> plateLabelNames = new HashSet<String>();
 		HashSet<String> plateControlTypes = new HashSet<String>();
