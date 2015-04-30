@@ -2,18 +2,28 @@ package edu.harvard.cscie99.adam.model;
 
 
 /**
+ * Polynom class
+ * 
+ * Represents a polynom curve in the saved results section of Data Analysis
  * 
  * @author Alexander G.
- *
  */
 
 public class Polynom extends Curve
 {
-
+	/**
+	 * Array of polinomial coefficients. Each position in the array represents a variable degree (index=2 is variable to second degree)
+	 */
 	private double[] polinimialCoeff;
 	
+	/**
+	 * R squared value: squared value of R
+	 */
 	private double rSquared;
 	
+	/**
+	 * Type of curve
+	 */
 	private String curveType;
 	
 	public double getrSquared()
