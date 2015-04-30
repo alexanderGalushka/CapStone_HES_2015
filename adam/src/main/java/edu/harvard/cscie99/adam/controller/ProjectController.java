@@ -61,15 +61,6 @@ public class ProjectController {
 		return projectService.createProject(newProject);
 	}
 	
-//	@RequestMapping(value = "/rest/project2", method = RequestMethod.POST)
-//	@ResponseBody
-//	public Project createProject2(
-//			@RequestBody Project newProject) throws UnauthorizedOperationException{
-//		
-//		System.out.println("algo");
-//		return projectService.createProject(newProject);
-//	}
-	
 	@RequestMapping(value = "/rest/project", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Project> listProjects() throws UnauthorizedOperationException{
