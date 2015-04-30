@@ -20,7 +20,6 @@ import edu.harvard.cscie99.adam.service.UserService;
 @RequestMapping(value = "/")
 public class CollaborationController {
 	
-	//TODO implement
 
 	@Autowired
 	private AuthenticationService authService;
