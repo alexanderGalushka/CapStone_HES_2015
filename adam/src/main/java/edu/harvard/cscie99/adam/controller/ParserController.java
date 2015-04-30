@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import edu.harvard.cscie99.adam.error.InvalidPlateFileException;
 import edu.harvard.cscie99.adam.error.ParserException;
 import edu.harvard.cscie99.adam.error.SessionTimeouException;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
@@ -66,7 +67,7 @@ public class ParserController {
 	@ResponseBody
 	public Plate parsePlate(@PathVariable("project_id") int projectId,
 			@PathVariable("filename") String filename) throws ParserException,
-			UnauthorizedOperationException {
+			UnauthorizedOperationException, InvalidPlateFileException {
 
 		Plate plate = parserService.parsePlateFromFile(filename);
 
