@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import edu.harvard.cscie99.adam.error.LoginFailedException;
 import edu.harvard.cscie99.adam.error.SessionTimeouException;
@@ -35,7 +36,7 @@ public class AuthenticationController {
 	private AuthenticationService authService;
 	
 	@RequestMapping(value = "/do_login", method = RequestMethod.GET)
-	public @ResponseBody User login( @RequestParam("username") String username,
+	public ModelAndView login( @RequestParam("username") String username,
 									 @RequestParam("password") String password,
 									 HttpServletRequest request, 
 									 HttpServletResponse response) throws LoginFailedException
@@ -71,7 +72,7 @@ public class AuthenticationController {
 //		user.setPassword(null);
 	
 		user.setPassword(authService.hashPassword(user.getPassword()));
-		return user;
+		return new ModelAndView("redirect:/#/projects");
 
 	}
 	
