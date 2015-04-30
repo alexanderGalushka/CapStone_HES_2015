@@ -153,8 +153,8 @@ public class PlateFileParser {
         }
         
         if (plateDimensionCol != 0 && plateDimensionRow != 0){
-        	plate.setNumberOfRows(plateDimensionRow);
-        	plate.setNumberOfColumns(plateDimensionCol);
+        	plate.setNumberOfRows(plateDimensionRow + 1);
+        	plate.setNumberOfColumns(plateDimensionCol + 1);
         }
 	    
 		return plate;
