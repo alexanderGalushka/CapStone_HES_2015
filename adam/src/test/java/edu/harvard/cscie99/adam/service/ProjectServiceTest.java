@@ -1,18 +1,22 @@
 package edu.harvard.cscie99.adam.service;
 
+import org.hibernate.SessionFactory;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import edu.harvard.cscie99.adam.config.PersistenceConfig;
 import junit.framework.TestCase;
 
 public class ProjectServiceTest extends TestCase {
 
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
-
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
+	@Autowired
+	private PersistenceConfig persistenceConfig;
 	
-	public void testCreateProject(){
+	@Autowired
+    private SessionFactory sessionFactory;
+	
+	@Test
+	public void testReadColumnBasedFile(){
 		
 		//TODO
 		assertTrue(true);
