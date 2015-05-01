@@ -26,19 +26,25 @@ import edu.harvard.cscie99.adam.profile.User;
         classes = { PersistenceConfig.class, PersistenceXmlConfig.class })
 public class PlateMapperTest extends TestCase{
 	
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
-
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
+	@Autowired
+	private PersistenceConfig persistenceConfig;
 	
-	public void testReadColumnBasedFile(){
+	@Autowired
+    private SessionFactory sessionFactory;
+	
+	@Test
+	public void testDatabaseBootstrap(){
 		
-		//TODO
+//		Compound compound = new Compound();
+//		compound.setName("NaCl");
+		
+		Session session = sessionFactory.openSession();
+//		session.beginTransaction();
+//		session.save(compound);
+//		session.getTransaction().commit();
+		session.close();
 		assertTrue(true);
+		
 	}
-
 
 }
