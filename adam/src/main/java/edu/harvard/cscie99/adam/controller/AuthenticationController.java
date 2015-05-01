@@ -25,42 +25,66 @@ import edu.harvard.cscie99.adam.service.AuthenticationService;
 
 /**
  * 
+ * AuthenticationController class
+ * 
+ * Intercepts user authentication method calls (login and logout)
+ * 
  * @author Gerson
  *
  */
 @RestController
 @RequestMapping(value = "/")
 public class AuthenticationController {
+	
+	private static final String ADAM_LAND_PAGE_URL = "redirect:/#/projects";
 
+	/**
+	 * AuthenticationService - Implements the logic of User credentials validation in DB
+	 */
 	@Autowired
 	private AuthenticationService authService;
 	
+	/**
+	 * login method
+	 * 
+	 * Executes the login. Method is called by the frontend application, and redirects the user
+	 * to ADAM's landing page (Project list)
+	 * 
+	 * @param username - User's username
+	 * @param password - User's password
+	 * @param request - HTTPRequest object
+	 * @param response - HTTPResponse object
+	 * @return ModelAndView - redirection to ADAM landpage
+	 * @throws LoginFailedException
+	 */
 	@RequestMapping(value = "/do_login", method = RequestMethod.GET)
 	public ModelAndView login( @RequestParam("username") String username,
 									 @RequestParam("password") String password,
 									 HttpServletRequest request, 
 									 HttpServletResponse response) throws LoginFailedException
 	{
-		HttpSession session = request.getSession();// it will go and look after the web.xml properties and check for the time out setting.
+		//Retrieves the current Http session or creates a new Http Session if none exists
+		HttpSession session = request.getSession();
 
-	    //if User is already logged and session not expired
-		
-		// not sure what getAttribute would return if the attribute is not set - need to check!
-		
+		//Checks if user has logged in
 		Object userObject = session.getAttribute(AuthenticationService.C_USER_SESSION);
 		User user = null;
 		if(userObject == null)
 		{
-			//authenticationService will lookup database and match user and password
+			//If the user is not logged in, check its credentials with User information in DB
 			user = authService.validateCredentials(username, password);
 	       
 			if (user != null)
 			{
+				//Login successful
+				//Saves the user in session for further login attemps
+				//Session lasts according to <session> attribute in web.xml
 				session.setAttribute(AuthenticationService.C_USER_SESSION, user);
 			}
 			else
 			{
-				throw new LoginFailedException("bad credentials");
+				//Login unsuccessful
+				throw new LoginFailedException("Failed to Login: check username and password");
 			}			
 		}
 		else
@@ -68,25 +92,38 @@ public class AuthenticationController {
 			user = (User) userObject;
 		}
 		
-		//clear password for security
-//		user.setPassword(null);
-	
+		//Hashes the user password brefore presenting to frontend
 		user.setPassword(authService.hashPassword(user.getPassword()));
-		return new ModelAndView("redirect:/#/projects");
+		//redirects the user to Adam's landpage
+		return new ModelAndView(ADAM_LAND_PAGE_URL);
 
 	}
 	
+	/**
+	 * logout method
+	 * 
+	 * Removes the user from HttpSession and redirects to Login screen
+	 * 
+	 * @param request - HttpRequest object
+	 * @param response - HttpResponse object
+	 * @return boolean - operation successful
+	 */
 	@RequestMapping(value = "/do_logout", method = RequestMethod.GET)
 	public boolean logout(HttpServletRequest request, 
-									 HttpServletResponse response) throws LoginFailedException
+									 HttpServletResponse response)
 	{
-		HttpSession session = request.getSession();// it will go and look after the web.xml properties and check for the time out setting.
-		session.invalidate();
+		//Retrieves existing HTTP Session
+		HttpSession session = request.getSession(false);
+		//If session doesn't exists, user is not logged in
+		if (session != null){
+			//Invalidates the session
+			session.invalidate();
+		}
 		
+		//Redirects to the login page
 		try {
 			response.sendRedirect(AuthInterceptor.C_LOGIN_SCREEN);
 		} catch (IOException e) {
-			e.printStackTrace();
 			return false;
 		}
 		
