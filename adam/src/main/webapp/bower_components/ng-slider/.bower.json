@@ -45,6 +45,6 @@
     "commit": "b40ef5fbb6ddf3fc0fda515321b2a58364798094"
   },
   "_source": "git://github.com/darul75/ng-slider.git",
-  "_target": "*",
+  "_target": "~2.2.6",
   "_originalSource": "ng-slider"
 }

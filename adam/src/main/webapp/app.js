@@ -1,40 +1,87 @@
 'use strict';
 
-// Declare app level module which depends on views, and components
-angular.module('hesAdam', [
-    'ngRoute',
-    'smart-table',
-    'mgcrea.ngStrap',
-    'ngAnimate',
-    'ngSanitize',
-    'projects',
-    'plates',
-    'plateeditor',
-    'version',
-    'adamServices'
-])
+/**
+ * @ngdoc overview
+ * @name adamApp
+ * @description
+ * # adamApp
+ *
+ * Main module of the application.
+ */
+(function() {
+  angular
+    .module('adamApp', [
+      'ngAnimate',
+      'ngCookies',
+      'ngResource',
+      'ngRoute',
+      'ngSanitize',
+      'smart-table',
+      'mgcrea.ngStrap',
+      'ngSlider',
+      // application modules
+      'adamServices',
+      'navbarAdam',
+      'project',
+      'projectpanel',
+      'project.data.model',
+      'plate',
+      'plate.data.model',
+      'platepanel',
+      'collaborator.data.model',
+      'plateeditor',
+      'resetsel',
+      'plotlabels',
+      'singlewell',
+      'wellstable',
+      'wellattrfilter',
+      'plateresults',
+      'measurmentsfilter',
+      "qc.data.model",
+      'qc',
+      'qcsinglewell',
+      'qcwellattrfilter'
+    ])
 
+    .config(configAdam);
 
-    .config(['$routeProvider',
-        function($routeProvider) {
-            $routeProvider.
-                when('/projects', {
-                    templateUrl: 'projects/projects.html',
-                    controller: 'ProjectsCtrl'
-                }).
-                when('/plates', {
-                    templateUrl: 'plates/plates.html',
-                    controller: 'PlatesCtrl'
-                }).
-                when('/plateeditor', {
-                    templateUrl: 'plateeditor/plateeditor.html',
-                    controller: 'PlateeditorCtrl'
-                }).
-                when('/dataanalysis', {
+  configAdam.$inject =['$routeProvider','$resourceProvider'];
+  function configAdam($routeProvider,$resourceProvider){
+    //$resourceProvider.defaults.useXDomain = true;  not supported?
+
+    $routeProvider.
+      when('/projects', {
+        templateUrl: 'project/project.html',
+        controller: 'ProjectsCtrl',
+        controllerAs: 'projVm'
+      }).
+      when('/plates', {
+        templateUrl: 'plate/plate.html',
+        controller: 'PlateCtrl',
+        controllerAs: 'plateVm'
+      }).
+      when('/plateeditor', {
+        templateUrl: 'plateeditor/plateeditor.html',
+        controller: 'PlateeditorCtrl',
+        controllerAs: 'pleditVm'
+      }).
+      when('/plateresults', {
+        templateUrl: 'plateresult/plateresult.html',
+        controller: 'PlateResultsCtrl',
+        controllerAs: 'plresVm'
+      }).
+      when('/qc', {
+        templateUrl: 'qc/qc.html',
+        controller: 'QcCtrl',
+        controllerAs: 'qcVm'
+      }).
+      when('/dataanalysis', {
                     templateUrl: 'dataanalysis/data_analysis.html',
-                    controller: 'DataAnalysisController'
+                    controller: 'DropdownCtrl'
                 }).
-                otherwise({
-                    redirectTo: '/projects'
-                });
-        }]);
+      otherwise({
+        redirectTo: '/projects'
+      });
+  }
+
+})();

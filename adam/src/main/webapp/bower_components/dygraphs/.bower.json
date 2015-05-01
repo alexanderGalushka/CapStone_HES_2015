@@ -48,6 +48,6 @@
     "commit": "6da2bb06976ff7fc4bd7838e1a3da1032868c2a4"
   },
   "_source": "git://github.com/danvk/dygraphs.git",
-  "_target": "*",
+  "_target": "~1.1.0",
   "_originalSource": "dygraphs"
 }
