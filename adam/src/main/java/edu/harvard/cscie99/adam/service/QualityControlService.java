@@ -17,12 +17,14 @@ import org.apache.commons.math3.util.FastMath;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import edu.harvard.cscie99.adam.error.BadPlateValidatorException;
 import edu.harvard.cscie99.adam.error.BadWellValidatorException;
 import edu.harvard.cscie99.adam.error.DbReadException;
 import edu.harvard.cscie99.adam.error.DbWriteException;
 import edu.harvard.cscie99.adam.model.Measurement;
 import edu.harvard.cscie99.adam.model.MeasurementType;
 import edu.harvard.cscie99.adam.model.Plate;
+import edu.harvard.cscie99.adam.model.PlateValidationContainer;
 import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.model.QCdata;
 import edu.harvard.cscie99.adam.model.QCdataTimeWrapper;
@@ -159,6 +161,89 @@ public class QualityControlService
 			}
 		}
 
+	}
+	
+	public void validateGroupOfPlates (List<PlateValidationContainer> groupOfPlateValidators) throws BadPlateValidatorException,
+	                                                                                         		 DbReadException,
+	                                                                                         		 DbWriteException
+	 {
+        Session session = null;
+		try
+		{
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			
+			for (PlateValidationContainer plateValidator : groupOfPlateValidators)
+			{
+				if (null == plateValidator.getPlateId())
+				{
+					throw new BadPlateValidatorException("Plate ID is null");
+				}
+				Plate plateToValidate = null;
+				try
+				{
+					plateToValidate = plateService.retrievePlate(plateValidator.getPlateId());
+				}
+				catch (Exception e)
+				{
+					throw new DbReadException("Couldn't retrieve the plate data");
+				}
+				finally
+				{
+					plateToValidate.setIfValid(plateValidator.getIfValid());
+					session.saveOrUpdate(plateToValidate);
+				}
+			}
+			
+			session.getTransaction().commit();
+		}
+		catch(Exception e)
+		{
+			throw new DbWriteException("Couldn't write the plate data");
+		}
+		finally
+		{
+			session.close();
+		}
+	 }
+	
+	public void validateSinglePlate (PlateValidationContainer plateValidator) throws BadPlateValidatorException,
+		DbReadException,
+		DbWriteException
+	{
+		Session session = null;
+		if (null == plateValidator.getPlateId())
+		{
+			throw new BadPlateValidatorException("Plate ID is null");
+		}
+		Plate plateToValidate = null;
+		try
+		{
+			plateToValidate = plateService.retrievePlate(plateValidator.getPlateId());
+		}
+		catch (Exception e)
+		{
+			throw new DbReadException("Couldn't retrieve the plate data");
+		}
+		finally
+		{
+			try
+			{
+				session = sessionFactory.openSession();
+				session.beginTransaction();
+				plateToValidate.setIfValid(plateValidator.getIfValid());
+				session.saveOrUpdate(plateToValidate);
+			}
+			catch (Exception e)
+			{
+				throw new DbWriteException("Couldn't write the plate data");
+			}
+			finally
+			{
+				session.close();
+			}
+		}
+	
 	}
 	
 	/**
@@ -347,8 +432,13 @@ public class QualityControlService
 	
 	public QCplate qualifyDataPerPlate(int plateId)
 	{
+		QCplate qcPlate = null;
 		Plate plate = plateService.retrievePlate(plateId);
-		return actualDataQualificationPerPlate(plate);
+		if(true == plate.getIfValid())
+		{
+			qcPlate = actualDataQualificationPerPlate(plate);
+		}
+		return qcPlate;
 	}
 	
 	public List<QCplate> qualifyDataPerProject (int projectId)
@@ -359,7 +449,10 @@ public class QualityControlService
 		
 		for (Plate plate : project.getPlates() )
 		{
-			qcPlateList.add(actualDataQualificationPerPlate (plate));
+			if (true == plate.getIfValid())
+			{
+				qcPlateList.add(actualDataQualificationPerPlate (plate));
+			}
 		}
 		
 		return qcPlateList;

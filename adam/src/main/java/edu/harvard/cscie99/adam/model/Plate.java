@@ -14,13 +14,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-
-import edu.harvard.cscie99.adam.profile.User;
 
 /**
  * 
@@ -98,6 +95,9 @@ public class Plate implements Serializable{
 	@Column(name = "barcode")
 	private String barcode;
 
+	@Column(name = "ifValid")
+	private boolean ifValid;
+	
 	/**
 	 * Tags associated to Plate
 	 */
@@ -297,6 +297,14 @@ public class Plate implements Serializable{
 
 	public void setControlTypes(List<ControlType> controlTypes) {
 		this.controlTypes = controlTypes;
+	}
+	
+	public boolean getIfValid() {
+		return ifValid;
+	}
+
+	public void setIfValid(boolean ifValid) {
+		this.ifValid = ifValid;
 	}
 
 //	public Project getProject() {

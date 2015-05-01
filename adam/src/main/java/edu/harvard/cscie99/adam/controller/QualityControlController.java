@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
+import edu.harvard.cscie99.adam.model.PlateValidationContainer;
 import edu.harvard.cscie99.adam.model.QCdataTimeWrapper;
 import edu.harvard.cscie99.adam.model.QCplate;
 import edu.harvard.cscie99.adam.model.WellValidationContainer;
@@ -88,6 +89,48 @@ public class QualityControlController
 		finally
 		{
 			result = qualityControlService.qualifyDataPerProject(listOfWellValidators.get(0).getProjectId());
+		}
+		return result;
+	}
+	
+	
+	@RequestMapping(value = "/rest/qc/single_plate_validation", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean validateSingleWPlate(@RequestBody PlateValidationContainer plateValidator) 
+			                                       throws  UnauthorizedOperationException{
+		boolean result = false;
+		try
+		{
+			qualityControlService.validateSinglePlate(plateValidator);
+		}
+        catch (Exception e)
+		{
+        	//TODO 
+		}
+		finally
+		{
+			result = true;
+		}
+		
+		return result;
+	}
+	
+	@RequestMapping(value = "/rest/qc/group_plate_validation", method = RequestMethod.POST)
+	@ResponseBody
+	public boolean validateGroupOfPlates(@RequestBody List<PlateValidationContainer> listOfPlateValidators)
+																throws  UnauthorizedOperationException{
+		boolean result = false;
+		try
+		{
+			qualityControlService.validateGroupOfPlates(listOfPlateValidators);
+		}	
+        catch (Exception e)
+		{
+        	//TODO 
+		}
+		finally
+		{
+			result = true;
 		}
 		return result;
 	}
