@@ -2,6 +2,6 @@
 --><label ng-repeat="j in []|range:0:ActivePlateResult.plateResult.numberOfColumns-1" style="white-space: nowrap;padding:0px;margin:0px;border:0px width:0px;height:0px"><!--
     --><adamhes-qc-single-well well="ActivePlateResult.plateResult.activeMeasurement.wells[(i * ActivePlateResult.plateResult.numberOfColumns)+ j]" boxsize="{{qcVm.boxsz}}" wellcollors="qcVm.wellcollors" valuerange="ActivePlateResult.plateResult.valuerange" controltypes="ActivePlateResult.plateResult.controlTypes" style="white-space: nowrap;padding:0px;margin:0px;border:0px width:0px;height:0px"></adamhes-qc-single-well><!--
 --></label><!--
---></div> </label> </div> <div class="panel-group col-md-8"> <input ng-model="ActivePlateResult.plateResult.valueslider" type="text" id="mySlider1" slider options="ActivePlateResult.plateResult.options"> </div> <div class="panel-group col-md-8" style="white-space: nowrap"><!--
+--></div> </label> </div> <div class="panel-group col-md-8"> <input ng-model="ActivePlateResult.plateResult.valueslider" type="text" id="mySlider1" slider options="ActivePlateResult.plateResult.options"> </div> <div class="panel-group col-md-8" style="white-space: nowrap">{{ActivePlateResult.plateResult.valuerange.minvalue}}<!--
 --><label ng-repeat="i in []|range:0:50" style="background-color:hsl(0,100%,{{i*2}}%);width: 20px;height: 20px"></label><!--
-  --></div>
+  -->{{ActivePlateResult.plateResult.valuerange.maxvalue}}</div>
