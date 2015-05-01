@@ -26,6 +26,11 @@ import edu.harvard.cscie99.adam.service.ProjectService;
 import edu.harvard.cscie99.adam.service.TagService;
 
 /**
+ * ProjectController class
+ * 
+ * Controller that handles request from the frontend to perform 
+ * project related operations (create, remove, update, delete, list)
+ * Methods use RESTful calls
  * 
  * @author Gerson
  *
@@ -34,21 +39,44 @@ import edu.harvard.cscie99.adam.service.TagService;
 @RequestMapping(value = "/")
 public class ProjectController {
 
+	/**
+	 * ProjectService object
+	 * Uses Spring IoC to instantiate PlateService in runtime
+	 */
 	@Autowired
 	private ProjectService projectService;
 	
+	/**
+	 * PlateService object
+	 */
 	@Autowired
 	private PlateService plateService;
 
-	@Autowired
-	private TagService tagService;
-
+	/**
+	 * AuthenticationService object
+	 */
 	@Autowired
 	private AuthenticationService authService;
 	
+	/**
+	 * ProfileService object
+	 */
 	@Autowired
 	private ProfileService profileService;
 	
+	/**
+	 * createProject method
+	 * 
+	 * Creates a new Project and persists in the DB.
+	 * Implements the RESTful POST method. 
+	 * 
+	 * The method receives input parameters in JSON string format,
+	 * and Jackson API maps the JSON string into Java Objects.
+	 * The return is mapped back to JSON String with the same mechanism.
+	 * 
+	 * @param newProject - Project object with all project attributes
+	 * @return Project object in JSON format
+	 */
 	@RequestMapping(value = "/rest/project", method = RequestMethod.POST)
 	@ResponseBody
 	public Project createProject(
@@ -61,6 +89,18 @@ public class ProjectController {
 		return projectService.createProject(newProject);
 	}
 	
+	/**
+	 * List Projects method
+	 * 
+	 * Lists all existing projects in the system.
+	 * Implement RESTful method call.
+	 * 
+	 * The method receives input parameters in JSON string format,
+	 * and Jackson API maps the JSON string into Java Objects.
+	 * The return is mapped back to JSON String with the same mechanism.
+	 * 
+	 * @return list of Plate objects
+	 */
 	@RequestMapping(value = "/rest/project", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Project> listProjects() throws UnauthorizedOperationException{
@@ -72,6 +112,19 @@ public class ProjectController {
 		return projects;
 	}
 	
+	/**
+	 * getPproject method.
+	 * 
+	 * Retrieve project's details and returns a JSON representation of Project object.
+	 * Implements a REST method call.
+	 * 
+	 * The method receives input parameters in JSON string format,
+	 * and Jackson API maps the JSON string into Java Objects.
+	 * The return is mapped back to JSON String with the same mechanism.
+	 * 
+	 * @param projectId - Key of Project table in DB
+	 * @return Project object in JSON format
+	 */
 	@RequestMapping(value = "/rest/project/{project_id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Project getProject(
@@ -84,6 +137,20 @@ public class ProjectController {
 		return project;
 	}
 	
+	/**
+	 * updateProject method.
+	 * 
+	 * Updates the project's details in DB and returns the updated object.
+	 * Implements a REST method call.
+	 * 
+	 * The method receives input parameters in JSON string format,
+	 * and Jackson API maps the JSON string into Java Objects.
+	 * The return is mapped back to JSON String with the same mechanism.
+	 * 
+	 * @param projectId - Key of Project table in DB
+	 * @param project - Fully-populated Project object
+	 * @return Project object in JSON format
+	 */
 	@RequestMapping(value = "/rest/project/{project_id}", method = RequestMethod.PUT)
 	public @ResponseBody Project updateProject(
 			@PathVariable("project_id") int projectId,
@@ -101,11 +168,20 @@ public class ProjectController {
 		
 		projectService.updateProject(currentProject);
 		
-		//Dont return plates
+		//Omit plates associated to this project
 		currentProject.setPlates(null);
 		return currentProject;
 	}
 	
+	/**
+	 * deleteProject method.
+	 * 
+	 * Hard-delete the Project from DB (and all Plates and Results associated).
+	 * Implements a REST method call.
+	 * 
+	 * @param projectId - Key of Project table in DB to be deleted
+	 * @return boolean indicatig success or failure in operation
+	 */
 	@RequestMapping(value = "/rest/project/{project_id}", method = RequestMethod.DELETE)
 	@ResponseBody
 	public boolean deleteProject(
@@ -116,6 +192,17 @@ public class ProjectController {
 		return projectService.deleteProject(project);
 	}
 	
+	/**
+	 * addPlateToProject method.
+	 * 
+	 * Associates a Plate object (refer to the documentation) to the Project.
+	 * 
+	 * RESTFul method. Will return a boolean indicating the success of the operation
+	 * 
+	 * @param projectId - Key of Project table in DB
+	 * @param plateId - Key of Plate table in DB
+	 * @return boolean indicatig success or failure in operation
+	 */
 	@RequestMapping(value = "/rest/project/{projectId}/add_plate/{plateId}", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean addPlateToProject(
@@ -133,6 +220,17 @@ public class ProjectController {
 		
 	}
 	
+	/**
+	 * removesPlateToProject method.
+	 * 
+	 * Removes the association between Plate object (refer to the documentation) and the Project.
+	 * 
+	 * RESTFul method. Will return a boolean indicating the success of the operation
+	 * 
+	 * @param projectId - Key of Project table in DB
+	 * @param plateId - Key of Plate table in DB
+	 * @return boolean indicatig success or failure in operation
+	 */
 	@RequestMapping(value = "/rest/project/{projectId}/remove_plate/{plateId}", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean removePlateFromProject(

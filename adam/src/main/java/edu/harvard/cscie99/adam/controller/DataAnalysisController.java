@@ -18,6 +18,10 @@ import edu.harvard.cscie99.adam.service.DataAnalysisService;
 import edu.harvard.cscie99.adam.service.ProjectService;
 
 /**
+ * DataAnalysisController class
+ * 
+ * Intercept calls from the frontend application. 
+ * Execute methods required by Data Analysis module in Adam.
  * 
  * @author Alexander G.
  *
@@ -26,37 +30,22 @@ import edu.harvard.cscie99.adam.service.ProjectService;
 @RequestMapping(value = "/")
 public class DataAnalysisController 
 {
-	
-	@Autowired
-	private ProjectService projectService;
-	
+
+	/**
+	 * Reference for DataAnalysisService.
+	 * Injected by the Spring container in runtime (Inversion of Control)
+	 * 
+	 */
 	@Autowired
 	private DataAnalysisService dataAnalysisService;
 	
-	/*
-	 * get all own projects
-	 */
-	@RequestMapping(value = "da/projects/own", method = RequestMethod.GET)
-	@ResponseBody
-	public Set<Project> listMyProjects()
-	{
-		
-		return projectService.listMyProjects();
-	}
-	
-	/*
-	 * get other's projects
-	 */
-	@RequestMapping(value = "da/projects/others", method = RequestMethod.GET)
-	@ResponseBody
-	public Set<Project> listOthersProjects()
-	{
-		
-		return projectService.listOthersProjects();
-	}
-	
-	/*
-	 * get list of fitted curves
+	/**
+	 * Get the list of fitted curves for (x,y) axis
+	 * 
+	 * @param x - x coordinate
+	 * @param y - y coordinate
+	 * @param fit - optional Fit of curve
+	 * @return List of Curves that matches the input coordinates
 	 */
 	@RequestMapping(value = "da/datapoints/{xAxis}/{yAxis}", method = RequestMethod.GET)
 	@ResponseBody
@@ -73,7 +62,6 @@ public class DataAnalysisController
 		listOfCurves.add(dataAnalysisService.getPolynomialFit(x, y, 3));
 		listOfCurves.add(dataAnalysisService.getDecay(x, y));
 		listOfCurves.add(dataAnalysisService.getGrowth(x, y));
-		//add one more: michaelis-menten
 		
 		return listOfCurves;
 		
