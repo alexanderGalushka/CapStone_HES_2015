@@ -26,25 +26,19 @@ import edu.harvard.cscie99.adam.profile.User;
         classes = { PersistenceConfig.class, PersistenceXmlConfig.class })
 public class PersistenceConfigTest extends TestCase{
 	
-	@Autowired
-	private PersistenceConfig persistenceConfig;
-	
-	@Autowired
-    private SessionFactory sessionFactory;
-	
-	@Test
-	public void testDatabaseBootstrap(){
-		
-//		Compound compound = new Compound();
-//		compound.setName("NaCl");
-		
-		Session session = sessionFactory.openSession();
-//		session.beginTransaction();
-//		session.save(compound);
-//		session.getTransaction().commit();
-		session.close();
-		assertTrue(true);
-		
+	protected void setUp() throws Exception {
+		super.setUp();
 	}
+
+	protected void tearDown() throws Exception {
+		super.tearDown();
+	}
+	
+	public void testReadColumnBasedFile(){
+		
+		//TODO
+		assertTrue(true);
+	}
+
 
 }
