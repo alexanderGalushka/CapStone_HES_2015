@@ -67,7 +67,7 @@ public class QualityControlController
 		}
 		finally
 		{
-			result = qualityControlService.qualifyDataPerPlate(wellValidator.getProjectId());
+			result = qualityControlService.qualifyDataPerPlate(wellValidator.getPlateId());
 		}
 		
 		return result;
