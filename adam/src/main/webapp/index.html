@@ -1,9 +1,96 @@
-<!doctype html> <html class="no-js"> <head> <meta charset="utf-8"> <title></title> <meta name="description" content=""> <meta name="viewport" content="width=device-width"> <!-- Place favicon.ico and apple-touch-icon.png in the root directory --> <link rel="stylesheet" href="styles/vendor.692e8768.css"> <link rel="stylesheet" href="styles/main.2794ceca.css">  <body ng-app="adamApp"> <!--[if lt IE 7]>
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <!-- build:css(.) styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/bootstrap-css-only/css/bootstrap.css" />
+  <link rel="stylesheet" href="bower_components/bootstrap-additions/dist/bootstrap-additions.min.css" />
+  <link rel="stylesheet" href="bower_components/ng-slider/dist/css/ng-slider.min.css" />
+  <link rel="stylesheet" href="bower_components/angular-motion/dist/angular-motion.css" />
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css(.tmp) styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+
+  <!-- endbuild -->
+</head>
+<body ng-app="adamApp">
+<!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-<![endif]--> <!-- Add your site or application content here --> <admahes-navbar></admahes-navbar> <div ng-view=""></div> <div class="footer col-md-12"> <div class="container"> <p><span class="glyphicon glyphicon-heart"></span> from the Adam team V 0.8</p> </div> </div> <!-- Google Analytics: change UA-XXXXX-X to be your site's ID --> <script>!function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
+<![endif]-->
+
+<!-- Add your site or application content here -->
+<admahes-navbar></admahes-navbar>
+
+
+<div ng-view=""></div>
+
+
+<div class="footer col-md-12">
+  <div class="container">
+    <p><span class="glyphicon glyphicon-heart"></span> from the Adam team V 0.8</p>
+  </div>
+</div>
+
+
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+<script>
+  !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
     (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
     r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
   }(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
   ga('create', 'UA-XXXXX-X');
-  ga('send', 'pageview');</script> <script src="scripts/vendor.74baed05.js"></script> <script src="scripts/scripts.c37c4254.js"></script>  
+  ga('send', 'pageview');
+</script>
+
+<!-- build:js(.) scripts/vendor.js -->
+<!-- bower:js -->
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.2/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.2/angular-animate.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.2/angular-cookies.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.2/angular-resource.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.2/angular-route.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.2/angular-sanitize.min.js"></script>
+<script src="bower_components/angular-strap/dist/angular-strap.js"></script>
+<script src="bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
+<script src="bower_components/angular-smart-table/dist/smart-table.js"></script>
+<script src="bower_components/ng-slider/dist/ng-slider.min.js"></script>
+<script src="bower_components/dygraphs/dygraph-combined.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:js({.tmp,app}) scripts/scripts.js -->
+<script src="app.js"></script>
+<script src="project/project.controller.js"></script>
+<script src="project/project.panel.directive.js"></script>
+<script src="dataanalysis/dygraph-combined-dev.js"></script>
+<script src="dataanalysis/dygraph-extra.js"></script>
+<script src="dataanalysis/dataanalysis.js"></script>
+<script src="plate/plate.controller.js"></script>
+<script src="plate/plate.panel.directive.js"></script>
+<script src="plateeditor/plateeditor.controller.js"></script>
+<script src="plateeditor/resetselection.factrory.js"></script>
+<script src="plateeditor/plotlabels/plotlabels.directive.js"></script>
+<script src="plateeditor/singlewell/singlewell.directive.js"></script>
+<script src="plateeditor/singlewell/wellattr.filter.js"></script>
+<script src="plateeditor/wellstable/wells.table.directive.js"></script>
+<script src="plateresult/plateresult.controller.js"></script>
+<script src="plateresult/measurments.filter.js"></script>
+<script src="qc/qc.controller.js"></script>
+<script src="qc/qcsinglewell.directive.js"></script>
+<script src="qc/qcwellattr.filter.js"></script>
+<script src="services/services.js"></script>
+<script src="layout/navbar.directive.js"></script>
+<script src="datamodel/project.data.model.js"></script>
+<script src="datamodel/plate.data.model.js"></script>
+<script src="datamodel/collaborator.data.model.js"></script>
+<script src="datamodel/qc.data.model.js"></script>
+<!-- endbuild -->
+</body>
+</html>
