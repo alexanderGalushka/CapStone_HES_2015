@@ -54,9 +54,9 @@ public class QualityControlController
 	
 	@RequestMapping(value = "/rest/qc/single_well_validation", method = RequestMethod.POST)
 	@ResponseBody
-	public List<QCplate> validateSingleWell(@RequestBody WellValidationContainer wellValidator) 
+	public QCplate validateSingleWell(@RequestBody WellValidationContainer wellValidator) 
 			                                       throws  UnauthorizedOperationException{
-		List<QCplate> result = null;
+		QCplate result = null;
 		try
 		{
 			qualityControlService.validateSingleWell(wellValidator);
@@ -67,7 +67,7 @@ public class QualityControlController
 		}
 		finally
 		{
-			result = qualityControlService.qualifyDataPerProject(wellValidator.getProjectId());
+			result = qualityControlService.qualifyDataPerPlate(wellValidator.getProjectId());
 		}
 		
 		return result;
