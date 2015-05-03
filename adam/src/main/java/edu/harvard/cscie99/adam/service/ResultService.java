@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -284,5 +285,56 @@ public class ResultService {
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * method to return all "virtual Wells", structure with plateId, wellId, list of WellLabel, timestamp,
+	 * unique measurement and value for it
+	 * @param projectId
+	 * @return
+	 */
+	public ArrayList<HashMap<Object, Object>> getAllWells( int projectId )
+	{
+		
+		ArrayList<HashMap<Object, Object>> result = new ArrayList<>();
+		//populateLetterMapping();
+		
+		Project project = projectService.retrieveProject(projectId);
+		
+		for (Plate plate: project.getPlates()){
+			
+			for (ResultSnapshot rs : plate.getResults()){
+				
+				long time = rs.getTime().getTime();
+				
+				for (Well well : plate.getWells()){
+					
+					Map<Object, Object> entry = new HashMap<>();
+					entry.put("plateId", plate.getId());
+					entry.put("wellId", well.getId());
+					entry.put("time", time);
+					
+					List<HashMap<Object, Object>> wellLabelEntries = new ArrayList<>();
+					for (WellLabel wl : well.getWellLabels())
+					{
+						HashMap<Object, Object> wellLablEntry = new HashMap<>();
+						wellLablEntry.put(wl.getName(), wl.getValue());	
+						wellLabelEntries.add(wellLablEntry);
+					}
+					
+					entry.put("wellLabels", wellLabelEntries);
+					
+					for (Measurement m : rs.getMeasurementsFromWell(well.getRow(), well.getCol()))
+					{
+						HashMap<Object, Object> newEntry = new HashMap<>();
+						newEntry.putAll(entry);
+						newEntry.put("measurementType", m.getMeasurementType());
+						newEntry.put("measurementValue", m.getValue());
+						result.add(newEntry);
+					}
+				}	
+			}
+		}		
+		return result;
 	}
 }
