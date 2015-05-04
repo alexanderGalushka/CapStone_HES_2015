@@ -19,6 +19,7 @@
       'smart-table',
       'mgcrea.ngStrap',
       'ngSlider',
+      'ngFileUpload',
       // application modules
       'adamServices',
       'navbarAdam',
@@ -40,7 +41,10 @@
       "qc.data.model",
       'qc',
       'qcsinglewell',
-      'qcwellattrfilter'
+      'qcwellattrfilter',
+      'loadresult',
+      'classgridfilter',
+      'well.invalidate.data.model'
     ])
 
     .config(configAdam);

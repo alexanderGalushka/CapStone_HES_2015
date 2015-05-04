@@ -34,8 +34,9 @@
 
     function setActiveProject (proj){
       $scope.ActiveProject.project = proj;
-      $scope.ActivePlate.plate  = "";
-      $scope.activePlateResult.plate  = "";
+      $scope.ActivePlate.plate  = null;
+      $scope.activePlateResult.plateResult  = null;
+      activePlateResult.resultExists = false;
     }
 
   }

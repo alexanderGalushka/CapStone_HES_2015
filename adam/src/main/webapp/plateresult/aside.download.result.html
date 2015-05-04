@@ -1,0 +1,32 @@
+<div class="aside" tabindex="-1" role="dialog">
+  <div class="aside-dialog">
+    <div class="aside-content">
+      <div class="aside-header" ng-show="title">
+        <button type="button" class="close" ng-click="$hide()">&times;</button>
+        <h4 class="aside-title" ng-bind-html="title"></h4>
+      </div>
+      <div class="aside-body">
+
+
+        <table>
+          <tr><td>Plate name &nbsp;</td> <td><label>{{ ActivePlate.plate.name}} {{ ActivePlate.plate.id}}</label></td></tr>
+
+        </table>
+
+        Files:
+        <ul>
+          <li ng-repeat="f in files" style="font:smaller">{{f.name}}</li>
+        </ul>
+        Upload Log:
+
+        <pre>{{plresVm.log}}</pre>
+
+      </div>
+
+      <div class="aside-footer">
+        <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+        <div class="button"  ngf-select ngf-change="plresVm.upload($files, ActivePlate.plate.id)" ngf-multiple="multiple"">Select File</div>
+      </div>
+    </div>
+  </div>
+</div>

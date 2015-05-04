@@ -36,7 +36,7 @@
       Project.delete({"id":indexinp.id});
       var index = coll.indexOf(indexinp);
       coll.splice(index, 1);
-    };
+    }
 
     function addNewProject (){
       projVm.projectAction = "new";
@@ -50,13 +50,13 @@
         "collaborators":[]
       };
       //projVm.newproject.creationDate = $filter('date')(new Date(),'MM/dd/yyyy');
-    };
+    }
 
     function editProject(proj) {
       projVm.projectAction = "edit";
       projVm.newproject = JSON.parse(JSON.stringify(proj));
       //$scope.newproject.name = proj.name;
-    };
+    }
 
     function saveChangesProject(act,proj) {
       if (act == "new") {
@@ -74,25 +74,25 @@
         proj.tags = projVm.newproject.tags;
         proj.collaborators = projVm.newproject.collaborators;
       }
-    };
+    }
 
 
     function setActiveProject (proj){
       $scope.ActiveProject.project= proj;
-      $scope.ActivePlate.plate  = "";
-      $scope.activePlateResult.plate  = "";
-    };
+      $scope.ActivePlate.plate  = null;
+      $scope.activePlateResult.plateResult  = null;
+    }
 
     function addTag(tags,newTag){
       tags.push({description:newTag});
-    };
+    }
 
     function checkedOwner(check){
       if (check)
         projVm.filterowner = 'ivan';
       else
         projVm.filterowner = '';
-    };
+    }
 
     function addCollaborator(collaborators,newCollaborator){
       if(collaborators.indexOf(newCollaborator) >= 0){
@@ -100,7 +100,7 @@
       }
       else
         collaborators.push(newCollaborator);
-    };
+    }
 
   }
 

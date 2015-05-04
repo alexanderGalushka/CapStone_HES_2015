@@ -54,15 +54,16 @@
         }
 
         function updateWellUniqLabelValues(well, newColor){
-          /*
-            $scope.uniqueLabelValuesColors[well[$scope.filterPlateEditor.plotLabelName]] = newColor;
+          console.log(JSON.stringify(well, null, 4));
+          console.log(newColor);
+
+/*            $scope.uniqueLabelValuesColors[well[$scope.filterPlateEditor.plotLabelName]] = newColor;
             for (var i = 0; i < $scope.uniqueLabelValues.length; i++) {
                 if($scope.uniqueLabelValues[i].name === well[$scope.filterPlateEditor.plotLabelName]){
                     $scope.uniqueLabelValues[i].color = newColor;
                 }
             }
-            */
-
+  */
         }
 
     }

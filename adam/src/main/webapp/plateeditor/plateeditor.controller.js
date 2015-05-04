@@ -8,9 +8,10 @@
     .controller('PlateeditorCtrl',PlateeditorCtrl)
 
 
-  PlateeditorCtrl.$inject = ["$scope", "activeProject", "activePlate", "resetSelection", "filterColorFilter", "filterBorder3Filter",  "filterHoverFilter", "filterControlFilter", "rangeFilter"];
+  PlateeditorCtrl.$inject = ["$scope", "activeProject", "activePlate", "resetSelection", "filterColorFilter", "filterBorder3Filter",
+    "filterHoverFilter", "filterControlFilter", "rangeFilter", "wellBoxSize"];
 
-  function PlateeditorCtrl($scope, activeProject, activePlate, resetSelection, filterColor, filterBorder3, filterHover, filterControl, range) {
+  function PlateeditorCtrl($scope, activeProject, activePlate, resetSelection, filterColor, filterBorder3, filterHover, filterControl, range, wellBoxSize) {
     var pleditVm = this;
 
 
@@ -35,11 +36,24 @@
 
     $scope.ActiveProject = activeProject.project;
     $scope.ActivePlate = activePlate;
+    $scope.WellBoxSize = wellBoxSize;
+
     pleditVm.filterPlateEditor.plotLabelName = "";
     pleditVm.filterPlateEditor.labelValueColors = {};
     pleditVm.filterPlateEditor.wellgroup = [];
     pleditVm.filterPlateEditor.labels = {};
 
+    pleditVm.boxsizerange = {
+      from: 25,
+      to: 100,
+      floor: true,
+      step: 1,
+      dimension: " px",
+      vertical: false,
+      callback: function(value, elt) {
+        //console.log(value);
+      }
+    };
 
     function leftTable() {
       if(pleditVm.multiselectWell.mode) {

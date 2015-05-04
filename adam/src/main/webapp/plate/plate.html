@@ -2,7 +2,7 @@
   <admahes-projectpanel asideind="plateVm.aside"></admahes-projectpanel>
 </div>
 
-<div class="col-md-8" >
+<div class="{{plateVm.aside | classgrid}}" >
   <table  st-table="plateVm.platesDisplay" st-safe-src="plateVm.plates" class="table table-striped">
     <thead>
     <th st-sort="name">Plate name&nbsp;</th>

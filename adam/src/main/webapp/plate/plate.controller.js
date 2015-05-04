@@ -5,8 +5,8 @@
 
     .controller('PlateCtrl', PlateCtrl);
 
-  PlateCtrl.$inject = ["$scope","activeProject", "activePlate", "activePlateResult", "Plate", "$filter"];
-  function PlateCtrl($scope, activeProject, activePlate, activePlateResult, Plate, $filter) {
+  PlateCtrl.$inject = ["$scope","activeProject", "activePlate", "activePlateResult", "Plate", "$filter" ,"loadActiveResult", "classgridFilter"];
+  function PlateCtrl($scope, activeProject, activePlate, activePlateResult, Plate, $filter, loadActiveResult, classgrid) {
     var plateVm = this;
 
     $scope.ActiveProject = activeProject;
@@ -23,15 +23,20 @@
     plateVm.deletePlate = deletePlate;
     plateVm.clearActiveProject = clearActiveProject;
 
-
     plateVm.plates = Plate.query();
     plateVm.platesDisplay = [].concat(plateVm.plates);
+
 
 
     function setActivePlate(plate){
       activePlate.plate  = plate;
       activePlate.plate.wellsDisplay = [].concat(activePlate.plate.wells);
-      $scope.activePlateResult.plate  = "";
+
+      if(plate !== null) {
+        loadActiveResult(plate.id);
+      }else
+        activePlateResult = null;
+
     }
 
     function addNewPlate(project){
@@ -89,9 +94,9 @@
     }
 
     function clearActiveProject(){
-      $scope.ActiveProject.project  = "";
-      $scope.ActivePlate.plate = "";
-      $scope.activePlateResult.plate  = "";
+      $scope.ActiveProject.project  = null;
+      $scope.ActivePlate.plate = null;
+      $scope.activePlateResult.plateResult  = null;
     }
   }
 })();

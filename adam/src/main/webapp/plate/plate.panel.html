@@ -2,7 +2,7 @@
   <div class="panel-heading">
     <h4 class="panel-title">
       <a bs-collapse-toggle>
-        Plates
+        <span class="label label-default">Plates</span> &nbsp;&nbsp;&nbsp;{{ActivePlate.plate.name}}
       </a>
     </h4>
   </div>
@@ -11,14 +11,7 @@
 
     <table  st-table="platepanVm.platesDisplay" st-safe-src="platepanVm.plates" class="table table-striped">
       <thead>
-      <div class="form-group" ng-show="ActiveProject.project">
-        <div class="input-group">
-          <div class="input-group-addon">{{ActiveProject.project.name}}</div>
-          <button type="button" class="btn btn-sm" ng-click="clearActiveProject()">
-            <i >Show all projects</i>
-          </button>
-        </div>
-      </div>
+
       <th st-sort="name">Plate name</th>
       <th st-sort="label">Label</th>
       <th st-sort="owner">Owner</th>

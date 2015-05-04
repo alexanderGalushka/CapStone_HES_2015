@@ -63,7 +63,7 @@
             var r = rgbColor[0].toString(16)!= 0?pad(rgbColor[0].toString(16),2):"00";
             var g = rgbColor[1].toString(16)!= 0?pad(rgbColor[1].toString(16),2):"00";
             var b = rgbColor[2].toString(16)!= 0?pad(rgbColor[2].toString(16),2):"00";
-            hlsColorStyle = "#" + r + g + b;;
+            hlsColorStyle = "#" + r + g + b;
             console.log(JSON.stringify( hlsColorStyle, null, 4));
 
             argLabel = {};

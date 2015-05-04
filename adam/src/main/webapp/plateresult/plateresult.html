@@ -1,9 +1,9 @@
-<div class="panel-group col-md-4" ng-model="panels.activePanel" data-allow-multiple="true" bs-collapse ng-show="!pleditVm.aside">
-  <admahes-projectpanel asideind="pleditVm.aside"></admahes-projectpanel>
+<div class="panel-group col-md-4" ng-model="panels.activePanel" data-allow-multiple="true" bs-collapse ng-show="!plresVm.aside">
+  <admahes-projectpanel asideind="plresVm.aside"></admahes-projectpanel>
   <admahes-platepanel></admahes-platepanel>
 </div>
 
-<div class="col-md-8" >
+<div class="{{plresVm.aside | classgrid}}" >
 
 
   <table  st-table="ActivePlateResult.plateResult.measurements" class="table table-striped">
@@ -17,11 +17,25 @@
       <th>User &nbsp;{{ActivePlateResult.plateResult.user}}</th>
 
       <th ng-show="ActivePlate.plate">
-        <button type="button" class="btn btn-sm btn-success" data-template="components/modal/aside.tpl.demo.html"
+        <button type="button" class="btn btn-sm btn-success" data-template="plateresult/aside.download.result.html"
                 data-placement="left" data-animation="am-slide-left" bs-aside="aside" data-container="body"
-                content= "x" title="Add project {{project.name}}" ng-click="addNewProject()">
+                content= "x" title="Upload result for {{ ActiveProject.project.name}} {{ ActivePlate.plate.name}}" ng-click="uploadResultSet()">
           <i class="glyphicon glyphicon-plus" >
           </i> Download results
+        </button>
+      </th>
+      <th ng-show="ActivePlateResult.resultExists">
+        <button type="button" class="btn btn-sm btn-danger" data-template="plateresult/modal.delete.result.html"
+                data-animation="am-fade-and-slide-top" bs-modal="modal"
+                content= "x" data-container="body" title="Delete result?">
+          <i class="glyphicon glyphicon-plus" >
+          </i> Delete results
+        </button>
+      </th>
+      <th>
+        <button type="button" class="btn btn-xs pull-right" ng-model="plresVm.aside" bs-checkbox ng-show="plresVm.aside" >
+          <i class="glyphicon glyphicon-chevron-left">
+          </i>
         </button>
       </th>
     </tr>
