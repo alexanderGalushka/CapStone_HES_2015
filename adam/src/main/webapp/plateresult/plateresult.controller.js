@@ -23,7 +23,7 @@
 
     plresVm.log = '';
 
-    function upload(files, plateid, loadActiveResult) {
+    function upload(files, plateid) {
       console.log(JSON.stringify(files, null, 4));
       if (files && files.length) {
         for (var i = 0; i < files.length; i++) {
