@@ -25,7 +25,9 @@
 
       <div class="aside-footer">
         <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
-        <div class="button"  ngf-select ngf-change="plresVm.upload($files, ActivePlate.plate.id)" ngf-multiple="multiple">Select File</div>
+        <button type="button" class="btn btn-primary">
+          <div class="button"  ngf-select ngf-change="plresVm.upload($files, ActivePlate.plate.id)" ngf-multiple="multiple">Select File</div>
+        </button>
       </div>
     </div>
   </div>
