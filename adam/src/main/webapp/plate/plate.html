@@ -28,7 +28,7 @@
         <button type="button" class="btn btn-sm btn-success" data-template="plate/aside.edit.plate.html"
                 data-placement="left" data-animation="am-slide-left" bs-aside="aside" data-container="body"
                 content= "x" title="Add plate in {{plateVm.ActiveProject.project.name}}" ng-click="plateVm.addNewPlate(ActiveProject.project)"
-                ng-disabled="ActiveProject.project==''">
+                ng-disabled="ActiveProject.project==null">
           <i class="glyphicon glyphicon-plus">
           </i> Add plate
         </button>
