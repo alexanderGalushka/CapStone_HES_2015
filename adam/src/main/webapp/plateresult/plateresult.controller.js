@@ -36,10 +36,11 @@
             file: file
           }).progress(function (evt) {
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-            $scope.log = 'progress: ' + progressPercentage + '% ' +
-            evt.config.file.name + '\n' + $scope.log;
+            plresVm.log = 'progress: ' + progressPercentage + '% ' +
+            evt.config.file.name + '\n' + plresVm.log;
           }).success(function (data, status, headers, config) {
-            $scope.log = 'file ' + config.file.name + 'uploaded. Response: ' + JSON.stringify(data) + '\n' + $scope.log;
+            console.log(JSON.stringify(data, null, 4));
+            plresVm.log = 'file ' + config.file.name + 'uploaded. Response: ' + JSON.stringify(data) + '\n' + plresVm.log;
             //$scope.$apply();
           });
         }
