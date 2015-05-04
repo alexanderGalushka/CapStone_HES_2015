@@ -48,7 +48,7 @@
 
     function deleteResult(plateResult){
       console.log(JSON.stringify(plateResult, null, 4));
-      Qc.delete({"id":plateResult.plateid});
+      Qc.delete({"id":plateResult.plateId});
       plateResult = null;
     }
 
