@@ -40,7 +40,7 @@
             evt.config.file.name + '\n' + $scope.log;
           }).success(function (data, status, headers, config) {
             $scope.log = 'file ' + config.file.name + 'uploaded. Response: ' + JSON.stringify(data) + '\n' + $scope.log;
-            $scope.$apply();
+            //$scope.$apply();
           });
         }
       }
