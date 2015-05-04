@@ -20,7 +20,7 @@
     projVm.addNewProject = addNewProject;
     projVm.saveChangesProject = saveChangesProject;
     projVm.setActiveProject = setActiveProject;
-    projVm.addTag = addTag;
+    /*projVm.addTag = addTag;*/
     projVm.checkedOwner = checkedOwner;
     projVm.addCollaborator = addCollaborator;
     projVm.deletePr = deletePr;
