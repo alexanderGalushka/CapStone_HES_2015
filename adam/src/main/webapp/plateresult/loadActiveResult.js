@@ -15,8 +15,8 @@
       var foundFirstValidWell = false;
 
       plateres = Qc.get({"id": plateid},function(){
-        if(plateres === null || plateres.timeStamps === null || plateres.timeStamps.length == 0 ||
-          plateres.measurements === null || plateres.measurements.length == 0){
+        if(plateres != null && plateres.timeStamps != null && plateres.timeStamps.length != 0 &&
+          plateres.measurements != null && plateres.measurements.length != 0){
           activePlateResult.plateResult = plateres;
           activePlateResult.plateResult.options = {
             from: 1,
@@ -55,7 +55,7 @@
           activePlateResult.plateResult.valueslider = 1;
           activePlateResult.resultExists = true;}
         else{
-          console.log("incorrect plateResult returned" + JSON.stringify(plateResult, null, 4));
+          console.log("incorrect plateResult returned" + JSON.stringify(plateres, null, 4));
           activePlateResult.plateResult = null;
           activePlateResult.resultExists = false;
         }
