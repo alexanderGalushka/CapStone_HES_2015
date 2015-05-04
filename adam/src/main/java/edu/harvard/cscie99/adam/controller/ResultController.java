@@ -117,8 +117,10 @@ public class ResultController {
         List<Project> listOfProjects= projectService.list();
         for (Project project: listOfProjects)
         {
-        	resultService.getAllWells(projectId);
+        	result.put(project.getId(), resultService.getAllWells(project.getId()));
         }
+        
+        return result;
 	}
 	
 }
