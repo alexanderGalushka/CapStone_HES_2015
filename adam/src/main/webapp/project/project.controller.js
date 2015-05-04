@@ -20,7 +20,6 @@
     projVm.addNewProject = addNewProject;
     projVm.saveChangesProject = saveChangesProject;
     projVm.setActiveProject = setActiveProject;
-    /*projVm.addTag = addTag;*/
     projVm.checkedOwner = checkedOwner;
     projVm.addCollaborator = addCollaborator;
     projVm.deletePr = deletePr;
@@ -36,6 +35,10 @@
       Project.delete({"id":indexinp.id});
       var index = coll.indexOf(indexinp);
       coll.splice(index, 1);
+
+      $scope.ActiveProject.project= null;
+      $scope.ActivePlate.plate  = null;
+      $scope.activePlateResult.plateResult  = null;
     }
 
     function addNewProject (){
@@ -44,18 +47,14 @@
         "name": "" ,
         "description": "",
         "label": "",
-        //"owner":"Ivan",
-        //"creationDate": "" //,
         "tags":[],
         "collaborators":[]
       };
-      //projVm.newproject.creationDate = $filter('date')(new Date(),'MM/dd/yyyy');
     }
 
     function editProject(proj) {
       projVm.projectAction = "edit";
       projVm.newproject = JSON.parse(JSON.stringify(proj));
-      //$scope.newproject.name = proj.name;
     }
 
     function saveChangesProject(act,proj) {
@@ -83,11 +82,6 @@
       $scope.activePlateResult.plateResult  = null;
     }
 
-    /*
-    function addTag(tags,newTag){
-      tags.push({description:newTag});
-    }
-*/
     function checkedOwner(check){
       if (check)
         projVm.filterowner = 'ivan';
