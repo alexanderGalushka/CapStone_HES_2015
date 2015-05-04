@@ -110,4 +110,15 @@ public class ResultController {
 		return resultService.getAllWells(projectId);
 	}
 	
+	@RequestMapping(value="/rest/get_all_data", method=RequestMethod.GET)
+	public @ResponseBody Map<Object, ArrayList<HashMap<Object, Object>>> getAllPossibleResults() throws JsonProcessingException 
+	{
+		Map<Object, ArrayList<HashMap<Object, Object>>> result = new HashMap<>();
+        List<Project> listOfProjects= projectService.list();
+        for (Project project: listOfProjects)
+        {
+        	resultService.getAllWells(projectId);
+        }
+	}
+	
 }
