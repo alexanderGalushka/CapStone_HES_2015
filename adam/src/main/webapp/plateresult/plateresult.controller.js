@@ -40,7 +40,7 @@
             evt.config.file.name + '\n' + plresVm.log;
           }).success(function (data, status, headers, config) {
             //plresVm.log = 'file ' + config.file.name + 'uploaded. Response: ' + JSON.stringify(data) + '\n' + plresVm.log;
-            loadActiveResult(plateid);
+            loadActiveResult(data);
             //$scope.$apply();
           });
         }
