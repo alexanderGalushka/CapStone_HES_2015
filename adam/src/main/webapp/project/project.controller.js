@@ -83,10 +83,11 @@
       $scope.activePlateResult.plateResult  = null;
     }
 
+    /*
     function addTag(tags,newTag){
       tags.push({description:newTag});
     }
-
+*/
     function checkedOwner(check){
       if (check)
         projVm.filterowner = 'ivan';

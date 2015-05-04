@@ -66,36 +66,6 @@
           </tbody>
         </table>
 
-        <table  st-table="projVm.newproject.tags" class="table table-striped">
-          <thead>
-          <th st-sort="">Tag</th>
-
-          <tr>
-            <th>
-              <input type="text" ng-model="newtag">
-              <button type="button" ng-click="projVm.addTag(projVm.newproject.tags,newtag)" class="btn btn-sm btn-success">
-                <i class="glyphicon glyphicon-plus">
-                </i> Add tag
-              </button>
-            </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr ng-repeat="tag in projVm.newproject.tags" st-select-row="tag">
-            <td>{{tag.description}}</td>
-            <td>
-              <button type="button" class="btn btn-sm btn-danger" ng-click="projVm.newproject.tags.splice($index, 1);">
-                <i class="glyphicon glyphicon-remove-circle">
-                </i>
-              </button>
-            </td>
-          </tr>
-
-          </tbody>
-        </table>
-      </div>
-
-
       <div class="aside-footer">
         <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
         <button type="button" class="btn btn-primary" ng-click="projVm.saveChangesProject(projVm.projectAction,project);$hide()">Save changes</button>
