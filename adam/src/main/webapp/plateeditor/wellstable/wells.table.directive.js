@@ -30,9 +30,10 @@
     function toogleRowSelection(well, labels, wellArray, dropwellgroup){
       dropwellgroup.checked = "true";
 
-      var wellSelected;
-      var numSameWellsSelected = 0;
+      var wellSelected;             // indicator whether well have the same values as clicked well
+      var numSameWellsSelected = 0; // how many already selected wells with the same values
 
+      /* find all wells with the same values in fields and that are selected */
       for (var i = 0; i < wellArray.length; i++) {
         wellSelected = "true";
         for (var j = 0; j < labels.length && wellSelected; j++) {
@@ -40,7 +41,6 @@
           if (well[labels[j].name] != wellArray[i][labels[j].name]) {
             wellSelected = false;
           }
-          //console.log("label " + cond.labels[i].name);
         }
         if(well.controltype != wellArray[i].controltype)
           wellSelected = false;
@@ -51,6 +51,7 @@
         }
       }
 
+      /* if well is selected or unselected there is work to do only if there is none of the same already selected */
       if((well.isSelected && numSameWellsSelected == 1)||(!well.isSelected && numSameWellsSelected == 0)) {
         for (var i = 0; i < wellArray.length; i++) {
           wellSelected = "true";
@@ -59,7 +60,6 @@
             if (well[labels[j].name] != wellArray[i][labels[j].name]) {
               wellSelected = false;
             }
-            //console.log("label " + cond.labels[i].name);
           }
           if (well.controltype != wellArray[i].controltype)
             wellSelected = false;
