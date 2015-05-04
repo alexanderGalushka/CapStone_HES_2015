@@ -40,27 +40,14 @@ import edu.harvard.cscie99.adam.model.WellValidationContainer;
 /**
  * 
  * @author Alexander G.
- * data screening prior the data analysis
- * 
+ * Data qualification prior the data analysis
  * 
  */
 
 @Component
 public class QualityControlService
 {
-	// are we assuming one data point in the well when calculating all these statistical metrics?
-	
-	// 1. SHOW the separation between the distributions of the positive and negative controls using Z′-factor
-	
-	// Z′-factor for each plate
-	
-	// Z′-factor for the run as a whole
-	
-	// evaluate Z′-factor:
-	// Values between 0.5 and 1 are excellent,
-	// values between 0 and 0.5 may be acceptable, and values less than 0 indicate the assay is unlikely to be usable in a high-throughput context
-	
-	
+
 	@Autowired
 	private PlateService plateService;
 	
@@ -75,6 +62,49 @@ public class QualityControlService
 	
 	private final static Double INVALID = 777d;	
 	
+	/**
+	 * wipes out results data associated with plate specified
+	 * @param plateId
+	 * @return true/false
+	 */
+	public boolean removeResultsFromPlate (int plateId)
+	{
+		
+		boolean result = true;
+		Plate plate = plateService.retrievePlate(plateId);
+		
+		Session session = sessionFactory.openSession();
+	    try
+	    {
+	    	session.beginTransaction();
+	    	
+			for (ResultSnapshot resultSnapshot: plate.getResults())
+			{
+				session.delete(resultSnapshot);
+			}
+			plate.setResults (null);
+			session.merge(plate);
+			session.getTransaction().commit();
+	    }
+	    catch(Exception e)
+	    {
+	    	// TODO
+	    	result = false;
+	    }
+		finally
+		{
+			session.close();	
+		}
+		return result;
+	}
+	
+	/**
+	 * validates single well
+	 * @param wellValidator
+	 * @throws BadWellValidatorException
+	 * @throws DbWriteException
+	 * @throws DbReadException
+	 */
 	public void validateSingleWell (WellValidationContainer wellValidator) throws BadWellValidatorException,
 																				  DbWriteException,
 																				  DbReadException
@@ -116,6 +146,13 @@ public class QualityControlService
 		}
 	}
 	
+	/**
+	 * validates group of wells
+	 * @param groupOfWellsValidator
+	 * @throws BadWellValidatorException
+	 * @throws DbReadException
+	 * @throws DbWriteException
+	 */
 	public void validateGroupOfWell (List<WellValidationContainer> groupOfWellsValidator) throws BadWellValidatorException,
 																								 DbReadException,
 																								 DbWriteException
@@ -163,6 +200,13 @@ public class QualityControlService
 
 	}
 	
+	/**
+	 * validates group of plates
+	 * @param groupOfPlateValidators
+	 * @throws BadPlateValidatorException
+	 * @throws DbReadException
+	 * @throws DbWriteException
+	 */
 	public void validateGroupOfPlates (List<PlateValidationContainer> groupOfPlateValidators) throws BadPlateValidatorException,
 	                                                                                         		 DbReadException,
 	                                                                                         		 DbWriteException
@@ -207,6 +251,13 @@ public class QualityControlService
 		}
 	 }
 	
+	/**
+	 * validates single plate
+	 * @param plateValidator
+	 * @throws BadPlateValidatorException
+	 * @throws DbReadException
+	 * @throws DbWriteException
+	 */
 	public void validateSinglePlate (PlateValidationContainer plateValidator) throws BadPlateValidatorException,
 		DbReadException,
 		DbWriteException
@@ -249,6 +300,7 @@ public class QualityControlService
 	/**
 	 * Quality Control ultimate method to aggregate data by time and measurement types for each plate ID,
 	 * perform statistical calculations
+	 * this method serves the purpose of integration test
 	 * @param projectId
 	 * @return the Map, where the key is the Plate ID (Integer), and the values is the collection of QCdataTimeWrappers
 	 */
@@ -430,6 +482,11 @@ public class QualityControlService
 		return resultMap;	
 	}
 	
+	/**
+	 * qualifies results data per each plate
+	 * @param plateId
+	 * @return QCplate object
+	 */
 	public QCplate qualifyDataPerPlate(int plateId)
 	{
 		QCplate qcPlate = null;
@@ -441,6 +498,11 @@ public class QualityControlService
 		return qcPlate;
 	}
 	
+	/**
+	 * qualifies results all data of specified project
+	 * @param plateId
+	 * @return list of QCplate objects
+	 */
 	public List<QCplate> qualifyDataPerProject (int projectId)
 	{
 		Project project = projectService.retrieveProject(projectId);
@@ -489,7 +551,7 @@ public class QualityControlService
         Set<Date> timeStamps = new HashSet<>();
         
         List<ResultSnapshot> listOfResSnashots = plate.getResults();
-        
+                
         // collect all possible timestamps to iterate through
         for (ResultSnapshot result : listOfResSnashots)
         {
@@ -607,8 +669,7 @@ public class QualityControlService
 									System.out.print(e.getMessage());
 								}
 								
-							}
-							
+							}			
 							//create the low level data object, further add it to the list of this type of objects								
 						}
 					}
