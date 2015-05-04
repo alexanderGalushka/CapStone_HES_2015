@@ -8,9 +8,9 @@
     .controller('PlateResultsCtrl',PlateResultsCtrl)
 
 
-  PlateResultsCtrl.$inject = ["$scope", "activeProject", "activePlate", "activePlateResult" , "Upload", "classgridFilter", "Qc"];
+  PlateResultsCtrl.$inject = ["$scope", "activeProject", "activePlate", "activePlateResult" , "Upload", "classgridFilter", "Qc", "loadActiveResult" ];
 
-  function PlateResultsCtrl($scope, activeProject, activePlate, activePlateResult, Upload, classgrid, Qc) {
+  function PlateResultsCtrl($scope, activeProject, activePlate, activePlateResult, Upload, classgrid, Qc, loadActiveResult) {
     var plresVm = this;
 
     $scope.ActiveProject = activeProject.project;
@@ -23,7 +23,7 @@
 
     plresVm.log = '';
 
-    function upload(files, plateid) {
+    function upload(files, plateid, loadActiveResult) {
       console.log(JSON.stringify(files, null, 4));
       if (files && files.length) {
         for (var i = 0; i < files.length; i++) {
@@ -39,8 +39,8 @@
             plresVm.log = 'progress: ' + progressPercentage + '% ' +
             evt.config.file.name + '\n' + plresVm.log;
           }).success(function (data, status, headers, config) {
-            console.log(JSON.stringify(data, null, 4));
-            plresVm.log = 'file ' + config.file.name + 'uploaded. Response: ' + JSON.stringify(data) + '\n' + plresVm.log;
+            //plresVm.log = 'file ' + config.file.name + 'uploaded. Response: ' + JSON.stringify(data) + '\n' + plresVm.log;
+            loadActiveResult(plateid);
             //$scope.$apply();
           });
         }
