@@ -88,9 +88,15 @@
     }
 
     function deletePlate(plate){
-      Plate.delete({"id":plate.id});
-      var index = plateVm.plates.indexOf(plate);
-      plateVm.plates.splice(index, 1);
+      Plate.delete({"id":plate.id} ,function(error) {
+          var index = plateVm.plates.indexOf(plate);
+          plateVm.plates.splice(index, 1);
+        } ,
+        function(error) {
+          alert("Plate can not eb deleted - Server error");
+          console.log(JSON.stringify(error, null, 4));
+        });
+
     }
 
     function clearActiveProject(){
