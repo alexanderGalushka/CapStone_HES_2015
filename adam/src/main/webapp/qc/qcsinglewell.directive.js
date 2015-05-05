@@ -14,8 +14,8 @@
           valuerange:"=",
           projectid:"@",
           plateid:"@",
-          measurementType:"@",
-          sliderIndex:"@"
+          measurementtype:"@",
+          sliderindex:"@"
         },
         templateUrl: 'qc/qcsinglewell.html',
         controller: QcSingleWellCtrl,
@@ -30,14 +30,14 @@
 
     qcsinglewellVm.toggleIfValid = toggleIfValid;
 
-    function toggleIfValid(well, projectid, plateid, measurementType, sliderIndex) {
+    function toggleIfValid(well, projectid, plateid, measurementtype, sliderindex) {
       var plateres;
 
       console.log(JSON.stringify(well, null, 4));
       console.log(projectid);
       console.log(plateid);
-      console.log(measurementType);
-      console.log(sliderIndex);
+      console.log(measurementtype);
+      console.log(sliderindex);
 
       plateres = WellInvalidate.save({"projectId": projectid,
         "plateId":plateid,
@@ -46,7 +46,7 @@
         "ifValid":!well.ifValid},function(){
         /* load returned result into activePlateResult service for sharing between pages */
         transformActiveResult(plateres);
-        setActiveMeasurement(measurementType, sliderIndex, plateres);
+        setActiveMeasurement(measurementtype, sliderindex, plateres);
       }, function(error) {
         /*  web service threw error */
         console.log(JSON.stringify(error, null, 4));
