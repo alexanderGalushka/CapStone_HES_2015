@@ -59,7 +59,9 @@
       for (var i = 0; i < plateres.measurements.length; i++) {
         if(plateres.measurements[i].measurementType === type &&
           plateres.measurements[i].timeStamp === plateres.options.scale[sliderIndex - 1]) {
+          /* Set active measurement to display in qc well map */
           plateres.activeMeasurement = plateres.measurements[i];
+          plateres.activeMeasurementType = type;
           console.log("Found IT!");
 
           for (var j = 0; j < plateres.measurements[i].wells.length; j++) {

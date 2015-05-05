@@ -13,7 +13,8 @@
           wellcollors:"=",
           valuerange:"=",
           projectid:"@",
-          plateid:"@"
+          plateid:"@",
+          measurementType:"@"
         },
         templateUrl: 'qc/qcsinglewell.html',
         controller: QcSingleWellCtrl,
@@ -28,7 +29,7 @@
 
     qcsinglewellVm.toggleIfValid = toggleIfValid;
 
-    function toggleIfValid(well, projectid, plateid) {
+    function toggleIfValid(well, projectid, plateid, measurementType) {
       var plateres;
 
       console.log(JSON.stringify(well, null, 4));
@@ -40,7 +41,6 @@
         "rowNum":well.row,
         "colNum":well.col,
         "ifValid":!well.ifValid});
-
       transformActiveResult(plateres);
       //well.ifValid = !well.ifValid;
 
