@@ -13,9 +13,11 @@
           <tr><td>&nbsp;</td></tr>
           <tr><td>Label</td> <td><input type="text" ng-model="plateVm.newplate.label"></td></tr>
           <tr><td>&nbsp;</td></tr>
-          <tr><td>Rows</td> <td><input type="text" ng-model="plateVm.newplate.numberOfRows" ng-disabled="plateVm.plateAction === 'edit'"></td></tr>
+          <tr><td>Rows</td> <td><input type="text" ng-model="plateVm.newplate.numberOfRows" ng-disabled="plateVm.plateAction === 'edit'"
+                                       onkeypress='return event.charCode >= 48 && event.charCode <= 57'></td></tr>
           <tr><td>&nbsp;</td></tr>
-          <tr><td>Columns</td> <td><input type="text" ng-model="plateVm.newplate.numberOfColumns"  ng-disabled="plateVm.plateAction === 'edit'"></td></tr>
+          <tr><td>Columns</td> <td><input type="text" ng-model="plateVm.newplate.numberOfColumns"  ng-disabled="plateVm.plateAction === 'edit'"
+                                          onkeypress='return event.charCode >= 48 && event.charCode <= 57'></td></tr>
           <tr><td>&nbsp;</td></tr>
           <tr><td>Barcode</td> <td><input type="text" ng-model="plateVm.newplate.barcode"></td></tr>
           <tr><td>&nbsp;</td></tr>
