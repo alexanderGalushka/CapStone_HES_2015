@@ -45,7 +45,8 @@
       'loadresult',
       'classgridfilter',
       'well.invalidate.data.model',
-      'transformresult'
+      'transformresult',
+      'setactivemeasurement'
     ])
 
     .config(configAdam);

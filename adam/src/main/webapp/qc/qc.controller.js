@@ -8,9 +8,9 @@
     .controller('QcCtrl',QcCtrl)
 
 
-  QcCtrl.$inject = ["$scope", "activeProject", "activePlate", "activePlateResult", "rangeFilter", "classgridFilter", "wellBoxSize" ];
+  QcCtrl.$inject = ["$scope", "activeProject", "activePlate", "activePlateResult", "rangeFilter", "classgridFilter", "wellBoxSize", "setActiveMeasurement" ];
 
-  function QcCtrl($scope, activeProject, activePlate, activePlateResult, range, classgrid, wellBoxSize) {
+  function QcCtrl($scope, activeProject, activePlate, activePlateResult, range, classgrid, wellBoxSize, setActiveMeasurement) {
     var qcVm = this;
 
     $scope.ActiveProject = activeProject.project;
@@ -30,7 +30,7 @@
     //qcVm.boxsz = "35";
     qcVm.wellcollors = {bckgColorH:"0",colorText:"#FFFF00"};
 
-    qcVm.setActiveMeasurement = setActiveMeasurement;
+    qcVm.callSetActiveMeasurement = callSetActiveMeasurement;
 
     qcVm.boxsizerange = {
       from: 25,
@@ -44,46 +44,8 @@
       }
     };
 
-    function setActiveMeasurement(type, sliderIndex, plateres) {
-      var minValue = 0;
-      var maxValue = 0;
-      var foundFirstValidWell = false;
-
-      if(sliderIndex === null){
-        sliderIndex = 1;
-      }
-      console.log(type);
-      console.log(sliderIndex);
-
-
-      for (var i = 0; i < plateres.measurements.length; i++) {
-        if(plateres.measurements[i].measurementType === type &&
-          plateres.measurements[i].timeStamp === plateres.options.scale[sliderIndex - 1]) {
-          /* Set active measurement to display in qc well map */
-          plateres.activeMeasurement = plateres.measurements[i];
-          plateres.activeMeasurementType = type;
-          console.log("Found IT!");
-
-          for (var j = 0; j < plateres.measurements[i].wells.length; j++) {
-            if(parseFloat(plateres.measurements[i].wells[j].value) != 777) {
-              if (!foundFirstValidWell) {
-                minValue = parseFloat(plateres.measurements[i].wells[j].value);
-                maxValue = parseFloat(plateres.measurements[i].wells[j].value);
-                foundFirstValidWell = true;
-              } else {
-                if (minValue > parseFloat(plateres.measurements[i].wells[j].value))
-                  minValue = parseFloat(plateres.measurements[i].wells[j].value);
-                else if (maxValue < parseFloat(plateres.measurements[i].wells[j].value))
-                  maxValue = parseFloat(plateres.measurements[i].wells[j].value);
-              }
-
-            }
-          }
-
-          plateres.valuerange  = {"minvalue":minValue, "maxvalue":maxValue};
-          break;
-        }
-      }
+    function callSetActiveMeasurement(type, sliderIndex, plateres) {
+      setActiveMeasurement(type, sliderIndex, plateres);
     }
 
 

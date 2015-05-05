@@ -41,6 +41,8 @@
         "rowNum":well.row,
         "colNum":well.col,
         "ifValid":!well.ifValid});
+
+
       transformActiveResult(plateres);
       //well.ifValid = !well.ifValid;
 

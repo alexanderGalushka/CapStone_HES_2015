@@ -78,7 +78,7 @@
 
     <div class="panel-group {{qcVm.aside | classgrid}}" ng-show="ActivePlateResult.plateResult.options.to > 1">
       <input ng-model="ActivePlateResult.plateResult.valueslider" type="text" id="mySlider1" slider options="ActivePlateResult.plateResult.options"
-             ng-change="qcVm.setActiveMeasurement(ActivePlateResult.plateResult.activeMeasurement.measurementType, ActivePlateResult.plateResult.valueslider, ActivePlateResult.plateResult)"/>
+             ng-change="qcVm.callSetActiveMeasurement(ActivePlateResult.plateResult.activeMeasurement.measurementType, ActivePlateResult.plateResult.valueslider, ActivePlateResult.plateResult)"/>
     </div>
 
     <div class="panel-group {{qcVm.aside | classgrid}}">
