@@ -8,9 +8,9 @@
     .controller('PlateResultsCtrl',PlateResultsCtrl)
 
 
-  PlateResultsCtrl.$inject = ["$scope", "activeProject", "activePlate", "activePlateResult" , "Upload", "classgridFilter", "Qc", "loadActiveResult" ];
+  PlateResultsCtrl.$inject = ["$scope", "activeProject", "activePlate", "activePlateResult" , "Upload", "classgridFilter", "Qc", "transformActiveResult" ];
 
-  function PlateResultsCtrl($scope, activeProject, activePlate, activePlateResult, Upload, classgrid, Qc, loadActiveResult) {
+  function PlateResultsCtrl($scope, activeProject, activePlate, activePlateResult, Upload, classgrid, Qc, transformActiveResult) {
     var plresVm = this;
 
     $scope.ActiveProject = activeProject.project;
@@ -40,7 +40,7 @@
             evt.config.file.name + '\n' + plresVm.log;
           }).success(function (data, status, headers, config) {
             //plresVm.log = 'file ' + config.file.name + 'uploaded. Response: ' + JSON.stringify(data) + '\n' + plresVm.log;
-            loadActiveResult(data);
+            transformActiveResult(data);
             //$scope.$apply();
           });
         }
