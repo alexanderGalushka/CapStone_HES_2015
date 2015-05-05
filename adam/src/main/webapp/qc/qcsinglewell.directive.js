@@ -36,6 +36,8 @@
       console.log(JSON.stringify(well, null, 4));
       console.log(projectid);
       console.log(plateid);
+      console.log(measurementType);
+      console.log(sliderIndex);
 
       plateres = WellInvalidate.save({"projectId": projectid,
         "plateId":plateid,
