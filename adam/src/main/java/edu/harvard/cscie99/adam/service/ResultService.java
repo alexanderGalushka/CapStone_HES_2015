@@ -305,7 +305,13 @@ public class ResultService {
 			
 			for (ResultSnapshot rs : plate.getResults()){
 				
-				long time = rs.getTime().getTime();
+				if (rs == null)
+					continue;
+				
+				long time = 0;
+				if (rs.getTime() != null){
+					time = rs.getTime().getTime();
+				}
 				
 				for (Well well : plate.getWells()){
 					
@@ -315,22 +321,27 @@ public class ResultService {
 					entry.put("time", time);
 					
 					List<HashMap<Object, Object>> wellLabelEntries = new ArrayList<>();
-					for (WellLabel wl : well.getWellLabels())
-					{
-						HashMap<Object, Object> wellLablEntry = new HashMap<>();
-						wellLablEntry.put(wl.getName(), wl.getValue());	
-						wellLabelEntries.add(wellLablEntry);
+					if (well != null && well.getWellLabels() != null){
+						for (WellLabel wl : well.getWellLabels())
+						{
+							HashMap<Object, Object> wellLablEntry = new HashMap<>();
+							wellLablEntry.put(wl.getName(), wl.getValue());	
+							wellLabelEntries.add(wellLablEntry);
+						}
 					}
 					
 					entry.put("wellLabels", wellLabelEntries);
 					
-					for (Measurement m : rs.getMeasurementsFromWell(well.getRow(), well.getCol()))
-					{
-						HashMap<Object, Object> newEntry = new HashMap<>();
-						newEntry.putAll(entry);
-						newEntry.put("measurementType", m.getMeasurementType());
-						newEntry.put("measurementValue", m.getValue());
-						result.add(newEntry);
+					List<Measurement> measurements = rs.getMeasurements();
+					if (well != null && measurements != null){
+						for (Measurement m : rs.getMeasurementsFromWell(well.getRow(), well.getCol()))
+						{
+							HashMap<Object, Object> newEntry = new HashMap<>();
+							newEntry.putAll(entry);
+							newEntry.put("measurementType", m.getMeasurementType());
+							newEntry.put("measurementValue", m.getValue());
+							result.add(newEntry);
+						}
 					}
 				}	
 			}
