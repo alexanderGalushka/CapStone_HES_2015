@@ -27,7 +27,6 @@
     else
       $scope.ActivePlateResult.resultExists = false;
 
-    //qcVm.boxsz = "35";
     qcVm.wellcollors = {bckgColorH:"0",colorText:"#FFFF00"};
 
     qcVm.callSetActiveMeasurement = callSetActiveMeasurement;
@@ -45,6 +44,7 @@
     };
 
     function callSetActiveMeasurement(type, sliderIndex, plateres) {
+      console.log("Call callSetActiveMeasurement: " + type);
       setActiveMeasurement(type, sliderIndex, plateres);
     }
 

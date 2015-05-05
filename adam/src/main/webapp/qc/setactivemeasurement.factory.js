@@ -6,8 +6,8 @@
 
     .factory('setActiveMeasurement', setActiveMeasurement);
 
-  setActiveMeasurement.$inject = ["activePlateResult"];
-  function setActiveMeasurement(activePlateResult) {
+  setActiveMeasurement.$inject = [];
+  function setActiveMeasurement() {
     return function (type, sliderIndex, plateres) {
       var minValue = 0;
       var maxValue = 0;
