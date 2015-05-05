@@ -64,9 +64,10 @@
       if (act == "new") {
         var savedplate = Plate.save(plateVm.newplate,function() {
           plateVm.plates = plateVm.plates.concat(savedplate);
-        } ,function(error) {});
+        } ,function(error) {
         alert("Changes can not be saved - Server error");
-        console.log(JSON.stringify(error, null, 4));
+        console.log(JSON.stringify(error, null, 4))
+        })
       }
       else {
         Plate.update({"id":plateVm.newplate.id},plateVm.newplate,function() {
