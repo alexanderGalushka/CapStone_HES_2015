@@ -51,7 +51,7 @@
           async: false
      });*/
 
-    
+
       /*var onPrjectRequestComplete = function () {
         for (var index in responce.data)
          {
@@ -413,48 +413,9 @@
       };
 
       var map_project_wells;
-
-      var getWellsFromDB = function(project_id)
-      {
-        var tmpArray = [];
-
-          var onWellRequestComplete = function(response) 
-          {
-             for (var index in response.data)
-             {
-                  var new_project = 
-                  {
-                    "title" : data[index].name,
-                    "description" : data[index].description,
-                    "owner" : data[index].owner,
-                    "date" : data[index].creationDate,
-                    "id" : data[index].id,
-                    "selected" : false
-                  }
-                  tmpArray.push(new_project);
-              }
-          }
-          
-          $http.get("/adam/getWells/" + project_id).then(onWellRequestComplete);
-      }
-
-
-
-      var getWells = function(projectTitle) 
-      {
+      var getWells = function(projectTitle) {
         var project = searchForProject(projectTitle);
-
-        if (map_project_wells == 'undefined')
-        {
-          for (var i = 0, iLen = projects.length; i < iLen; i++) 
-          {
-
-              var proj = projects[i];
-              map_project_wells[proj.id] = getWellsFromDB(proj.id);
-          }
-        }
-
-        return map_project_wells[project.id];
+        return this.map_project_wells[project.id];
       };
 
       var getMeasurements = function() {
@@ -780,8 +741,7 @@
 
       var graphIt = function() {
         //options.xlabel = "Time (minutes)";
-        if (plotData.length != 0)
-        {
+        if (plotData.length != 0) {
           g = new Dygraph(document.getElementById('graph'), plotData, options);
           return g;
         }
@@ -865,7 +825,8 @@
         'measurementTypeFilter': measurementTypeFilter,
         'addMeasurementTypeIfDoesNotExist': addMeasurementTypeIfDoesNotExist,
         'measurementTypes': measurementTypes,
-        'initializeData': initializeData
+        'initializeData': initializeData,
+        "map_project_wells": map_project_wells
       };
     }
   ]);
@@ -877,23 +838,28 @@
   app.controller('DropdownCtrl', ['$scope', '$log', 'DAService', '$http', '$q',
     function($scope, $log, DAService, $http, $q) {
 
-    
-      var onError = function(reason)
-      {
-        var dAasd  = 123;
+      dsPLACEHOLDER = 'Select data series';
+      gtPLACEHOLDER = 'Select graph type';
+      xPLACEHOLDER = 'Select x-axis variable';
+      
+      var onError = function(reason) {
+        var dAasd = 123;
       }
 
-      var getProjectsFromDB = function()
-      {
-          $http.get("/adam/rest/project/").then(onPrjectRequestComplete, onError);
+      var getProjectsFromDB = function() {
+        $http.get("/adam/rest/project").then(onPrjectRequestComplete, onError);
       }
-      
-      var onPrjectRequestComplete = function(response) 
-      {
+
+      var getProjectsWells = function() {
+        $http.get("/adam/rest/get_all_data").then(onPrjectWellsInfo, onError);
+      }
+
+      var onPrjectWellsInfo = function(response) {
+        DAService.map_project_wells = response.data;
+        
         $scope.labels = DAService.labels.slice(1); // remove default x-axis label, don't want that in the dropdown menu
         $scope.showLabels = [];
-        for (var i in $scope.labels) 
-        {
+        for(i in $scope.labels) {
           $scope.showLabels.push(true);
         }
         $scope.graphTypes = ['scatter', 'line', 'curve fit'];
@@ -921,32 +887,37 @@
         xPLACEHOLDER = 'Select x-axis variable';
         $scope.selectedXAxisLabel = xPLACEHOLDER;
         //DAService.updateData([0], 'setX');
-        DAService.options.labels = ['x-axis', 'y-axis'];
-        var g = new Dygraph(document.getElementById('graph'), [
-          [0, 0],
-          [0, 0]
-        ], DAService.options);
+        DAService.options.labels = ['x-axis','y-axis'];
+        var g = new Dygraph(document.getElementById('graph'), [[0,0],[0,0]],  DAService.options);
 
         $scope.ySeries = [];
         $scope.yCount = 1;
+        
+        DAService.initializeData();
 
-         for (var index in response.data)
-         {
-
-              var new_project = 
-              {
-                "title" : data[index].name,
-                "description" : data[index].description,
-                "owner" : data[index].owner,
-                "date" : data[index].creationDate,
-                "id" : data[index].id,
-                "selected" : false
-              }
-              projects.push(new_project);
-          }
-
-          resetDataSeries();
+        resetDataSeries();
       }
+
+      var onPrjectRequestComplete = function(response) 
+      {
+
+          var data = response.data;
+          DAService.projects.splice(0, DAService.projects.length);
+          for (var index in response.data) 
+          {
+            var project = 
+            {
+              "title": data[index].name,
+              "description": data[index].description,
+              "owner": data[index].owner,
+              "date": data[index].creationDate,
+              "id": data[index].id,
+              "selected": false
+            }
+            DAService.projects.push(project);
+            getProjectsWells();
+          }
+       }
 
       getProjectsFromDB();
 
@@ -1096,14 +1067,14 @@
         DAService.graphIt();
       };
 
-      $scope.deletePr = function(coll1, indx1) {
+      /*$scope.deletePr = function(coll1, indx1) {
         deleteProject(coll1, indx1);
-      };
-      $scope.makeActive = function(proj) {
+      };*/
+      /*$scope.makeActive = function(proj) {
         $scope.ActiveProject = proj;
         setActiveProject(activeProject, proj);
         DAService.makeActive(proj.title);
-      };
+      };*/
 
       $scope.updateWells = function() {
         $scope.wellCollection = [];
