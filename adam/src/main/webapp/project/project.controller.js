@@ -1,10 +1,18 @@
 'use strict';
 
+/**
+ * @ngdoc function
+ * @name project.controller:ProjectsCtrl
+ * @description
+ * # ProjectsCtrl
+ * Controller of the projects page
+ *
+ */
+
 (function() {
   angular.module('project', ['smart-table','mgcrea.ngStrap'])
 
     .controller('ProjectsCtrl', ProjectsCtrl);
-
 
   ProjectsCtrl.$inject = ["$scope", "activeProject", "activePlate", "activePlateResult", "Project", "Collaborator", "$filter"];
   function ProjectsCtrl($scope, activeProject, activePlate, activePlateResult, Project, Collaborator, $filter) {
@@ -29,9 +37,15 @@
 
     projVm.collaborators = Collaborator.query({id:'others'});
 
-    function deletePr(coll,indexinp){
-      //deleteProject(coll,indexinp);
 
+    /**
+     * @ngdoc function
+     * @name deletePr
+     * @description
+     * Delete project from database and updates json collection used for display
+     *
+     */
+    function deletePr(coll,indexinp){
       Project.delete({"id":indexinp.id});
       var index = coll.indexOf(indexinp);
       coll.splice(index, 1);
@@ -41,54 +55,88 @@
       $scope.activePlateResult.plateResult  = null;
     }
 
+    /**
+     * @ngdoc function
+     * @name addNewProject
+     * @description
+     * Prepares new project json to be used in modal page
+     *
+     */
     function addNewProject (){
-      projVm.projectAction = "new";
+      projVm.projectAction = "new";  // the same page has been used for new and edit project
       projVm.newproject = {
         "name": "" ,
         "description": "",
         "label": "",
-        "tags":[],
         "collaborators":[]
       };
     }
 
+    /**
+     * @ngdoc function
+     * @name editProject
+     * @description
+     * Prepares  project json to be used in modal page for edit
+     *
+     */
     function editProject(proj) {
       projVm.projectAction = "edit";
       projVm.newproject = JSON.parse(JSON.stringify(proj));
     }
 
+    /**
+     * @ngdoc function
+     * @name saveChangesProject
+     * @description
+     * Function called from modal page to save changes
+     */
     function saveChangesProject(act,proj) {
       if (act == "new") {
         var savedproj = Project.save(projVm.newproject);
         projVm.projects = projVm.projects.concat(savedproj);
       }
       else {
-
+        // Calls web service and update json structure used for display
         Project.update({"id":projVm.newproject.id},projVm.newproject);
         proj.name = projVm.newproject.name;
         proj.description = projVm.newproject.description;
         proj.label = projVm.newproject.label;
-        //proj.owner = projVm.newproject.owner;
-        //proj.creationDate = projVm.newproject.creationDate  ;
         proj.tags = projVm.newproject.tags;
         proj.collaborators = projVm.newproject.collaborators;
       }
     }
 
-
+    /**
+     * @ngdoc function
+     * @name setActiveProject
+     * @description
+     * Function called to set active project variable shared between screens
+     */
     function setActiveProject (proj){
       $scope.ActiveProject.project= proj;
       $scope.ActivePlate.plate  = null;
       $scope.activePlateResult.plateResult  = null;
     }
 
+    /**
+     * @ngdoc function
+     * @name checkedOwner
+     * @description
+     * Filters table rows
+     */
     function checkedOwner(check){
       if (check)
-        projVm.filterowner = 'ivan';
+        projVm.filterowner = project.owner;
       else
         projVm.filterowner = '';
     }
 
+    /**
+     * @ngdoc function
+     * @name addCollaborator
+     * @description
+     * Add selected user to the list of collaborators. Json list will be saved in database
+     */
     function addCollaborator(collaborators,newCollaborator){
       if(collaborators.indexOf(newCollaborator) >= 0){
         alert("User " + newCollaborator.name + " is already added as collaborator");
@@ -98,7 +146,5 @@
     }
 
   }
-
-
 
 })();

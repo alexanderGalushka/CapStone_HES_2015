@@ -1,4 +1,12 @@
 'use strict';
+/**
+ * @ngdoc directive
+ * @name project.panel.directive:admahesProjectpanel
+ * @description
+ * # admahesProjectpanel
+ * Project panel directive used in other pages
+ *
+ */
 
 (function() {
   angular.module('projectpanel', ['ngAnimate','ngSanitize', 'smart-table','mgcrea.ngStrap'])
@@ -32,6 +40,12 @@
     projpanVm.projects = Project.query();
     projpanVm.projectsDisplay = [].concat(projpanVm.projects);
 
+    /**
+     * @ngdoc function
+     * @name setActiveProject
+     * @description
+     * Set active project variable shared between screens
+     */
     function setActiveProject (proj){
       $scope.ActiveProject.project = proj;
       $scope.ActivePlate.plate  = null;
