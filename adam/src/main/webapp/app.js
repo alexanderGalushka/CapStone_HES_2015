@@ -83,7 +83,7 @@
                     templateUrl: 'dataanalysis/data_analysis.html',
                     controller: 'DropdownCtrl'
                 }).
-      when('/login.html', {
+      when('login.html', {
                     templateUrl: 'login.html',
                     controller: function(){}
                 }).
