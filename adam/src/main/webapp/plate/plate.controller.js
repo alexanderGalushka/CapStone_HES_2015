@@ -62,19 +62,28 @@
 
     function saveChangesPlate(act,plate) {
       if (act == "new") {
-        var savedplate = Plate.save(plateVm.newplate);
-        plateVm.plates = plateVm.plates.concat(savedplate);
+        var savedplate = Plate.save(plateVm.newplate,function() {
+          plateVm.plates = plateVm.plates.concat(savedplate);
+        } ,function(error) {});
+        alert("Changes can not be saved - Server error");
+        console.log(JSON.stringify(error, null, 4));
       }
       else {
-        Plate.update({"id":plateVm.newplate.id},plateVm.newplate);
-        plate.project = plateVm.newplate.project;
-        plate.name = plateVm.newplate.name;
-        plate.label = plateVm.newplate.label;
-        plate.numberOfRows = plateVm.newplate.numberOfRows;
-        plate.numberOfColumns = plateVm.newplate.numberOfColumns;
-        plate.barcode = plateVm.newplate.barcode;
-        plate.protocolId = plateVm.newplate.protocolId;
-        plate.wellLabels = plateVm.newplate.wellLabels;
+        Plate.update({"id":plateVm.newplate.id},plateVm.newplate,function() {
+            plate.project = plateVm.newplate.project;
+            plate.name = plateVm.newplate.name;
+            plate.label = plateVm.newplate.label;
+            plate.numberOfRows = plateVm.newplate.numberOfRows;
+            plate.numberOfColumns = plateVm.newplate.numberOfColumns;
+            plate.barcode = plateVm.newplate.barcode;
+            plate.protocolId = plateVm.newplate.protocolId;
+            plate.wellLabels = plateVm.newplate.wellLabels;
+        },
+          function(error) {
+            alert("Changes can not be saved - Server error");
+            console.log(JSON.stringify(error, null, 4));
+          });
+
 
       }
     }
@@ -88,12 +97,12 @@
     }
 
     function deletePlate(plate){
-      Plate.delete({"id":plate.id} ,function(error) {
+      Plate.delete({"id":plate.id} ,function() {
           var index = plateVm.plates.indexOf(plate);
           plateVm.plates.splice(index, 1);
         } ,
         function(error) {
-          alert("Plate can not eb deleted - Server error");
+          alert("Plate can not be deleted - Server error");
           console.log(JSON.stringify(error, null, 4));
         });
 
