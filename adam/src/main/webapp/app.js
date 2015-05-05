@@ -83,6 +83,10 @@
                     templateUrl: 'dataanalysis/data_analysis.html',
                     controller: 'DropdownCtrl'
                 }).
+      when('/login.html', {
+                    templateUrl: 'login.html',
+                    controller: function(){}
+                }).
       otherwise({
         redirectTo: '/projects'
       });
