@@ -128,8 +128,7 @@
      * Add label to the list of labels. Json list will be saved in database
      */
     function addLabel(labels,newLabel){
-      if(labels.indexOf(newLabel) < 0)
-        labels.push({name:newLabel});
+      labels.push({name:newLabel});
     }
 
     /**
@@ -139,8 +138,7 @@
      * Add control type to the list of control types. Json list will be saved in database
      */
     function addControlType(controlTypes,newcontrolType,newdisplayChar){
-      if(controlTypes.indexOf(newcontrolType) < 0)
-        controlTypes.push({name:newcontrolType, displayChar:newdisplayChar});
+      controlTypes.push({name:newcontrolType, displayChar:newdisplayChar});
     }
 
     /**
