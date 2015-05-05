@@ -10,9 +10,6 @@
   function loadActiveResult(activePlateResult, transformActiveResult, Qc) {
     return function (plateid){
       var plateres;
-      var minValue = 0;
-      var maxValue = 0;
-      var foundFirstValidWell = false;
 
       plateres = Qc.get({"id": plateid},function(){
           /* load result into activePlateResult service for sharing between pages */

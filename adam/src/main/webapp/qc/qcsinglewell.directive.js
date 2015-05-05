@@ -22,24 +22,28 @@
       };
     });
 
-  QcSingleWellCtrl.$inject = ["filterQcColorFilter", "filterQcControlFilter", "WellInvalidate"];
-  function QcSingleWellCtrl(filterQcColor, filterQcControl, WellInvalidate) {
+  QcSingleWellCtrl.$inject = ["filterQcColorFilter", "filterQcControlFilter", "WellInvalidate", "transformActiveResult"];
+  function QcSingleWellCtrl(filterQcColor, filterQcControl, WellInvalidate, transformActiveResult) {
     var qcsinglewellVm = this;
 
     qcsinglewellVm.toggleIfValid = toggleIfValid;
 
     function toggleIfValid(well, projectid, plateid) {
+      var plateres;
+
       console.log(JSON.stringify(well, null, 4));
       console.log(projectid);
       console.log(plateid);
 
-      WellInvalidate.save({"projectId": projectid,
+      plateres = WellInvalidate.save({"projectId": projectid,
         "plateId":plateid,
         "rowNum":well.row,
         "colNum":well.col,
         "ifValid":!well.ifValid});
 
-      well.ifValid = !well.ifValid;
+      transformActiveResult(plateres);
+      //well.ifValid = !well.ifValid;
+
     }
 
 
