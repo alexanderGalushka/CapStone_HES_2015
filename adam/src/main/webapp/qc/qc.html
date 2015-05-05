@@ -32,7 +32,7 @@
         </thead>
         <tbody>
         <tr st-select-row="type" ng-repeat="type in ActivePlateResult.plateResult.measurementTypes"
-            ng-click="qcVm.setActiveMeasurement(type.name,ActivePlateResult.plateResult.valueslider, ActivePlateResult.plateResult)">
+            ng-click="qcVm.callSetActiveMeasurement(type.name,ActivePlateResult.plateResult.valueslider, ActivePlateResult.plateResult)">
           <td>{{type.name}}</td>
         </tr>
         </tbody>
