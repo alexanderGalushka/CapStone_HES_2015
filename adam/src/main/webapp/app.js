@@ -44,7 +44,8 @@
       'qcwellattrfilter',
       'loadresult',
       'classgridfilter',
-      'well.invalidate.data.model'
+      'well.invalidate.data.model',
+      'transformresult'
     ])
 
     .config(configAdam);
