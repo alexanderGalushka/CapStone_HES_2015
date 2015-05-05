@@ -14,7 +14,8 @@
           valuerange:"=",
           projectid:"@",
           plateid:"@",
-          measurementType:"@"
+          measurementType:"@",
+          sliderIndex:"@"
         },
         templateUrl: 'qc/qcsinglewell.html',
         controller: QcSingleWellCtrl,
@@ -23,8 +24,8 @@
       };
     });
 
-  QcSingleWellCtrl.$inject = ["filterQcColorFilter", "filterQcControlFilter", "WellInvalidate", "transformActiveResult"];
-  function QcSingleWellCtrl(filterQcColor, filterQcControl, WellInvalidate, transformActiveResult) {
+  QcSingleWellCtrl.$inject = ["filterQcColorFilter", "filterQcControlFilter", "WellInvalidate", "transformActiveResult", "setActiveMeasurement"];
+  function QcSingleWellCtrl(filterQcColor, filterQcControl, WellInvalidate, transformActiveResult, setActiveMeasurement) {
     var qcsinglewellVm = this;
 
     qcsinglewellVm.toggleIfValid = toggleIfValid;
@@ -42,7 +43,7 @@
         "colNum":well.col,
         "ifValid":!well.ifValid});
 
-
+      setActiveMeasurement(measurementType, sliderIndex, plateres);
       transformActiveResult(plateres);
       //well.ifValid = !well.ifValid;
 

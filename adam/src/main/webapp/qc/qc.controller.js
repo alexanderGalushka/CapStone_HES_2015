@@ -44,7 +44,6 @@
     };
 
     function callSetActiveMeasurement(type, sliderIndex, plateres) {
-      console.log("Call callSetActiveMeasurement: " + type);
       setActiveMeasurement(type, sliderIndex, plateres);
     }
 

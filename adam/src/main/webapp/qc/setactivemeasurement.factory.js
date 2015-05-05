@@ -26,6 +26,8 @@
           /* Set active measurement to display in qc well map */
           plateres.activeMeasurement = plateres.measurements[i];
           plateres.activeMeasurementType = type;
+          plateres.activeMeasurementSliderIndex = sliderIndex;
+
           console.log("Found IT!");
 
           for (var j = 0; j < plateres.measurements[i].wells.length; j++) {
