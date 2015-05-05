@@ -30,7 +30,7 @@
 
     qcsinglewellVm.toggleIfValid = toggleIfValid;
 
-    function toggleIfValid(well, projectid, plateid, measurementType) {
+    function toggleIfValid(well, projectid, plateid, measurementType, sliderIndex) {
       var plateres;
 
       console.log(JSON.stringify(well, null, 4));
