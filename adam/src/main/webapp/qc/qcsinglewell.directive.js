@@ -41,10 +41,16 @@
         "plateId":plateid,
         "rowNum":well.row,
         "colNum":well.col,
-        "ifValid":!well.ifValid});
+        "ifValid":!well.ifValid},function(){
+        /* load returned result into activePlateResult service for sharing between pages */
+        transformActiveResult(plateres);
+        setActiveMeasurement(measurementType, sliderIndex, plateres);
+      }, function(error) {
+        /*  web service threw error */
+        console.log(JSON.stringify(error, null, 4));
+      });
 
-      setActiveMeasurement(measurementType, sliderIndex, plateres);
-      transformActiveResult(plateres);
+
       //well.ifValid = !well.ifValid;
 
     }
