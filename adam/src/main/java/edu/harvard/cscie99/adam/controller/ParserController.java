@@ -112,27 +112,6 @@ public class ParserController {
 		return plateService.createPlate(plate);
 	}
 	
-//	//Upload plate
-//	@RequestMapping(value="/upload_plate_with_result", method=RequestMethod.POST)
-//	public @ResponseBody Plate handlePlateAndResultUpload(
-//			@RequestParam("name") String name,
-//			@RequestParam("file") MultipartFile file) throws IOException, ParserException, InvalidPlateFileException{
-//		
-//		Plate plate = null;
-//		
-//		if (file != null && !file.isEmpty()){
-//		
-//			byte[] bytes = file.getBytes();
-//			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(C_PLATE_FILE_PATH + name)));
-//			stream.write(bytes);
-//			stream.close();
-//		
-//			plate = parserService.parsePlateFromFile(C_PLATE_FILE_PATH + name);
-//		}
-//		
-//		return plateService.createPlate(plate);
-//	}
-	
 	/**
 	 * handleResultUpload method
 	 * 

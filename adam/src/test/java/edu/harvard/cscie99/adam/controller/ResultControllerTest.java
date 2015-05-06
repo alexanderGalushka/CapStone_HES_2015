@@ -1,4 +1,4 @@
-package edu.harvard.cscie99.adam.service;
+package edu.harvard.cscie99.adam.controller;
 
 import static org.junit.Assert.*;
 
@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,24 +20,25 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import edu.harvard.cscie99.adam.config.PersistenceConfig;
 import edu.harvard.cscie99.adam.config.PersistenceXmlConfig;
-import edu.harvard.cscie99.adam.model.DataSet;
 import edu.harvard.cscie99.adam.model.Measurement;
 import edu.harvard.cscie99.adam.model.Plate;
 import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.model.ResultSnapshot;
-import edu.harvard.cscie99.adam.model.Well;
 import edu.harvard.cscie99.adam.model.WellLabel;
+import edu.harvard.cscie99.adam.service.PlateService;
+import edu.harvard.cscie99.adam.service.ProjectService;
+import edu.harvard.cscie99.adam.service.ResultService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class,
         classes = { PersistenceConfig.class, PersistenceXmlConfig.class })
-public class ResultServiceTest {
+public class ResultControllerTest {
 	
 	@Autowired
-	private ResultService  resultService;
+	private ResultController resultController;
 	
 	@Autowired
-    private SessionFactory sessionFactory;
+	private ResultService resultService;
 	
 	@Autowired
 	private ProjectService projectService;
@@ -46,16 +46,13 @@ public class ResultServiceTest {
 	@Autowired
 	private PlateService plateService;
 	
-	private Project project = null;
-	private Plate plate = null;
-	private ResultSnapshot result = null;
 	private int recentlyCreatedResultID = 0;
 	
 	@Before
 	public void populateData(){
 		
 		//Create a plate
-		plate = new Plate();
+		Plate plate = new Plate();
 		plate.setName("plate1");
 		plate.setNumberOfRows(5);
 		plate.setNumberOfColumns(5);
@@ -67,7 +64,7 @@ public class ResultServiceTest {
 		plateService.createPlate(plate);
 		
 		//Create a project
-		project = new Project();
+		Project project = new Project();
 		project.setName("proj1");
 		
 		List<Plate> plates = new ArrayList<Plate>();
@@ -80,7 +77,7 @@ public class ResultServiceTest {
 		plateService.updatePlate(plate);
 		
 		//Create a result
-		result = new ResultSnapshot();
+		ResultSnapshot result = new ResultSnapshot();
 		List<Measurement> measures = new ArrayList<Measurement>();
 		
 		for (int i = 0; i < 5; i++){
@@ -107,13 +104,14 @@ public class ResultServiceTest {
 		recentlyCreatedResultID = result.getId();
 	}
 	
+	
 	@Test
-	public void testGetResult(){
+	public void testGetResults(){
 		
 		ResultSnapshot result = null;
 		try {
-			result = resultService.retrieveResult(recentlyCreatedResultID);
-		} catch (Exception e) {
+			result = resultController.getResults(recentlyCreatedResultID);
+		} catch (JsonProcessingException e) {
 			fail();
 		}
 		
@@ -123,11 +121,12 @@ public class ResultServiceTest {
 	}
 	
 	@Test
-	public void listResults(){
+	public void testListResults(){
+		
 		List<ResultSnapshot> results = null;
 		try {
-			results = resultService.listResults();
-		} catch (Exception e) {
+			results = resultController.listResults();
+		} catch (JsonProcessingException e) {
 			fail();
 		}
 		
@@ -136,46 +135,37 @@ public class ResultServiceTest {
 	}
 	
 	@Test
-	public void testGetAllWells(){
-		ArrayList<HashMap<Object, Object>> wells = null;
+	public void testGetAllResults(){
+		
+		List<HashMap<Object, Object>> results = null;
 		try {
-			wells = resultService.getAllWells(project.getId());
-		} catch (Exception e) {
+			results = resultController.getAllResults(1);
+		} catch (JsonProcessingException e) {
 			fail();
 		}
 		
-		assertNotNull(wells);
-		assertFalse(wells.isEmpty());
+		assertNotNull(results);
+		assertFalse(results.isEmpty());
+		assertTrue(results.get(0).containsKey("plateId"));
+		assertEquals(results.get(0).get("plateId"), 1);
 	}
 	
 	@Test
-	public void testCreateResult(){
+	public void testGetAllPossibleResults(){
 		
-		//Create a result
-		ResultSnapshot newResult = new ResultSnapshot();
-		List<Measurement> measures = new ArrayList<Measurement>();
-		
-		for (int i = 0; i < 5; i++){
-			for (int j = 0; j < 5; j++){
-			
-				Measurement m = new Measurement();
-				m.setColumn(j);
-				m.setRow(i);
-				m.setMeasurementType("type"+i);
-				m.setValue(Math.random());
-				measures.add(m);
-			}
-		}
-		newResult.setTime(new Date());
-		newResult.setMeasurements(measures);
-		
+		Map<Object, ArrayList<HashMap<Object, Object>>> results = null;
 		try {
-			newResult = resultService.saveResultSnapshot(result);
-		} catch (Exception e) {
+			results = resultController.getAllPossibleResults();
+		} catch (JsonProcessingException e) {
 			fail();
 		}
 		
-		assertNotNull(newResult);
-		assertNotEquals(newResult, 0);
+		assertNotNull(results);
+		assertFalse(results.isEmpty());
+		assertTrue(results.containsKey(1));
 	}
 }
+		
+
+	
+

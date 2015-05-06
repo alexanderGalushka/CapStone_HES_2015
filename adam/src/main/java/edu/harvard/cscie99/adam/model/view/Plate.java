@@ -169,4 +169,26 @@ public class Plate implements Serializable{
 		this.controlTypes = controlTypes;
 	}
 	
+	@Override
+	public boolean equals(Object obj){
+		
+		if (obj == null){
+			return false;
+		}
+		if (!(obj instanceof Plate)){
+			return false;
+		}
+		Plate other = (Plate) obj;
+		if (other.getId() != getId()){
+			return false;
+		}
+		
+		return true;
+	}
+	
+	@Override
+	public int hashCode(){
+		return 17;
+	}
+	
 }

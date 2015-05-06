@@ -116,7 +116,7 @@ public class PersistenceConfig {
      * 
      * @return properties - object representation of properties file (key:value)
      */
-    final Properties hibernateProperties() {
+    public final Properties hibernateProperties() {
         final Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
         hibernateProperties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));

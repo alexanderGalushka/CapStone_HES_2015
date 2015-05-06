@@ -32,10 +32,24 @@
     projVm.addCollaborator = addCollaborator;
     projVm.deletePr = deletePr;
 
-    projVm.projects = Project.query();
-    projVm.projectsDisplay = [].concat(projVm.projects);
+    projVm.projects = Project.query(
+      function() {
+        projVm.projectsDisplay = [].concat(projVm.projects);
+      },
+      function(error) {
+        //alert("Data can not be retrieved - Server error");
+        console.log(JSON.stringify(error, null, 4));
+      });
 
-    projVm.collaborators = Collaborator.query({id:'others'});
+    projVm.collaborators = Collaborator.query({id:'others'},
+      function() {
+
+      },
+      function(error) {
+        //alert("Data can not be retrieved - Server error");
+        console.log(JSON.stringify(error, null, 4));
+      });
+
 
 
     /**
@@ -46,13 +60,20 @@
      *
      */
     function deletePr(coll,indexinp){
-      Project.delete({"id":indexinp.id});
-      var index = coll.indexOf(indexinp);
-      coll.splice(index, 1);
+      Project.delete({"id":indexinp.id},
+        function() {
+          var index = coll.indexOf(indexinp);
+          coll.splice(index, 1);
 
-      $scope.ActiveProject.project= null;
-      $scope.ActivePlate.plate  = null;
-      $scope.activePlateResult.plateResult  = null;
+          $scope.ActiveProject.project= null;
+          $scope.ActivePlate.plate  = null;
+          $scope.activePlateResult.plateResult  = null;
+        },
+        function(error) {
+          alert("Changes can not be saved - Server error");
+          console.log(JSON.stringify(error, null, 4));
+        });
+
     }
 
     /**
@@ -92,17 +113,31 @@
      */
     function saveChangesProject(act,proj) {
       if (act == "new") {
-        var savedproj = Project.save(projVm.newproject);
-        projVm.projects = projVm.projects.concat(savedproj);
+        var savedproj = Project.save(projVm.newproject,
+          function() {
+            projVm.projects = projVm.projects.concat(savedproj);
+          },
+          function(error) {
+            alert("Changes can not be saved - Server error");
+            console.log(JSON.stringify(error, null, 4));
+          });
+
       }
       else {
         // Calls web service and update json structure used for display
-        Project.update({"id":projVm.newproject.id},projVm.newproject);
-        proj.name = projVm.newproject.name;
-        proj.description = projVm.newproject.description;
-        proj.label = projVm.newproject.label;
-        proj.tags = projVm.newproject.tags;
-        proj.collaborators = projVm.newproject.collaborators;
+        Project.update({"id":projVm.newproject.id},projVm.newproject,
+          function() {
+            proj.name = projVm.newproject.name;
+            proj.description = projVm.newproject.description;
+            proj.label = projVm.newproject.label;
+            proj.tags = projVm.newproject.tags;
+            proj.collaborators = projVm.newproject.collaborators;
+          },
+          function(error) {
+            alert("Changes can not be saved - Server error");
+            console.log(JSON.stringify(error, null, 4));
+          });
+
       }
     }
 

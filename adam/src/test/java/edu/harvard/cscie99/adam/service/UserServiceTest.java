@@ -1,14 +1,9 @@
-package edu.harvard.cscie99.adam.controller;
+package edu.harvard.cscie99.adam.service;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -17,39 +12,25 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import edu.harvard.cscie99.adam.config.PersistenceConfig;
 import edu.harvard.cscie99.adam.config.PersistenceXmlConfig;
 import edu.harvard.cscie99.adam.profile.User;
+import edu.harvard.cscie99.adam.service.UserService;
 import junit.framework.TestCase;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class,
         classes = { PersistenceConfig.class, PersistenceXmlConfig.class })
-public class CollaborationControllerTest extends TestCase {
+public class UserServiceTest extends TestCase {
 	
 	@Autowired
-	private CollaborationController collaborationController;
+	private UserService userService;
 	
-	@Before
-	public void populateData(){
-		HttpServletRequest request = (HttpServletRequest)Mockito.mock(HttpServletRequest.class);
-		HttpSession session = (HttpSession)Mockito.mock(HttpSession.class);
-		Mockito.when(request.getSession()).thenReturn(session);
+	@Test
+	public void testUserCreation(){
 		
 		User user = new User();
 		user.setUsername("testUser");
 		user.setPassword("testPass");
-		user = collaborationController.create(user, request);
-	}
-	
-	@Test
-	public void testUserCreation(){
-		HttpServletRequest request = (HttpServletRequest)Mockito.mock(HttpServletRequest.class);
-		HttpSession session = (HttpSession)Mockito.mock(HttpSession.class);
-		Mockito.when(request.getSession()).thenReturn(session);
-		
-		User user = new User();
-		user.setUsername("newUser");
-		user.setPassword("newtPass");
 		try{
-			user = collaborationController.create(user, request);
+			user = userService.createUser(user);
 		}
 		catch(Exception e){
 			fail();
@@ -65,7 +46,7 @@ public class CollaborationControllerTest extends TestCase {
 		
 		User user = null;
 		try{
-			user = collaborationController.getUser("testUser");
+			user = userService.retrieveUser("testUser");
 		}
 		catch(Exception e){
 			fail();
@@ -75,15 +56,11 @@ public class CollaborationControllerTest extends TestCase {
 	}
 	
 	@Test
-	public void testListUsersButMe(){
-		
-		HttpServletRequest request = (HttpServletRequest)Mockito.mock(HttpServletRequest.class);
-		HttpSession session = (HttpSession)Mockito.mock(HttpSession.class);
-		Mockito.when(request.getSession()).thenReturn(session);
+	public void testListAllUsers(){
 		
 		List<User> users = null;
 		try{
-			users = collaborationController.listOtherUsers(request);
+			users = userService.listUsers(null);
 		}
 		catch(Exception e){
 			fail();
@@ -93,17 +70,23 @@ public class CollaborationControllerTest extends TestCase {
 	}
 	
 	@Test
-	public void testListAllUsers(){
+	public void testListUsersButOne(){
+		
+		User user = new User();
+		user.setUsername("not");
+		user.setPassword("not");
+		user = userService.createUser(user);
 		
 		List<User> users = null;
 		try{
-			users = collaborationController.getListUser();
+			//list all users but one
+			users = userService.listUsers("not");
 		}
 		catch(Exception e){
 			fail();
 		}
 		assertNotNull(users);
-		assertFalse(users.isEmpty());
+		assertSame(users.size(), 1);
 	}
 	
 	@Test
@@ -114,12 +97,8 @@ public class CollaborationControllerTest extends TestCase {
 		user.setLastName("changedLastName");
 		user.setFirstName("changedFirstName");
 		
-		HttpServletRequest request = (HttpServletRequest)Mockito.mock(HttpServletRequest.class);
-		HttpSession session = (HttpSession)Mockito.mock(HttpSession.class);
-		Mockito.when(request.getSession()).thenReturn(session);
-		
 		try{
-			user = collaborationController.editUser(user, "testUser", request);
+			user = userService.editUser(user);
 		}
 		catch(Exception e){
 			fail();
@@ -136,7 +115,7 @@ public class CollaborationControllerTest extends TestCase {
 		
 		boolean result = false;
 		try{
-			result = collaborationController.removeUser("testUser");
+			result = userService.removeUser(user);
 		}
 		catch(Exception e){
 			fail();

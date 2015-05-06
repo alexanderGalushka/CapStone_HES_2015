@@ -88,7 +88,6 @@ public class QualityControlService
 	    }
 	    catch(Exception e)
 	    {
-	    	// TODO
 	    	result = false;
 	    }
 		finally
