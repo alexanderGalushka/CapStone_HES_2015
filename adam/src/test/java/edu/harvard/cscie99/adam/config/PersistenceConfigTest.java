@@ -1,6 +1,7 @@
 package edu.harvard.cscie99.adam.config;
 
 import java.sql.Connection;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 
@@ -21,15 +22,7 @@ public class PersistenceConfigTest extends TestCase {
 
 	@Autowired
 	PersistenceConfig config;
-	
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
 
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
-	
 	@Test
 	public void testHibernateSessionCreation(){
 		
@@ -54,6 +47,20 @@ public class PersistenceConfigTest extends TestCase {
 		catch (Exception ex){
 			fail();
 		}
+	}
+	
+	@Test
+	public void testHibernatePropertiesFile(){
+		Properties prop = config.hibernateProperties();
+		assertNotNull(prop);
+		assertTrue(prop.containsKey("hibernate.hbm2ddl.auto"));
+		assertTrue(prop.containsKey("hibernate.dialect"));
+	}
+	
+	@Test
+	public void testGetSessionFactory(){
+		LocalSessionFactoryBean session = config.sessionFactory();
+		assertNotNull(session);
 	}
 
 }

@@ -63,14 +63,14 @@ public class ResultController {
 	
 	private HashMap<Integer, String> letterMapping = new HashMap<>();
 	
-	@RequestMapping(value="/rest/resultsnapshot/{result_id}/prepare", method=RequestMethod.POST)
-	public @ResponseBody boolean prepareResultsData(
-			@PathVariable("result_id") int resultId) throws JsonProcessingException {
-		
-		ResultSnapshot resultSnapshot = resultService.retrieveResult(resultId);
-		
-		return resultService.prepareResultsData(resultSnapshot);
-	}
+//	@RequestMapping(value="/rest/resultsnapshot/{result_id}/prepare", method=RequestMethod.POST)
+//	public @ResponseBody boolean prepareResultsData(
+//			@PathVariable("result_id") int resultId) throws JsonProcessingException {
+//		
+//		ResultSnapshot resultSnapshot = resultService.retrieveResult(resultId);
+//		
+//		return resultService.prepareResultsData(resultSnapshot);
+//	}
 	
 	@RequestMapping(value="/rest/resultsnapshot/{result_id}", method=RequestMethod.GET)
 	public @ResponseBody ResultSnapshot getResults(
@@ -89,24 +89,23 @@ public class ResultController {
 		return resultList;
 	}
 	
-	@RequestMapping(value="/rest/getResults", method=RequestMethod.GET)
-	public @ResponseBody DataSet queryResults(
-			@RequestParam(value="projectId", required=false) Integer projectId,
-			@RequestParam(value="plateId", required=false) Integer plateId,
-			@RequestParam(value="labelName", required=false) String labelName,
-			@RequestParam(value="labelValue", required=false) String labelValue,
-			@RequestParam(value="measurementType", required=false) String measurementType,
-			@RequestParam(value="time", required=false) String time
-			) throws JsonProcessingException {
-		
-		return queryService.queryResultsData(projectId, plateId, labelName, labelValue, measurementType, time);
-	}
+//	@RequestMapping(value="/rest/getResults", method=RequestMethod.GET)
+//	public @ResponseBody DataSet queryResults(
+//			@RequestParam(value="projectId", required=false) Integer projectId,
+//			@RequestParam(value="plateId", required=false) Integer plateId,
+//			@RequestParam(value="labelName", required=false) String labelName,
+//			@RequestParam(value="labelValue", required=false) String labelValue,
+//			@RequestParam(value="measurementType", required=false) String measurementType,
+//			@RequestParam(value="time", required=false) String time
+//			) throws JsonProcessingException {
+//		
+//		return queryService.queryResultsData(projectId, plateId, labelName, labelValue, measurementType, time);
+//	}
 	
 	@RequestMapping(value="/rest/getWells/{project_id}", method=RequestMethod.GET)
 	public @ResponseBody ArrayList<HashMap<Object, Object>> getAllResults(
 			@PathVariable("project_id") int projectId) throws JsonProcessingException 
 	{
-		
 		return resultService.getAllWells(projectId);
 	}
 	

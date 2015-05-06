@@ -1,6 +1,7 @@
 package edu.harvard.cscie99.adam.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,50 +20,56 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import edu.harvard.cscie99.adam.config.PersistenceConfig;
 import edu.harvard.cscie99.adam.config.PersistenceXmlConfig;
 import edu.harvard.cscie99.adam.error.UnauthorizedOperationException;
+import edu.harvard.cscie99.adam.model.Measurement;
 import edu.harvard.cscie99.adam.model.Project;
 import edu.harvard.cscie99.adam.model.Plate;
+import edu.harvard.cscie99.adam.model.ResultSnapshot;
 import edu.harvard.cscie99.adam.model.Tag;
+import edu.harvard.cscie99.adam.model.view.mapper.PlateMapper;
 import edu.harvard.cscie99.adam.profile.User;
 import edu.harvard.cscie99.adam.service.AuthenticationService;
 import edu.harvard.cscie99.adam.service.PlateService;
 import edu.harvard.cscie99.adam.service.ProjectService;
+import edu.harvard.cscie99.adam.service.ResultService;
 import junit.framework.TestCase;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class,
         classes = { PersistenceConfig.class, PersistenceXmlConfig.class })
-public class ProjectControllerTest extends TestCase {
+public class PlateControllerTest extends TestCase {
 
-	Project project = null;
 	Plate plate = null;
-	
+	ResultSnapshot result = null;
 	User user = null;
 	
 	@Autowired
-	private ProjectController projectController;
-
-	@Autowired
-	private ProjectService projectService;
+	private PlateController plateController;
 
 	@Autowired
 	private PlateService plateService;
+
+	@Autowired
+	private ResultService resultService;
 	
 	@Before
 	public void prepareData(){
-		project = createProjectObject();
-		project = projectService.createProject(project);
-		
 		plate = createPlateObject();
 		plate = plateService.createPlate(plate);
 		
+		result = createResultObject();
+		result = resultService.saveResultSnapshot(result);
+		
 		user = new User();
-		user.setUsername("ivan");
-		user.setPassword("ivan");
+		user.setUsername("testUser");
+		user.setPassword("testPass");
 	}
-	
+
 	@Test
-	public void testCreateProject(){
-		Project newProject = createProjectObject();
+	public void testCreatePlate(){
+		edu.harvard.cscie99.adam.model.view.Plate newPlate = new edu.harvard.cscie99.adam.model.view.Plate();
+		newPlate.setNumberOfColumns(5);
+		newPlate.setNumberOfRows(5);
+		newPlate.setLabel("newPlate");
 		
 		HttpServletRequest request = (HttpServletRequest)Mockito.mock(HttpServletRequest.class);
 		HttpSession session = (HttpSession)Mockito.mock(HttpSession.class);
@@ -70,79 +77,79 @@ public class ProjectControllerTest extends TestCase {
 		Mockito.when(session.getAttribute(AuthenticationService.C_USER_SESSION)).thenReturn(user);
 		
 		try{
-			newProject = projectController.createProject(newProject, request);
+			newPlate = plateController.createPlate(newPlate, request);
 		}
 		catch(Exception e){
 			fail();
 		}
-		assertNotNull(newProject);
-		assertNotSame(newProject.getId(), 0);
+		assertNotNull(newPlate);
+		assertNotSame(newPlate.getId(), 0);
 	}
 	
 	@Test
-	public void testRetrieveProject(){
+	public void testRetrievePlate(){
 		
-		Project proj = null;
+		edu.harvard.cscie99.adam.model.view.Plate _plate = null;
 		try{
-			proj = projectController.getProject(project.getId());
+			_plate = plateController.getPlate(plate.getId());
 		}
 		catch(Exception e){
 			fail();
 		}
-		assertNotNull(proj);
+		assertNotNull(_plate);
 	}
 	
 	@Test
-	public void testListProjects(){
+	public void testListPlates(){
 		
-		List<Project> projs = null;
+		List<edu.harvard.cscie99.adam.model.view.Plate> plates = null;
 		try{
-			projs = projectController.listProjects();
+			plates = plateController.listPlates();
 		}
 		catch(Exception e){
 			fail();
 		}
-		assertNotNull(projs);
-		assertNotSame(projs.size(), 0);
+		assertNotNull(plates);
+		assertNotSame(plates.size(), 0);
 	}
 	
 	@Test
-	public void testUpdateProject(){
+	public void testUpdatePlate(){
 		HttpServletRequest request = (HttpServletRequest)Mockito.mock(HttpServletRequest.class);
 		HttpServletResponse response = (HttpServletResponse)Mockito.mock(HttpServletResponse.class);
 		HttpSession session = (HttpSession)Mockito.mock(HttpSession.class);
 		Mockito.when(request.getSession()).thenReturn(session);
 		Mockito.when(session.getAttribute(AuthenticationService.C_USER_SESSION)).thenReturn(user);
 		
-		Project changedProj = createProjectObject();
-		changedProj.setDescription("changed");
+		edu.harvard.cscie99.adam.model.view.Plate _plate = PlateMapper.getViewPlate(plate);
 		
 		try{
-			changedProj = projectController.updateProject(project.getId(), changedProj, request);
+			_plate = plateController.updatePlate(_plate, _plate.getId(), request);
 		}
 		catch(Exception e){
 			fail();
 		}
-		assertNotNull(changedProj);
+		assertNotNull(_plate);
 	}
 	
 	@Test
-	public void testDeleteProject(){
+	public void testDeletePlate(){
 		HttpServletRequest request = (HttpServletRequest)Mockito.mock(HttpServletRequest.class);
 		HttpSession session = (HttpSession)Mockito.mock(HttpSession.class);
 		Mockito.when(request.getSession()).thenReturn(session);
 		Mockito.when(session.getAttribute(AuthenticationService.C_USER_SESSION)).thenReturn(user);
 		
-		Project newProj = createProjectObject();
+		Plate newPlate= createPlateObject();
+		edu.harvard.cscie99.adam.model.view.Plate _plate = null;
 		try {
-			newProj = projectController.createProject(newProj, request);
-		} catch (UnauthorizedOperationException e1) {
+			_plate = plateController.createPlate(PlateMapper.getViewPlate(newPlate), request);
+		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 		
 		boolean success = false;
 		try{
-			success = projectController.deleteProject(newProj.getId());
+			success = plateController.removePlate(_plate.getId());
 		}
 		catch(Exception e){
 			fail();
@@ -151,17 +158,17 @@ public class ProjectControllerTest extends TestCase {
 	}
 	
 	@Test
-	public void testAddingPlateToProject(){
+	public void testAddingResultToPlate(){
 		
 		try {
-			projectController.removePlateFromProject(project.getId(), plate.getId());
+			plateController.removeResultFromPlate(plate.getId(), result.getId());
 		} catch (UnauthorizedOperationException e) {
 			//no plate to remove
 		}
 		
 		boolean success = false;
 		try {
-			success = projectController.addPlateToProject(project.getId(), plate.getId());
+			success = plateController.addResultToPlate(plate.getId(), result.getId());
 		} catch (UnauthorizedOperationException e) {
 			fail();
 		}
@@ -170,10 +177,10 @@ public class ProjectControllerTest extends TestCase {
 	}
 	
 	@Test
-	public void testRemovePlateToProject(){
+	public void testRemoveResultFromPlate(){
 		
 		try{
-			projectController.addPlateToProject(project.getId(), plate.getId());
+			plateController.removeResultFromPlate(plate.getId(), result.getId());
 		}
 		catch(Exception e){
 			//already linked
@@ -181,25 +188,12 @@ public class ProjectControllerTest extends TestCase {
 		
 		boolean success = false;
 		try {
-			success = projectController.removePlateFromProject(project.getId(), plate.getId());
+			success = plateController.removeResultFromPlate(plate.getId(), result.getId());
 		} catch (UnauthorizedOperationException e) {
 			fail();
 		}
 		
 		assertTrue(success);
-	}
-	
-	private Project createProjectObject(){
-		Project project = new Project();
-		project.setCreationDate("date");
-		project.setDescription("description");
-		project.setLabel("label");
-		project.setName("name");
-		project.setOwner("owner");
-		project.setPublic(true);
-		project.setType("type");
-		
-		return project;
 	}
 	
 	private Plate createPlateObject(){
@@ -211,6 +205,25 @@ public class ProjectControllerTest extends TestCase {
 		plate.setNumberOfColumns(5);
 		plate.setNumberOfRows(5);
 		return plate;
+	}
+	
+	private ResultSnapshot createResultObject() {
+		ResultSnapshot result = new ResultSnapshot();
+		result.setTime(new Date());
+		
+		List<Measurement> measures = new ArrayList<Measurement>();
+		for (int i = 0; i < 5; i++){
+			for (int j = 0; j < 5; j++){
+				Measurement measure = new Measurement();
+				measure.setColumn(j);
+				measure.setRow(i);
+				measure.setValue(Math.random());
+				measure.setMeasurementType("type"+i);
+				measures.add(measure);
+			}
+		}
+		result.setMeasurements(measures);
+		return result;
 	}
 
 }

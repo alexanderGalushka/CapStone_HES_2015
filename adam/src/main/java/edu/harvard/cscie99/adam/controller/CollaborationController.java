@@ -44,7 +44,7 @@ public class CollaborationController {
 		
 		User currentUser = authService.getCurrentUser(request);
 		
-		List<User> listUser = userService.listUsers(currentUser.getUsername());
+		List<User> listUser = userService.listUsers(currentUser != null ? currentUser.getUsername() : null);
 		for (User user : listUser){
 			user.setPassword(null);
 		}
