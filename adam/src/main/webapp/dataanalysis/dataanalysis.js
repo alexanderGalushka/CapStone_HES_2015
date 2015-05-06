@@ -81,9 +81,10 @@
 
           if (projects[i].title == projectTitle) return projects[i];
         }
-      };
+      }; 
 
       var grid_labels = [];
+      //var grid_labels = {};
       var addLabelIfDoesNotExist = function(DAService, label) {
         var result = false;
         for (var i = 0, iLen = grid_labels.length; i < iLen; i++) {
@@ -155,11 +156,13 @@
         }
       };
 
-
       var labelFilter = function(label) {
 
         if (grid_labels.length == 0)
           return true;
+
+        if (label.length === 0)
+          return false;
 
         // in this case we will disregard criteria, if nothing is
         // selected all grid_labels are ok
@@ -336,7 +339,7 @@
           compound: comp,
           substrate: substr,
           measurement1: meas1,
-          measurement2: meas2
+          measurementValue: meas2
         }
       };
 
@@ -360,7 +363,7 @@
           compound: comp,
           substrate: substr,
           measurement1: meas1,
-          measurement2: meas2
+          measurementValue: meas2
         }
       };
 
@@ -424,7 +427,7 @@
         for (var i = 0, iLen = currentWellCollection; i < iLen; i++) {
           well = currentWellCollection[i];
           measurementData.push(well.measurement1);
-          measurementData.push(well.measurement2);
+          measurementData.push(well.measurementValue);
         }
         return
       };
@@ -524,7 +527,7 @@
         "labelName": "Measurement1",
         "labelData": [2, 4, 5, 7, 9]
       }, {
-        "labelName": "Measurement2",
+        "labelName": "measurementValue",
         "labelData": [1, 8, 3, 3, 6]
       }, {
         "labelName": "Measurement3",
@@ -856,6 +859,31 @@
 
       var onPrjectWellsInfo = function(response) {
         DAService.map_project_wells = response.data;
+
+        for (var projectIndex in DAService.map_project_wells )
+        {
+              for (var measurementIndex in DAService.map_project_wells[projectIndex]) {
+                var measurment = DAService.map_project_wells[projectIndex][measurementIndex];
+                var measurmentLabels = DAService.map_project_wells[projectIndex][measurementIndex].wellLabels;
+                for (var lableIndex in measurmentLabels ) 
+                {
+                  var individualMeasurment =  measurmentLabels[lableIndex];
+                  if ("wellLabel" in individualMeasurment)
+                  {
+                      measurment.wellLabel = individualMeasurment.wellLabel;
+                  }
+                  if ("compound" in individualMeasurment)
+                  {
+                      measurment.compound = individualMeasurment.compound;
+                  }
+                  if ("substrate" in individualMeasurment)
+                  {
+                      measurment.substrate = individualMeasurment.substrate;
+                  }
+                }
+                
+            }   
+        }
         
         $scope.labels = DAService.labels.slice(1); // remove default x-axis label, don't want that in the dropdown menu
         $scope.showLabels = [];
@@ -1085,10 +1113,10 @@
             var wellLabel = "";
 
             for (var w = 0, wLen = wells.length; w < wLen; w++) {
-              wellLabel = wells[w].wellLabel;
+              var wellLabel = wells[w].wellLabel;
               wellCompound = wells[w].compound;
               wellSubstrate = wells[w].substrate;
-              if (DAService.labelFilter(wellLabel) && DAService.compoundFilter(wellCompound) && DAService.substrateFilter(wellSubstrate) && DAService.measurementTypeFilter(wells[w].measurementType))
+              if ( DAService.labelFilter(wellLabel) && DAService.compoundFilter(wellCompound) && DAService.substrateFilter(wellSubstrate) && DAService.measurementTypeFilter(wells[w].measurementType))
                 $scope.wellCollection.push(wells[w]);
             }
           }
@@ -1113,7 +1141,7 @@
           if (project.selected == true) {
             var wells = DAService.getWells(project.title);
             for (var w = 0, wLen = wells.length; w < wLen; w++) {
-              DAService.addLabelIfDoesNotExist(DAService, wells[w].wellLabel);
+              DAService.addLabelIfDoesNotExist(DAService, wells[w].wellLabel);                
             }
           }
         }
@@ -1191,7 +1219,7 @@
           if (DAService.rawData.length === 0) {
             var emptyArray = [];
             var timeArray = [];
-            emptyArray.push(parseInt(well.measurement2));
+            emptyArray.push(parseInt(well.measurementValue));
             timeArray.push(parseInt(well.time));
             var object = {
               "labelName": well.measurementType,
@@ -1207,7 +1235,7 @@
               var obj = DAService.rawData[p];
               if (obj.labelName == well.measurementType) {
                 noSuchLabel = false;
-                obj.labelData.push(parseInt(well.measurement2));
+                obj.labelData.push(parseInt(well.measurementValue));
                 obj.time.push(parseInt(well.time));
                 break;
               }
@@ -1216,7 +1244,7 @@
             if (noSuchLabel === true) {
               var emptyArray = [];
               var timeArray = [];
-              emptyArray.push(parseInt(well.measurement2));
+              emptyArray.push(parseInt(well.measurementValue));
               timeArray.push(parseInt(well.time));
               var object = {
                 "labelName": well.measurementType,
