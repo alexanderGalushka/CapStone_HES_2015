@@ -156,6 +156,7 @@
         }
       };
 
+
       var labelFilter = function(label) {
 
         if (grid_labels.length == 0)
@@ -320,7 +321,11 @@
         return subs;
       };
 
+
+
+
       var generateRandomItem = function() {
+
         var wellLabel = ['Snake Data', 'Mouse Data', 'Cow Data', 'Gimmick Data'];
         var compound = ['verapamil', 'alcohol', 'ph20', 'x30z'];
         var substrate = ['propophol', 'ix30', 'po31', 'mx70'];
@@ -552,9 +557,11 @@
           }
         });
 
-        if (dummyAllData[0].hasOwnProperty("time")) {
+        if (dummyAllData[0].hasOwnProperty("time"))
+        {
           dummyData[0] = dummyAllData[0].time;
-        } else
+        }
+        else
           dummyData[0] = generateSequence(1, maxlen, 1);
 
         if (dummyData[0].length === 0)
@@ -568,7 +575,12 @@
           dummyLabels.push(i.labelName);
         });
 
+
+
       };
+
+
+
 
 
       var dataIndices = [];
@@ -746,8 +758,13 @@
         //options.xlabel = "Time (minutes)";
         if (plotData.length != 0) {
           g = new Dygraph(document.getElementById('graph'), plotData, options);
-          return g;
-        }
+        var arr1 = [];
+        var arr2 = [];
+        var arr3 = [];
+        var object= {plot: arr1, opts: arr2, graph: g, wells: arr3};
+        object.plot = angular.copy(plotData);
+        object.opts = angular.copy(options);
+        return object;
       };
 
       var clearLabels = function() {
@@ -777,6 +794,12 @@
         compounds = [];
       };
 
+      var currentGraph = [];
+
+      var curentImageSetId = 0;
+
+      var mapGraphs = new Object(); // or var map = {};
+      var savedPlotData = [];
 
 
       return {
@@ -829,7 +852,11 @@
         'addMeasurementTypeIfDoesNotExist': addMeasurementTypeIfDoesNotExist,
         'measurementTypes': measurementTypes,
         'initializeData': initializeData,
-        "map_project_wells": map_project_wells
+        'currentGraph':currentGraph,
+        'curentImageSetId' : curentImageSetId,
+        'mapGraphs' : mapGraphs,
+        'savedPlotData':savedPlotData,
+         "map_project_wells": map_project_wells
       };
     }
   ]);
@@ -886,6 +913,7 @@
         }
         
         $scope.labels = DAService.labels.slice(1); // remove default x-axis label, don't want that in the dropdown menu
+        document.getElementById('saved').style.visibility = "hidden";
         $scope.showLabels = [];
         for(i in $scope.labels) {
           $scope.showLabels.push(true);
@@ -965,7 +993,9 @@
         addDataSeries($scope.yCount);
         DAService.updateData(DAService.genSeq(1, $scope.labels.length, 1), 'setY');
         DAService.options.series = {};
-        DAService.graphIt();
+        object = DAService.graphIt();
+        object.wells = DAService.currentWellCollection;
+        DAService.mapGraphs[DAService.curentImageSetId] = object;
       };
 
       $scope.addNewYAxisSelectionButton = function() {
@@ -994,7 +1024,7 @@
           }
           delete DAService.options.series[labelToRemove];
 
-          DAService.graphIt();
+          DAService.currentGraph = DAService.graphIt();
         } else {
           resetDataSeries();
         }
@@ -1042,7 +1072,7 @@
         $scope.showLabels[labelIndex] = false;
         DAService.options.series[label] = {};
 
-        DAService.graphIt();
+        DAService.currentGraph = DAService.graphIt();
       };
 
       $scope.setYAxisGraphType = function(ID, type) {
@@ -1084,25 +1114,24 @@
               default:
             }
 
-            DAService.graphIt();
-          }
+          DAService.currentGraph = DAService.graphIt();
         }
       };
 
       $scope.setXAxisData = function(label) {
         $scope.selectedXAxisLabel = label;
         DAService.updateData([DAService.labels.indexOf(label)], 'setX');
-        DAService.graphIt();
+        DAService.currentGraph = DAService.graphIt();
       };
 
-      /*$scope.deletePr = function(coll1, indx1) {
-        deleteProject(coll1, indx1);
-      };*/
-      /*$scope.makeActive = function(proj) {
-        $scope.ActiveProject = proj;
-        setActiveProject(activeProject, proj);
+      $scope.deletePr = function(coll1, indx1) {
+        //deleteProject(coll1, indx1);
+      };
+      $scope.makeActive = function(proj) {
+        //$scope.ActiveProject = proj;
+        //setActiveProject(activeProject, proj);
         DAService.makeActive(proj.title);
-      };*/
+      };
 
       $scope.updateWells = function() {
         $scope.wellCollection = [];
@@ -1208,7 +1237,7 @@
         $scope.measurementTypeCollection = DAService.measurementTypes;
       };
 
-      $scope.updateGraphData = function() {
+      $scope.updateGraphData = function(scope) {
         //update the graph data
 
         DAService.rawData.splice(0, DAService.rawData.length);
@@ -1264,6 +1293,7 @@
 
         resetDataSeries();
 
+        scope.savedPlotData = DAService.plotData;
 
       }
 
@@ -1281,19 +1311,119 @@
         $scope.updateCompounds();
         $scope.updateSubstrates();
         $scope.updateMeasurementTypes();
-        $scope.updateGraphData();
+        $scope.updateGraphData($scope);
+
       };
 
       $scope.updateBar = function(foo) {
-        $scope.updateGraphData();
+        //$scope.updateGraphData();
       };
 
       $scope.clearGraph = function(foo) {
-        var g = new Dygraph(document.getElementById('graph'), [
-          [0, 0],
-          [0, 0]
-        ], DAService.options);
+
+        // These are the default options
+        var options = {
+            //Texts displayed below the chart's x-axis and to the left of the y-axis 
+            titleFont: "bold 12px serif",
+            titleFontColor: "black",
+
+            //Texts displayed below the chart's x-axis and to the left of the y-axis 
+            axisLabelFont: "bold 12px serif",
+            axisLabelFontColor: "black",
+
+            // Texts for the axis ticks
+            labelFont: "normal 12px serif",
+            labelFontColor: "black",
+
+            // Text for the chart legend
+            legendFont: "bold 12px serif",
+            legendFontColor: "black",
+
+            legendHeight: 1000    // Height of the legend area
+        }; 
+        
+
+        /*
+        document.getElementById('saved').style.visibility = "visible";
+        var newId = "id" + Math.floor(Math.random() * 1000).toString();
+        
+        $('#saved').prepend("<img id='fakeId' ng-click='toggleImage(" + "1" + ")' src='' /></a>");
+        
+        //var newImgLink = document.getElementById('fakeIdLink');
+        var newImg = document.getElementById('fakeId');
+        //newImg.style.width='500px';
+        //newImg.style.height='300px';
+        newImg.style.width='300px';
+        newImg.style.height='200px';
+        newImg.id = newId;
+        newImg.src = "";
+
+        var firstRow=document.getElementById("inventory").rows[0];
+        var x=firstRow.insertCell(-1);
+        x.innerHTML="";    
+        
+        x.appendChild(newImg);
+        //newImgLink.appendChild(newImg);
+
+        */
+        
+        var imageIds = ['image1', 'image2', 'image3', 'image4'];
+        document.getElementById('saved').style.visibility = "visible";
+        var id = imageIds[DAService.curentImageSetId];
+        var image = document.getElementById(id);
+        image.style.visibility = "visible";
+        image.style.width='300px';
+        image.style.height='200px';
+        var obj =  DAService.mapGraphs[DAService.curentImageSetId];
+
+        g = new Dygraph(document.getElementById('graph'), obj.plot, obj.opts);
+
+        Dygraph.Export.asPNG(g, image, obj.opts);
+
+        //var arr = [];
+        //var saveObject = {options: DAService.options, plotData: arr};
+        //saveObject.plotData = angular.copy(DAService.savedPlotData);
+
+        //DAService.mapGraphs[DAService.curentImageSetId] = saveObject;
+        
+        DAService.curentImageSetId ++;
+
+        if (DAService.curentImageSetId > 3)
+        {
+            DAService.curentImageSetId = 0;
+        }
+
+        var id = $location.hash();
+          $location.hash('verybottom');
+          $anchorScroll();
+          $location.hash(id);
+      };
+
+      $scope.clearGraph2Disabled = function(foo) {
+        var g = new Dygraph(document.getElementById('graph'), [[0,0],[0,0]],  DAService.options);
         $scope.ySeries.splice(0, $scope.ySeries.length);
+      };
+
+      $scope.toggleImage = function(id) {
+          saveObject = DAService.mapGraphs[id];
+          g = new Dygraph(document.getElementById('graph'), saveObject.plot, saveObject.opts);
+          
+          //  $scope.wellCollectionDisplay.splice(0, $scope.wellCollectionDisplay.length);
+          
+          $scope.wellCollectionDisplay = angular.copy(saveObject.wells);
+
+          $scope.wellCollection = angular.copy(saveObject.wells);
+        
+          $scope.wellCollectionDisplay = [].concat($scope.wellCollection);
+
+          var id = $location.hash();
+          $location.hash('verytop');
+          $anchorScroll();
+          $location.hash(id);
+
+          
+          //DAService.currentWellCollection = $scope.wellCollectionDisplay;
+
       };
 
 

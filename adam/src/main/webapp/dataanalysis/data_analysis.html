@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <div ng-controller="DropdownCtrl">
-  
+  <div id="verytop" ></div>
   <table>
     <tr>
 
       <td valign="top">
+        <center><h3>Data Graph</h3></center>
         <div>
           <div id="y-axis-data-selection">
             <div ng-repeat="series in ySeries">
@@ -38,27 +39,28 @@
               </button>
             </p>
           </div>
-          <div style="width:500px; height:">
+          <div style="width:500px; height:300px">
           <center><div id="graph">No Data Selected</div></center>
           </div>
           <div id="x-axis-data-selection">
             <div class="btn-group btn-group-sm dropup" dropdown>
               <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" dropdown-toggle ng-disabled="disabled">
-                {{ selectedXAxisLabel }}&nbsp;&nbsp;<span class="caret"></span>
+                <!--{{ selectedXAxisLabel }}--> Time - minutes &nbsp;&nbsp;<span class="caret"></span>
               </button>
-              <ul class="dropdown-menu" role="menu">
+              <!--<ul class="dropdown-menu" role="menu">
                 <li ng-repeat="label in labels">
                   <a ng-click="setXAxisData(label)">{{ label }}</a>
                 </li>
-              </ul>
+              </ul>-->
             </div>
           </div>
         </div>
       </td>
 
-      <td valign="top" height="450">
+      <td valign="top" height="500px">
         <center><h3>Selected Data Points</h3></center>
-        <table st-safe-src="wellCollection" track style="width:600px" st-table="wellCollectionDisplay" class="table table-striped">
+        <div style="height:500px">
+        <table st-safe-src="wellCollection" track style="width:600px;" st-table="wellCollectionDisplay" class="table table-striped">
           <thead>
             <tr>
               <th st-sort="time">Time</th>
@@ -105,15 +107,17 @@
           <tfoot>
             <tr>
               <td colspan="6" class="text-center">
-                <div st-pagination st-items-by-page="5" st-displayed-pages="14"></div>
+                <div st-pagination st-items-by-page="8" st-displayed-pages="14"></div>
               </td>
             </tr>
           </tfoot>
         </table>
+        </div>
         <center><button type="button" ng-click="updateTable2()" style="width:200px" class="btn btn-primary"/>
                 <!--{{ selectedXAxisLabel }}--> Graph Selected Datapoints &nbsp;&nbsp; </button>
 
-                <button type="button" ng-click="clearGraph()" class="btn btn-danger"/>Clear Graph </button>
+                <button type="button" ng-click="clearGraph()" style="width:200px" class="btn btn-success"/>
+                Save Graph &nbsp;&nbsp; </button>
 
               </center>
       </td>
@@ -174,7 +178,6 @@
         <table style="width:200px" 
           st-safe-src="compoundCollection"  
           st-table="compoundCollectionDisplay"
-
           class="table table-striped">
           <thead>
             <tr>
@@ -258,9 +261,36 @@
     </tr>
 
   </table>
+  <div id = "saved">
+    <h3>Saved Graphs </h3>
+    <table id="inventory" width="300px">
+    <tr>
+      <td>
+        <img src="" id="image1" style="visibility:hidden" ng-click="toggleImage(0)" />       
+      </td>
+      <td>
+        <img src="" id="image2" style="visibility:hidden"  ng-click="toggleImage(1)" />       
+      </td>
+      <td>
+        <img src="" id="image3" style="visibility:hidden"  ng-click="toggleImage(2)" />       
+      </td>
+      <td>
+        <img src="" id="image4" style="visibility:hidden"  ng-click="toggleImage(3)" />       
+      </td>
+    </tr>
+    </table>
 
-  <br>
-  <h2>Saved Image </h2>
+    <!--<div style="width:500px; height:300px" id = "inventory">-->
+
+  </div>
+
+  <div id = "verybottom"></div>
+  <div>
+    <!--<div style="width:1000; height:600px; visibility:hidden">
+          <center><div id="graph"></div></center>
+          </div>-->
+  </div>
+</div>
 
 
 
