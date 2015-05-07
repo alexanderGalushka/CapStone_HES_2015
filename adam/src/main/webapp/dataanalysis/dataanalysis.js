@@ -1119,7 +1119,9 @@
 
           DAService.currentGraph = DAService.graphIt();
         }
+        }
       };
+     
 
       $scope.setXAxisData = function(label) {
         $scope.selectedXAxisLabel = label;
@@ -1430,7 +1432,8 @@
       };
 
 
-    } }
+    } 
+
   ]); // end of DropdownCtrl
 
 
