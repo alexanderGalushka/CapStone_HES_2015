@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -292,6 +293,22 @@ public class ResultService {
 		
 		for (Plate plate: project.getPlates()){
 			
+			List<Long> allTimes = new ArrayList<>();
+			for (ResultSnapshot rs : plate.getResults()){
+				
+				if (rs == null)
+					continue;
+				
+				long time = 0;
+				if (rs.getTime() != null){
+					time = rs.getTime().getTime();
+				}
+				
+				allTimes.add(time);
+			}
+			
+			Long zeroTime = Collections.min(allTimes);
+			
 			for (ResultSnapshot rs : plate.getResults()){
 				
 				if (rs == null)
@@ -308,6 +325,7 @@ public class ResultService {
 					entry.put("plateId", plate.getId());
 					entry.put("wellId", well.getId());
 					entry.put("time", time);
+					entry.put("elapsed", time - zeroTime);
 					
 					List<HashMap<Object, Object>> wellLabelEntries = new ArrayList<>();
 					if (well != null && well.getWellLabels() != null){
