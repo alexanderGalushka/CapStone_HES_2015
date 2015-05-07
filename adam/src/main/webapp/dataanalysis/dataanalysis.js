@@ -845,19 +845,19 @@
       gtPLACEHOLDER = 'Select graph type';
       xPLACEHOLDER = 'Select x-axis variable';
       
-      var onError = function(reason) {
+      onError = function(reason) {
         var dAasd = 123;
       }
 
-      var getProjectsFromDB = function() {
+      getProjectsFromDB = function() {
         $http.get("/adam/rest/project").then(onPrjectRequestComplete, onError);
       }
 
-      var getProjectsWells = function() {
+      getProjectsWells = function() {
         $http.get("/adam/rest/get_all_data").then(onPrjectWellsInfo, onError);
       }
 
-      var onPrjectWellsInfo = function(response) {
+      onPrjectWellsInfo = function(response) {
         DAService.map_project_wells = response.data;
 
         for (var projectIndex in DAService.map_project_wells )
@@ -926,7 +926,7 @@
         resetDataSeries();
       }
 
-      var onPrjectRequestComplete = function(response) 
+      onPrjectRequestComplete = function(response) 
       {
 
           var data = response.data;
