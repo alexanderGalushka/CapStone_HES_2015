@@ -884,7 +884,7 @@
 
   var DUMMYDEFAULTDATASERIESTOPLOT = [7, 8, 9];
 
-  app.controller('DropdownCtrl', ['$scope', '$log', 'DAService', '$http', '$q',
+  app.controller('DropdownCtrl', ['$scope', '$log', 'DAService', '$http', '$q', 'ui.bootstrap',
     function($scope, $log, DAService, $http, $q) {
 
       dsPLACEHOLDER = 'Select data series';
