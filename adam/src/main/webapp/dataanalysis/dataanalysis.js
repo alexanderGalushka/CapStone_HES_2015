@@ -1430,7 +1430,7 @@
       };
 
 
-    }
+    } }
   ]); // end of DropdownCtrl
 
 
