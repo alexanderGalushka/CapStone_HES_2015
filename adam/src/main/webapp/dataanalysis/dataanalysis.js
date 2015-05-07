@@ -512,7 +512,7 @@
       var dummyLabels = [];
 
       // I'm assuming this is how we're actually going to get the data
-      var dummyAllData = [{
+/*      var dummyAllData = [{
         "labelName": "Drug1",
         "labelData": generateSequence(1, 5, 1)
       }, {
@@ -539,6 +539,11 @@
       }, {
         "labelName": "Measurement3",
         "labelData": [5, 2, 3, 4, 5]
+      }];
+*/
+      var dummyAllData = [{
+        "labelName": "",
+        "labelData": generateSequence(1,5,1)
       }];
 
       var initializeData = function() {
