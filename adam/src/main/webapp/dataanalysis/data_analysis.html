@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <div ng-controller="DropdownCtrl">
   <div id="verytop" ></div>
   <table>
@@ -14,7 +12,7 @@
               <div class="btn-group btn-group-sm y-axis-control-button" >
                 <button class="btn btn-success btn-remove" ng-click="removeYAxisSelectionButton(series.id)" type="button"><span class="glyphicon glyphicon-minus"></span>
                 </button>
-                <div class="btn-group btn-group-sm" dropdown>
+                <div class="btn-group btn-group-sm dropdown" dropdown>
                   <button type="button" class="btn btn-success"ng-disabled="disabled">
                     <a href class="dropdown-toggle" dropdown-toggle>{{ series.label }}&nbsp;&nbsp;<span class="caret"></span></a>
                   </button>
@@ -24,7 +22,7 @@
                     </li>
                   </ul>
                 </div>
-                <div class="btn-group btn-group-sm" dropdown>
+                <div class="btn-group btn-group-sm dropdown" dropdown>
                   <button type="button" class="btn btn-success" ng-disabled="disabled">
                     <a href class="dropdown-toggle" dropdown-toggle>{{ series.type }}&nbsp;&nbsp;<span class="caret"></span></a>
                   </button>
