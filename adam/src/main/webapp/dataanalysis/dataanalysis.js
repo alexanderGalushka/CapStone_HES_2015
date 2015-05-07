@@ -943,8 +943,8 @@
               "selected": false
             }
             DAService.projects.push(project);
-            getProjectsWells();
           }
+          getProjectsWells();
        }
 
       getProjectsFromDB();
