@@ -757,15 +757,16 @@
       var graphIt = function() {
         //options.xlabel = "Time (minutes)";
         if (plotData.length != 0) {
-          g = new Dygraph(document.getElementById('graph'), plotData, options);
-        var arr1 = [];
-        var arr2 = [];
-        var arr3 = [];
-        var object= {plot: arr1, opts: arr2, graph: g, wells: arr3};
-        object.plot = angular.copy(plotData);
-        object.opts = angular.copy(options);
-        return object;
-      };
+              g = new Dygraph(document.getElementById('graph'), plotData, options);
+            var arr1 = [];
+            var arr2 = [];
+            var arr3 = [];
+            var object= {plot: arr1, opts: arr2, graph: g, wells: arr3};
+            object.plot = angular.copy(plotData);
+            object.opts = angular.copy(options);
+            return object;
+          };
+      }
 
       var clearLabels = function() {
         grid_labels.splice(0, grid_labels.length);
@@ -1082,9 +1083,11 @@
         if ($scope.ySeries[index].label != dsPLACEHOLDER) {
           thisLabel = $scope.ySeries[index].label;
           $scope.ySeries[index].type = type;
-          if (DAService.options.series.hasOwnProperty(thisLabel)) {
+          if (DAService.options.series.hasOwnProperty(thisLabel)) 
+          {
 
-            switch (type) {
+            switch (type) 
+            {
               case 'scatter':
                 if (DAService.hasCurveFit(thisLabel)) {
                   DAService.removeCurveFit(thisLabel);
