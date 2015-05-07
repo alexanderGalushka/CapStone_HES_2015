@@ -856,7 +856,7 @@
   //var DUMMYDEFAULTDATASERIESTOPLOT = [7, 8, 9];
 
   app.controller('DropdownCtrl', ['$scope', '$log', 'DAService', '$http', '$q',
-    function($scope, $log, $http, DAService, deleteProject, activeProject, setActiveProject) {
+    function($scope, $log, DAService, $http, deleteProject, activeProject, setActiveProject) {
 
       dsPLACEHOLDER = 'Select data series';
       gtPLACEHOLDER = 'Select graph type';
