@@ -13,7 +13,7 @@
                 </button>
                <div class="btn-group btn-group-sm" dropdown>
                   <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" dropdown-toggle>
-                    <a href class="dropdown-toggle" dropdown-toggle>{{ series.label }}&nbsp;&nbsp;<span class="caret"></span></a>
+                    {{ series.label }}&nbsp;&nbsp;<span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" role="menu">
                     <li ng-repeat="label in labels">
@@ -23,7 +23,7 @@
                 </div>
                 <div class="btn-group btn-group-sm" dropdown>
                   <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" dropdown-toggle>
-                    <a href class="dropdown-toggle" dropdown-toggle>{{ series.type }}&nbsp;&nbsp;<span class="caret"></span></a>
+                    {{ series.type }}&nbsp;&nbsp;<span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" role="menu">
                     <li ng-repeat="type in graphTypes">
@@ -46,11 +46,11 @@
               <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" dropdown-toggle ng-disabled="disabled">
                 {{ selectedXAxisLabel }} <!-- Time - seconds --> &nbsp;&nbsp;<span class="caret"></span>
               </button>
-              <!--<ul class="dropdown-menu" role="menu">
+              <ul class="dropdown-menu" role="menu">
                 <li ng-repeat="label in labels">
                   <a ng-click="setXAxisData(label)">{{ label }}</a>
                 </li>
-              </ul>-->
+              </ul>
             </div>
           </div>
         </div>
