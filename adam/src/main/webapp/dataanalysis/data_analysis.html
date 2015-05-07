@@ -9,7 +9,17 @@
         <div>
           <div id="y-axis-data-selection">
             <div ng-repeat="series in ySeries">
-              <div class="btn-group btn-group-sm y-axis-control-button" >
+              <select>
+                <option ng-repeat="label in labels">
+                  <a ng-click="setYAxisData(series.id,label)" ng-show="showLabels[labels.indexOf(label)]">{{ label }}</a>
+                </option>
+              </select>
+              <select>
+                <option ng-repeat="type in graphTypes">
+                  <a ng-click="setYAxisGraphType(series.id,type)">{{ type }}</a>
+                </option>
+              </select>
+<!--               <div class="btn-group btn-group-sm y-axis-control-button" >
                 <button class="btn btn-success btn-remove" ng-click="removeYAxisSelectionButton(series.id)" type="button"><span class="glyphicon glyphicon-minus"></span>
                 </button>
                 <div class="btn-group btn-group-sm" dropdown>
@@ -32,7 +42,7 @@
                     </li>
                   </ul>
                 </div>
-              </div>
+              </div> -->
             </div>
             <p>
               <button class="btn btn-sm btn-success btn-add y-axis-add" ng-click="addNewYAxisSelectionButton()" type="button"><span class="glyphicon glyphicon-plus"></span>
