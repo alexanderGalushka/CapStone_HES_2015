@@ -303,7 +303,6 @@ public class ResultService {
 				if (rs.getTime() != null){
 					time = rs.getTime().getTime();
 				}
-				
 				allTimes.add(time);
 			}
 			
@@ -325,7 +324,7 @@ public class ResultService {
 					entry.put("plateId", plate.getId());
 					entry.put("wellId", well.getId());
 					entry.put("time", time);
-					entry.put("elapsed", time - zeroTime);
+					entry.put("elapsed", (time - zeroTime)/60000d);
 					
 					List<HashMap<Object, Object>> wellLabelEntries = new ArrayList<>();
 					if (well != null && well.getWellLabels() != null){
