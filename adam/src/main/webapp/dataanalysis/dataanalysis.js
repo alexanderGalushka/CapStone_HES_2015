@@ -564,7 +564,7 @@
           }
         });
 
-        if (dummyAllData[0].hasOwnProperty("time"))
+        if (dummyAllData.length > 0 && dummyAllData[0].hasOwnProperty("time"))
         {
           dummyData[0] = dummyAllData[0].time;
         }

@@ -9,13 +9,13 @@
         <div>
           <div id="y-axis-data-selection">
             <div ng-repeat="series in ySeries">
-              <select>
-                <option ng-repeat="label in labels" ng-click="setYAxisData(series.id,label)" ng-show="showLabels[labels.indexOf(label)]">
+              <select ng-repeat="label in labels">
+                <option value="{{label}}" ng-click="setYAxisData(series.id,label)" ng-show="showLabels[labels.indexOf(label)]">
                   {{ label }}
                 </option>
               </select>
-              <select>
-                <option ng-repeat="type in graphTypes" ng-click="setYAxisGraphType(series.id,type)">
+              <select ng-repeat="type in graphTypes" >
+                <option value="{{type}}" ng-click="setYAxisGraphType(series.id,type)">
                   {{ type }}
                 </option>
               </select>
