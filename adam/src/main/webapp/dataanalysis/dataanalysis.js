@@ -886,6 +886,21 @@
 
   app.controller('DropdownCtrl', ['$scope', '$log', 'DAService', '$http', '$q',
     function($scope, $log, DAService, $http, $q) {
+/*
+<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+*/
+
+    var loadScript = function () {
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js';
+      document.body.appendChild(script);
+    }
+
+    $scope.$on('$viewContentLoaded', function () {
+      loadScript();
+    });
 
       dsPLACEHOLDER = 'Select data series';
       gtPLACEHOLDER = 'Select graph type';
