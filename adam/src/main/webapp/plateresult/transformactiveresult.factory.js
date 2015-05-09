@@ -60,6 +60,7 @@
         activePlateResult.plateResult.valuerange = {"minvalue":minValue, "maxvalue":maxValue};
         activePlateResult.plateResult.valueslider = 1;
         activePlateResult.plateResult.displayMeasurements = [].concat(activePlateResult.plateResult.measurements);
+        activePlateResult.plateResult.DisplayMeasurementTypes = [].concat(activePlateResult.plateResultmeasurementTypes);
 
         /* set indicator for qc page */
                 activePlateResult.resultExists = true;}
