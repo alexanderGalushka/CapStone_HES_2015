@@ -11,7 +11,10 @@
           labelsdisplay:'=',
           dropwellgroup:"=",
           rows:"=",
-          filterplateeditor:"="
+          filterplateeditor:"=",
+          uniquelabelvalues:'=',
+          uniquelabelvaluesdisplay:'=',
+          uniquelabelvaluescolors:'='
         },
         templateUrl: 'plateeditor/plotlabels/plotlabels.html',
         controller:PlotLabelsCtrl,
@@ -30,12 +33,12 @@
     plotlbVm.setModeCopyLabelValue = setModeCopyLabelValue;
     plotlbVm.updateUniqLabelValues = updateUniqLabelValues;
 
-    plotlbVm.uniqueLabelValues = [];
-    plotlbVm.uniqueLabelValuesDisplay = [];
-    plotlbVm.uniqueLabelValuesColors = [];
+    //plotlbVm.uniqueLabelValues = [];
+    //plotlbVm.uniqueLabelValuesDisplay = [];
+    //plotlbVm.uniqueLabelValuesColors = [];
 
 
-    function setUniqLabelValues(wells,labelName,dropwellgroup,filterplateeditor){
+    function setUniqLabelValues(wells,labelName,dropwellgroup,filterplateeditor,uniqueLabelValues,uniqueLabelValuesDisplay,uniqueLabelValuesColors){
       var argLabel = {};
       var argLabelColor = {};
       /*var hlsColor;
@@ -46,8 +49,8 @@
 
       dropwellgroup.checked = "true";
 
-      plotlbVm.uniqueLabelValues = [];
-      plotlbVm.uniqueLabelValuesColors = [];
+      uniqueLabelValues = [];
+      uniqueLabelValuesColors = [];
 
       if(wells != null && labelName != null) {
         var uniq = uniqueMemebers(wells, labelName);
@@ -70,7 +73,7 @@
             argLabel.name = uniq[i].name;
             argLabel.description = uniq[i].name + '&nbsp;&nbsp;<label style="background-color:' + hlsColorStyle + ';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>';
             argLabel.color = hlsColorStyle;
-            plotlbVm.uniqueLabelValues.push(argLabel);
+            uniqueLabelValues.push(argLabel);
 
 
             argLabelColor[uniq[i].name] = hlsColorStyle;
@@ -78,10 +81,10 @@
           }
         }
 
-        plotlbVm.uniqueLabelValuesDisplay = [].concat(plotlbVm.uniqueLabelValues);
-        plotlbVm.uniqueLabelValuesColors = argLabelColor;
+        uniqueLabelValuesDisplay = [].concat(uniqueLabelValues);
+        uniqueLabelValuesColors = argLabelColor;
         filterplateeditor.plotLabelName = labelName;
-        filterplateeditor.labelValueColors = plotlbVm.uniqueLabelValuesColors;
+        filterplateeditor.labelValueColors = uniqueLabelValuesColors;
       }
 
     }
@@ -188,9 +191,9 @@
 
     }
 
-    function updateUniqLabelValues(label, newColor, filterplateeditor){
-      plotlbVm.uniqueLabelValuesColors[label] = newColor;
-      filterplateeditor.labelValueColors = plotlbVm.uniqueLabelValuesColors;
+    function updateUniqLabelValues(label, newColor, filterplateeditor, uniqueLabelValuesColors){
+      uniqueLabelValuesColors[label] = newColor;
+      filterplateeditor.labelValueColors = uniqueLabelValuesColors;
 
     }
   }
