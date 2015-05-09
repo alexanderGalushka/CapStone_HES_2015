@@ -12,16 +12,16 @@
                 <div class="input-group">
                     <div class="input-group-addon">Select label to plot&nbsp;</div>
                     <button type="button" class="btn btn-default" ng-model="selectedLabel" data-html="1" bs-options="label.name for label in labelsdisplay" bs-select
-                            ng-change="plotlbVm.setUniqLabelValues(rows,selectedLabel.name,dropwellgroup,filterplateeditor,uniquelabelvalues,uniquelabelvaluesdisplay,uniquelabelvaluescolors)"><span class="caret"></span>
+                            ng-change="plotlbVm.setUniqLabelValues(rows,selectedLabel.name,dropwellgroup,filterplateeditor,activeplate.uniquelabelvalues,activeplate.uniquelabelvaluesdisplay,activeplate.uniquelabelvaluescolors)"><span class="caret"></span>
                     </button>
-                    <button type="button" class="btn btn-sm" ng-click="plotlbVm.setUniqLabelValues(rows,selectedLabel.name,dropwellgroup,filterplateeditor,uniquelabelvalues,uniquelabelvaluesdisplay,uniquelabelvaluescolors)">
+                    <button type="button" class="btn btn-sm" ng-click="plotlbVm.setUniqLabelValues(rows,selectedLabel.name,dropwellgroup,filterplateeditor,activeplate.uniquelabelvalues,activeplate.uniquelabelvaluesdisplay,activeplate.uniquelabelvaluescolors)">
                         <i class="glyphicon glyphicon-refresh">
                         </i>
                     </button>
                 </div>
             </div>
             <div class="form-group">
-                <table  st-table="uniquelabelvaluesdisplay" st-safe-src="uniquelabelvalues" class="table table-striped">
+                <table  st-table="activeplate.uniquelabelvaluesdisplay" st-safe-src="activeplate.uniquelabelvalues" class="table table-striped">
                     <thead>
                     <th st-sort="name">Name</th>
                     <th st-sort="color">Color</th>
@@ -32,7 +32,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="label in uniquelabelvaluesdisplay"  st-select-row="label">
+                    <tr ng-repeat="label in activeplate.uniquelabelvaluesdisplay"  st-select-row="label">
                         <td>{{label.name}}</td>
                         <td>
                             <button type="button" class="btn btn-sm" ng-click="plotlbVm.setModeCopyLabelValue(label, dropwellgroup, filterplateeditor)">
@@ -41,7 +41,7 @@
                             </button>
                         </td>
                         <td>
-                            <input class="form-control" ng-model="label.color" type="color" ng-change="plotlbVm.updateUniqLabelValues(label.name,label.color, filterplateeditor,uniquelabelvaluescolors)"></td>
+                            <input class="form-control" ng-model="label.color" type="color" ng-change="plotlbVm.updateUniqLabelValues(label.name,label.color, filterplateeditor,activeplate.uniquelabelvaluescolors)"></td>
                     </tr>
                     </tbody>
                     <tfoot>

@@ -12,9 +12,7 @@
           dropwellgroup:"=",
           rows:"=",
           filterplateeditor:"=",
-          uniquelabelvalues:'=',
-          uniquelabelvaluesdisplay:'=',
-          uniquelabelvaluescolors:'='
+          activeplate:'='
         },
         templateUrl: 'plateeditor/plotlabels/plotlabels.html',
         controller:PlotLabelsCtrl,
