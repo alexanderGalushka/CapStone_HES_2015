@@ -18,6 +18,7 @@
       }
       console.log(type);
       console.log(sliderIndex);
+      console.log(plateres);
 
 
       for (var i = 0; i < plateres.measurements.length; i++) {
