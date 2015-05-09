@@ -6,7 +6,7 @@
 <div class="{{plresVm.aside | classgrid}}" >
 
 
-  <table  st-table="ActivePlateResult.plateResult.measurements" class="table table-striped">
+  <table  st-table="ActivePlateResult.plateResult.displayMeasurements" st-safe-src="ActivePlateResult.plateResult.measurements" class="table table-striped">
     <thead>
     <tr>
       <th>
@@ -50,7 +50,7 @@
     </thead>
 
     <tbody>
-    <tr st-select-row="measurement" ng-repeat="measurement in ActivePlateResult.plateResult.measurements">
+    <tr st-select-row="measurement" ng-repeat="measurement in ActivePlateResult.plateResult.displayMeasurements">
       <td>{{measurement.measurementType}}</td>
       <td>{{measurement.timeStamp}}</td>
       <td>{{measurement.zFactor}}</td>

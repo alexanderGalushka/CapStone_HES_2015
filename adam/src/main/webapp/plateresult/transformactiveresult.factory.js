@@ -59,9 +59,10 @@
         }
         activePlateResult.plateResult.valuerange = {"minvalue":minValue, "maxvalue":maxValue};
         activePlateResult.plateResult.valueslider = 1;
+        activePlateResult.plateResult.displayMeasurements = [].concat(activePlateResult.plateResult.measurements);
 
         /* set indicator for qc page */
-        activePlateResult.resultExists = true;}
+                activePlateResult.resultExists = true;}
       else{
         console.log("unfinished plateResult returned" + JSON.stringify(plateres, null, 4));
         activePlateResult.plateResult = null;

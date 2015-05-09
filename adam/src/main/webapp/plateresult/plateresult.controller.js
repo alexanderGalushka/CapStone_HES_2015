@@ -16,6 +16,8 @@
     $scope.ActiveProject = activeProject.project;
     $scope.ActivePlate = activePlate;
     $scope.ActivePlateResult = activePlateResult;
+    //$scope.ActivePlateResult.plateResult.displayMeasurements = [].concat($scope.ActivePlateResult.plateResult.measurements);
+
     plresVm.aside = false;
 
     plresVm.upload = upload;
