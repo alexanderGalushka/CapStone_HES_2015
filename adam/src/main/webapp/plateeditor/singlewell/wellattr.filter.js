@@ -41,11 +41,13 @@
                 return "color:black;background-color:#FF0000";
               well.color = "#FF0000";
             }
-          } else
-          if(well.controlType === "" || well.controlType === null)
-            return "color:#FFFFFF;background-color:#FFFFFF";
-          else
-            return "color:black;background-color:#FFFFFF";
+          } else {
+            if (well.controlType === "" || well.controlType === null)
+              return "color:#FFFFFF;background-color:#FFFFFF";
+            else
+              return "color:black;background-color:#FFFFFF";
+            well.color = "#FFFFFF";
+          }
         }else {
           well.color = "#FFFFFF";
           return "color:#FFFFFF;background-color:#FFFFFF";
