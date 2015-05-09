@@ -34,6 +34,11 @@
     function setActivePlate (plate){
       activePlate.plate  = plate;
       activePlate.plate.wellsDisplay = [].concat(activePlate.plate.wells);
+      if(activePlate.plate.uniquelabelvalues === null){
+        activePlate.plate.uniquelabelvalues = [];
+        activePlate.plate.uniquelabelvaluesdisplay = [];
+        activePlate.plate.uniquelabelvaluescolors = [];
+      }
 
       if(plate !== null) {
         loadActiveResult(plate.id);
