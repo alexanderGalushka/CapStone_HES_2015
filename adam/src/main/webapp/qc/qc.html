@@ -20,7 +20,7 @@
 
     <div class="panel-collapse" bs-collapse-target>
 
-      <table  st-table="ActivePlateResult.plateResult.measurementTypes" class="table table-striped">
+      <table  st-table="ActivePlateResult.plateResult.DisplayMeasurementTypes" st-safe-src="ActivePlateResult.plateResult.measurementTypes" class="table table-striped">
         <thead>
         <th st-sort="name">Type</th>
 
@@ -31,7 +31,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr st-select-row="type" ng-repeat="type in ActivePlateResult.plateResult.measurementTypes"
+        <tr st-select-row="type" ng-repeat="type in ActivePlateResult.plateResult.DisplayMeasurementTypes"
             ng-click="qcVm.callSetActiveMeasurement(type.name,ActivePlateResult.plateResult.valueslider, ActivePlateResult.plateResult)">
           <td>{{type.name}}</td>
         </tr>
