@@ -21,7 +21,8 @@
 
     if($scope.ActivePlateResult != null && $scope.ActivePlateResult.plateResult != null && $scope.ActivePlateResult.plateResult != "" &&
       $scope.ActivePlateResult.resultExists === true) {
-      $scope.ActivePlateResult.plateResult.valueslider = 1;
+      if($scope.ActivePlateResult.plateResult.valueslider === null)
+        $scope.ActivePlateResult.plateResult.valueslider = 1;
       $scope.ActivePlateResult.resultExists = true;
     }
     else
