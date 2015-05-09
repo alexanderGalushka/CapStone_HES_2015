@@ -36,7 +36,7 @@
     //plotlbVm.uniqueLabelValuesColors = [];
 
 
-    function setUniqLabelValues(wells,labelName,dropwellgroup,filterplateeditor,uniqueLabelValues,uniqueLabelValuesDisplay,uniqueLabelValuesColors){
+    function setUniqLabelValues(wells,labelName,dropwellgroup,filterplateeditor,activeplate){
       var argLabel = {};
       var argLabelColor = {};
       /*var hlsColor;
@@ -47,8 +47,8 @@
 
       dropwellgroup.checked = "true";
 
-      uniqueLabelValues = [];
-      uniqueLabelValuesColors = [];
+      activeplate.uniqueLabelValues = [];
+      activeplate.uniqueLabelValuesColors = [];
 
       if(wells != null && labelName != null) {
         var uniq = uniqueMemebers(wells, labelName);
@@ -71,7 +71,7 @@
             argLabel.name = uniq[i].name;
             argLabel.description = uniq[i].name + '&nbsp;&nbsp;<label style="background-color:' + hlsColorStyle + ';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>';
             argLabel.color = hlsColorStyle;
-            uniqueLabelValues.push(argLabel);
+            activeplate.uniqueLabelValues.push(argLabel);
 
 
             argLabelColor[uniq[i].name] = hlsColorStyle;
@@ -79,10 +79,10 @@
           }
         }
 
-        uniqueLabelValuesDisplay = [].concat(uniqueLabelValues);
-        uniqueLabelValuesColors = argLabelColor;
+        activeplate.uniqueLabelValuesDisplay = [].concat(activeplate.uniqueLabelValues);
+        activeplate.uniqueLabelValuesColors = argLabelColor;
         filterplateeditor.plotLabelName = labelName;
-        filterplateeditor.labelValueColors = uniqueLabelValuesColors;
+        filterplateeditor.labelValueColors = activeplate.uniqueLabelValuesColors;
       }
 
     }
@@ -189,9 +189,9 @@
 
     }
 
-    function updateUniqLabelValues(label, newColor, filterplateeditor, uniqueLabelValuesColors){
-      uniqueLabelValuesColors[label] = newColor;
-      filterplateeditor.labelValueColors = uniqueLabelValuesColors;
+    function updateUniqLabelValues(label, newColor, filterplateeditor, activeplate){
+      activeplate.uniqueLabelValuesColors[label] = newColor;
+      filterplateeditor.labelValueColors = activeplate.uniqueLabelValuesColors;
 
     }
   }
