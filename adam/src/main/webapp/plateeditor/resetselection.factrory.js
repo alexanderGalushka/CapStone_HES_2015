@@ -1,5 +1,15 @@
 'use strict';
 
+/**
+ * @ngdoc function
+ * @name resetselection.factory:resetSelection
+ * @description
+ * # resetSelection
+ * Factory to reset all selection, in plate map and table
+ * the same well array is used for both displays
+ *
+ */
+
 (function() {
 
     angular.module('resetsel', [])
