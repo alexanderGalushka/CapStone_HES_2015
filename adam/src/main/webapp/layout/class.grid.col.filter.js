@@ -9,11 +9,11 @@
 
 
         if(input == null) {
-          return "col-md-8";
+          return "col-lg-8";
         }else if(input){
-          return "col-md-12";
+          return "col-lg-12";
         }else{
-          return "col-md-8";
+          return "col-lg-8";
         }
 
       }
