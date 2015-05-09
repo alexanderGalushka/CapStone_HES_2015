@@ -24,7 +24,7 @@
   <tr ng-repeat="well in rowsonedimdisplayw"  st-select-row="well" st-select-mode="multiple" ng-click="wellstabVm.toogleRowSelection(well,labelsdisplayw, rowsonedimw,dropwellgroup)">
     <td ng-repeat="label in labelsdisplayw">{{well[label.name]}}</td>
     <td>{{well.controlType}}</td>
-    <td><input class="form-control" ng-model="well.color" type="color" ng-change="wellstabVm.updateWellUniqLabelValues(well,well.color)"></td>
+    <td><input class="form-control" ng-model="well.color" type="color" ng-change="wellstabVm.updateWellUniqLabelValues(well,well.color)" disabled></td>
     <td>
     </td>
   </tr>
