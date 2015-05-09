@@ -42,11 +42,11 @@
               well.color = "#FF0000";
             }
           } else {
+            well.color = "#FFFFFF";
             if (well.controlType === "" || well.controlType === null)
               return "color:#FFFFFF;background-color:#FFFFFF";
             else
               return "color:black;background-color:#FFFFFF";
-            well.color = "#FFFFFF";
           }
         }else {
           well.color = "#FFFFFF";
