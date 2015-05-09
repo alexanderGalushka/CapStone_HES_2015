@@ -83,6 +83,7 @@
         activeplate.uniqueLabelValuesColors = argLabelColor;
         filterplateeditor.plotLabelName = labelName;
         filterplateeditor.labelValueColors = activeplate.uniqueLabelValuesColors;
+        console.log(activeplate);
       }
 
     }
