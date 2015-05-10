@@ -1,5 +1,14 @@
 'use strict';
 
+/**
+ * @ngdoc filter
+ * @name singlewell.directive:filterBorder3
+ * @description
+ * # adamhesSinglewell
+ * Set of filters used for drawing single well
+ *
+ */
+
 (function() {
 
   angular.module('wellattrfilter', [])

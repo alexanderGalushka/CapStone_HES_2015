@@ -1,5 +1,14 @@
 'use strict';
 
+/**
+ * @ngdoc directive
+ * @name wells.table.directive:adamhesWellstable
+ * @description
+ * # adamhesWellstable
+ * Directive to wells table
+ *
+ */
+
 (function() {
   angular.module('wellstable', ['ngAnimate','ngSanitize', 'smart-table','mgcrea.ngStrap'])
 
@@ -26,6 +35,14 @@
     wellstabVm.resetSelection = resetSelection;
     wellstabVm.toogleRowSelection = toogleRowSelection;
     wellstabVm.updateWellUniqLabelValues = updateWellUniqLabelValues;
+
+    /**
+     * @ngdoc function
+     * @name toogleRowSelection
+     * @description
+     * Switch row selection
+     *
+     */
 
     function toogleRowSelection(well, labels, wellArray, dropwellgroup){
       dropwellgroup.checked = "true";
@@ -73,6 +90,15 @@
         }
       }
     }
+
+
+    /**
+     * @ngdoc function
+     * @name updateWellUniqLabelValues
+     * @description
+     * Update color for label - it is disabled to simplify user experience
+     *
+     */
 
     function updateWellUniqLabelValues(well, newColor){
       console.log(JSON.stringify(well, null, 4));

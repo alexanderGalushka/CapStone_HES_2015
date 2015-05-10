@@ -1,5 +1,14 @@
 'use strict';
 
+/**
+ * @ngdoc directive
+ * @name singlewell.directive:adamhesSinglewell
+ * @description
+ * # adamhesSinglewell
+ * Directive for single well
+ *
+ */
+
 (function() {
   angular.module('singlewell', ['ngAnimate','ngSanitize', 'smart-table','mgcrea.ngStrap'])
 

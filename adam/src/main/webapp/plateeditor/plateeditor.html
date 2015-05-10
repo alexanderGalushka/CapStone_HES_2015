@@ -11,7 +11,6 @@
     <admahes-projectpanel asideind="pleditVm.aside"></admahes-projectpanel>
     <admahes-platepanel></admahes-platepanel>
     <adamhes-plotlabels labelsdisplay="ActivePlate.plate.wellLabels" dropwellgroup="pleditVm.dropWellGroup" rows="ActivePlate.plate.wells"
-                        filterplateeditor="pleditVm.filterPlateEditor"
                         activeplate="ActivePlate.plate"></adamhes-plotlabels>
 </div>
 
@@ -25,7 +24,7 @@
     <div ng-attr-style="white-space: nowrap;height:{{WellBoxSize.size}}px" ng-repeat="i in []|range:0:ActivePlate.plate.numberOfRows-1" ><!--
 --><label ng-repeat="j in []|range:0:ActivePlate.plate.numberOfColumns-1" style="white-space: nowrap;padding:0px;margin:0px;border:0px width:0px;height:0px" class="noselect"><!--
     --><adamhes-singlewell well="ActivePlate.plate.wells[(i * ActivePlate.plate.numberOfColumns)+ j]" boxsize="{{WellBoxSize.size}}"  tooltipdelay="{{pleditVm.tooltipdel}}"
-                           filterarg="pleditVm.filterPlateEditor" dropgroup="pleditVm.dropWellGroup"
+                           filterarg="ActivePlate.plate" dropgroup="pleditVm.dropWellGroup"
                            labels="ActivePlate.plate.wellLabels" rows="ActivePlate.plate.wells" controltypes="ActivePlate.plate.controlTypes" plate="ActivePlate.plate"
                     style="white-space: nowrap;padding:0px;margin:0px;border:0px width:0px;height:0px"
                            ng-mousedown="pleditVm.mouseDownWell(ActivePlate.plate.wells[(i * ActivePlate.plate.numberOfColumns)+ j], ActivePlate.plate.wellLabels)"

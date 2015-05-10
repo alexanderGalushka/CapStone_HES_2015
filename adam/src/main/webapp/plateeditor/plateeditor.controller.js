@@ -31,7 +31,7 @@
     pleditVm.boxsz = "30";                                // initial size of label for wells
     pleditVm.tooltipdel = "500";                          // delay to show tooltip, otherwise it's unpleasantly fast
     pleditVm.dropWellGroup = {checked:"true"};            // status indicator when user copy value from one well to other with mouse click
-    pleditVm.filterPlateEditor = {};                      // object used in plate map in individual well
+    //pleditVm.filterPlateEditor = {};                      // object used in plate map in individual well
     pleditVm.uniqueLabelValues = [];                      // list of label values
     pleditVm.uniqueLabelValuesColors = [];                // list of label colors
     pleditVm.selectedLabel = {};                          // selected label from list of available labels in plate
@@ -46,10 +46,10 @@
     $scope.ActivePlate = activePlate;
     $scope.WellBoxSize = wellBoxSize;
 
-    pleditVm.filterPlateEditor.plotLabelName = "";
-    pleditVm.filterPlateEditor.labelValueColors = {};
-    pleditVm.filterPlateEditor.wellgroup = [];
-    pleditVm.filterPlateEditor.labels = {};
+    //pleditVm.filterPlateEditor.plotLabelName = "";
+    //pleditVm.filterPlateEditor.labelValueColors = {};
+    //pleditVm.filterPlateEditor.wellgroup = [];
+    //pleditVm.filterPlateEditor.labels = {};
 
     // slider used for plate map size
     pleditVm.boxsizerange = {

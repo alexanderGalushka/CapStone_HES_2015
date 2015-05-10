@@ -1,5 +1,14 @@
 'use strict';
 
+/**
+ * @ngdoc directive
+ * @name plotlabels.directive:adamhesPlotlabels
+ * @description
+ * # adamhesPlotlabels
+ * Directive used to plot labels on plate map
+ *
+ */
+
 (function() {
   angular.module('plotlabels', ['ngAnimate','ngSanitize', 'smart-table','mgcrea.ngStrap'])
 
@@ -36,7 +45,7 @@
     //plotlbVm.uniqueLabelValuesColors = [];
 
 
-    function setUniqLabelValues(wells,labelName,dropwellgroup,filterplateeditor,activeplate){
+    function setUniqLabelValues(wells,labelName,dropwellgroup,activeplate){
       var argLabel = {};
       var argLabelColor = {};
       /*var hlsColor;
@@ -81,9 +90,8 @@
 
         activeplate.uniqueLabelValuesDisplay = [].concat(activeplate.uniqueLabelValues);
         activeplate.uniqueLabelValuesColors = argLabelColor;
-        filterplateeditor.plotLabelName = labelName;
-        filterplateeditor.labelValueColors = activeplate.uniqueLabelValuesColors;
-        console.log(activeplate);
+        activeplate.plotLabelName = labelName;
+        activeplate.labelValueColors = activeplate.uniqueLabelValuesColors;
       }
 
     }
@@ -184,15 +192,15 @@
       return false;
     }
 
-    function setModeCopyLabelValue(labelValue, dropwellgroup, filterplateeditor){
-      filterplateeditor.copyLabel = labelValue;
+    function setModeCopyLabelValue(labelValue, dropwellgroup, activeplate){
+      activeplate.copyLabel = labelValue;
       dropwellgroup.checked = "";
 
     }
 
-    function updateUniqLabelValues(label, newColor, filterplateeditor, activeplate){
+    function updateUniqLabelValues(label, newColor, activeplate){
       activeplate.uniqueLabelValuesColors[label] = newColor;
-      filterplateeditor.labelValueColors = activeplate.uniqueLabelValuesColors;
+      activeplate.labelValueColors = activeplate.uniqueLabelValuesColors;
 
     }
   }

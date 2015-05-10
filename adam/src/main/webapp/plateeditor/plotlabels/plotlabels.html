@@ -12,9 +12,9 @@
                 <div class="input-group">
                     <div class="input-group-addon">Select label to plot&nbsp;</div>
                     <button type="button" class="btn btn-default" ng-model="selectedLabel" data-html="1" bs-options="label.name for label in labelsdisplay" bs-select
-                            ng-change="plotlbVm.setUniqLabelValues(rows,selectedLabel.name,dropwellgroup,filterplateeditor,activeplate)"><span class="caret"></span>
+                            ng-change="plotlbVm.setUniqLabelValues(rows,selectedLabel.name,dropwellgroup,activeplate)"><span class="caret"></span>
                     </button>
-                    <button type="button" class="btn btn-sm" ng-click="plotlbVm.setUniqLabelValues(rows,selectedLabel.name,dropwellgroup,filterplateeditor,activeplate)">
+                    <button type="button" class="btn btn-sm" ng-click="plotlbVm.setUniqLabelValues(rows,selectedLabel.name,dropwellgroup,activeplate)">
                         <i class="glyphicon glyphicon-refresh">
                         </i>
                     </button>
@@ -35,13 +35,13 @@
                     <tr ng-repeat="label in activeplate.uniqueLabelValuesDisplay"  st-select-row="label">
                         <td>{{label.name}}</td>
                         <td>
-                            <button type="button" class="btn btn-sm" ng-click="plotlbVm.setModeCopyLabelValue(label, dropwellgroup, filterplateeditor)">
+                            <button type="button" class="btn btn-sm" ng-click="plotlbVm.setModeCopyLabelValue(label, dropwellgroup, activeplate)">
                                 <i class="glyphicon glyphicon-upload">
                                 </i>
                             </button>
                         </td>
                         <td>
-                            <input class="form-control" ng-model="label.color" type="color" ng-change="plotlbVm.updateUniqLabelValues(label.name,label.color, filterplateeditor,activeplate)"></td>
+                            <input class="form-control" ng-model="label.color" type="color" ng-change="plotlbVm.updateUniqLabelValues(label.name,label.color, activeplate)"></td>
                     </tr>
                     </tbody>
                     <tfoot>
