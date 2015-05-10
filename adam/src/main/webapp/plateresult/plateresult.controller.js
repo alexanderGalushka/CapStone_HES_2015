@@ -1,5 +1,14 @@
 'use strict';
 
+/**
+ * @ngdoc directive
+ * @name plateresult.directive:PlateResultsCtrl
+ * @description
+ * # PlateResultsCtrl
+ * Controller for plate result page
+ *
+ */
+
 (function() {
 
 
@@ -25,13 +34,21 @@
 
     plresVm.log = '';
 
+    /**
+     * @ngdoc function
+     * @name upload
+     * @description
+     * Uploads result file into server
+     *
+     */
     function upload(files, plateid) {
       console.log(JSON.stringify(files, null, 4));
       if (files && files.length) {
         for (var i = 0; i < files.length; i++) {
           var file = files[i];
+          // calls ngFileUpload Upload object to upload file to server adam/upload_result
           Upload.upload({
-            url: 'http://54.149.197.234/adam/upload_result',
+            url: '/adam/upload_result',
             fields: {
               'plate_id': plateid
             },
@@ -49,7 +66,15 @@
       }
     }
 
+    /**
+     * @ngdoc function
+     * @name deleteResult
+     * @description
+     * Delete plate result from database
+     *
+     */
     function deleteResult(plateResult){
+      // Call web service
       Qc.delete({"id":plateResult.plateId});
       plateResult.measurements = null;
       plateResult = null;

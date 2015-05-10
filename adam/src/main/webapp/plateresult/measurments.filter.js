@@ -1,5 +1,14 @@
 'use strict';
 
+/**
+ * @ngdoc filter
+ * @name measurments.filter:filtermeasurements
+ * @description
+ * # adamhesQcSingleWell
+ * Filter -  not used!
+ *
+ */
+
 (function() {
 
   angular.module('measurmentsfilter', [])

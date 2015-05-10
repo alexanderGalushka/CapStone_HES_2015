@@ -1,5 +1,14 @@
 'use strict';
 
+/**
+ * @ngdoc function
+ * @name transformactiveresult.factory:transformActiveResult
+ * @description
+ * # transformActiveResult
+ * Function that adds necessary details to plate result object used in display
+ *
+ */
+
 (function() {
 
   angular.module('transformresult', [])

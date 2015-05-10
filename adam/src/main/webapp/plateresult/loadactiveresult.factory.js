@@ -1,5 +1,15 @@
 'use strict';
 
+/**
+ * @ngdoc function
+ * @name loadactiveresult.factory:loadActiveResult
+ * @description
+ * # loadActiveResult
+ * Load result file from server
+ *
+ */
+
+
 (function() {
 
   angular.module('loadresult', [])
@@ -11,6 +21,7 @@
     return function (plateid){
       var plateres;
 
+      // call web service
       plateres = Qc.get({"id": plateid},function(){
           /* load result into activePlateResult service for sharing between pages */
           transformActiveResult(plateres);
