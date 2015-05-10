@@ -13,7 +13,7 @@
   angular.module('project.data.model',[])
 
     .factory("Project", function ProjectFactory($resource){
-      return $resource("/rest/project/:id", {}, {
+      return $resource("/adam/rest/project/:id", {}, {
           'update': {method: 'PUT'}
         }
       );
