@@ -1,5 +1,14 @@
 'use strict';
 
+/**
+ * @ngdoc function
+ * @name setactivemeasurement.factory:setActiveMeasurement
+ * @description
+ * # setActiveMeasurement
+ * Factory to set active measurment in qc page
+ *
+ */
+
 (function() {
 
   angular.module('setactivemeasurement', [])
@@ -16,11 +25,8 @@
       if(sliderIndex === null){
         sliderIndex = 1;
       }
-      console.log(type);
-      console.log(sliderIndex);
-      console.log(plateres);
 
-
+      // search through array of measurement objects using measurement type selected from side panel and selected slider value
       for (var i = 0; i < plateres.measurements.length; i++) {
         if(plateres.measurements[i].measurementType === type &&
           plateres.measurements[i].timeStamp === plateres.options.scale[sliderIndex - 1]) {
@@ -30,8 +36,9 @@
           //plateres.activeMeasurementSliderIndex = sliderIndex;
           plateres.valueslider = sliderIndex;
 
-          console.log("Found IT!");
+          console.log("Found measurement!");
 
+          // Calculate min and max value used for calculating well color
           for (var j = 0; j < plateres.measurements[i].wells.length; j++) {
             if(parseFloat(plateres.measurements[i].wells[j].value) != 777) {
               if (!foundFirstValidWell) {

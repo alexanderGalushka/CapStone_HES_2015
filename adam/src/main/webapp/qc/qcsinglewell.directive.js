@@ -1,5 +1,14 @@
 'use strict';
 
+/**
+ * @ngdoc directive
+ * @name qcsinglewell.directive:adamhesQcSingleWell
+ * @description
+ * # adamhesQcSingleWell
+ * Directive for single well in plate map in qc page
+ *
+ */
+
 (function() {
   angular.module('qcsinglewell', ['ngAnimate','ngSanitize', 'smart-table','mgcrea.ngStrap'])
 
@@ -30,6 +39,13 @@
 
     qcsinglewellVm.toggleIfValid = toggleIfValid;
 
+    /**
+     * @ngdoc function
+     * @name toggleIfValid
+     * @description
+     * Switch ifValid field in plate result
+     *
+     */
     function toggleIfValid(well, projectid, plateid, measurementtype, sliderindex) {
       var plateres;
 
@@ -51,9 +67,6 @@
         /*  web service threw error */
         console.log(JSON.stringify(error, null, 4));
       });
-
-
-      //well.ifValid = !well.ifValid;
 
     }
 

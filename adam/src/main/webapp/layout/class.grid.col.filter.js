@@ -1,4 +1,12 @@
 'use strict';
+/**
+ * @ngdoc filter
+ * @name class.grid.filter:classgrid
+ * @description
+ * # classgrid
+ * Filter that update div class to adjust layout according to open left panels
+ *
+ */
 
 (function() {
 

@@ -1,6 +1,14 @@
 'use strict';
 
-/* Services */
+/**
+ * @ngdoc service
+ * @name service:activeProject activePlate activePlateResult wellBoxSize
+ * @description
+ * # services
+ * Services used to share json objects between pages
+ * active* objects represent individual database object displayed on page
+ *
+ */
 
 angular.module('adamServices', ['ngResource'])
 

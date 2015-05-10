@@ -1,5 +1,14 @@
 'use strict';
 
+/**
+ * @ngdoc directive
+ * @name plate.panel.directive:admahesPlatepanel
+ * @description
+ * # admahesPlatepanel
+ * Panel directive used in other pages to display plates
+ *
+ */
+
 (function() {
   angular.module('platepanel', ['ngAnimate','ngSanitize', 'smart-table','mgcrea.ngStrap'])
 
@@ -34,6 +43,7 @@
     function setActivePlate (plate){
       activePlate.plate  = plate;
       activePlate.plate.wellsDisplay = [].concat(activePlate.plate.wells);
+      activePlate.plate.wellsDisplay.push("controlType");
       if(activePlate.plate.uniquelabelvalues === null){
         activePlate.plate.uniquelabelvalues = [];
         activePlate.plate.uniquelabelvaluesdisplay = [];

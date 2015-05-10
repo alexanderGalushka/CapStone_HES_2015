@@ -1,4 +1,12 @@
 'use strict';
+/**
+ * @ngdoc function
+ * @name qc.controller:QcCtrl
+ * @description
+ * # QcCtrl
+ * Controller for Qc page
+ *
+ */
 
 (function() {
 
@@ -28,10 +36,12 @@
     else
       $scope.ActivePlateResult.resultExists = false;
 
+    // set colors in wells in plate map
     qcVm.wellcollors = {bckgColorH:"0",colorText:"#FFFF00"};
 
     qcVm.callSetActiveMeasurement = callSetActiveMeasurement;
 
+    // object used for slider to control the size of plate map
     qcVm.boxsizerange = {
       from: 25,
       to: 100,
@@ -43,6 +53,14 @@
         //console.log(value);
       }
     };
+
+    /**
+     * @ngdoc function
+     * @name callSetActiveMeasurement
+     * @description
+     * Set active measurement object shared between pages
+     *
+     */
 
     function callSetActiveMeasurement(type, sliderIndex, plateres) {
       setActiveMeasurement(type, sliderIndex, plateres);
