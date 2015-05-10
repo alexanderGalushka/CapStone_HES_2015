@@ -43,7 +43,7 @@
     function setActivePlate (plate){
       activePlate.plate  = plate;
       activePlate.plate.wellsDisplay = [].concat(activePlate.plate.wells);
-      activePlate.plate.wellsDisplay.push("controlType");
+      activePlate.plate.wellsDisplay.push({name:"controlType"});
       if(activePlate.plate.uniquelabelvalues === null){
         activePlate.plate.uniquelabelvalues = [];
         activePlate.plate.uniquelabelvaluesdisplay = [];
