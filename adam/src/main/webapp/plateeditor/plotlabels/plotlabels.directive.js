@@ -175,7 +175,7 @@
       var arrObj = [];
 
       for(var i = 0; i < list.length; i++) {
-            if (list[i][field] != null && !containsMemeber(arr, list[i][field])) {
+            if (list[i][field] != null && list[i][field] != '' && !containsMemeber(arr, list[i][field])) {
             arr.push(list[i][field]);
             //var tag = '<label style="background-color:hsl(20,50%,50%);">' + '&nbsp;&nbsp;&nbsp;' + '</label>';
             //arrObj.push({'name':list[i][field],'description': list[i][field] + tag });
